@@ -502,8 +502,9 @@ Trendiest neighborhood. Restored colonial mansions. Weekend starts Thursday. Ups
 Do this EVERY TIME before writing a single word:
 
 0. ✅ **Check the Dushi Week Registry** (SKILL.md → "STEP 0.5") — Airtable base `appFRLV1H76ohiIQS`, table "Dushi Weeks" (`tblGHUrF6PGkqrnn3`). Search the guest's email (dedupe), find the nearest template by Estate + Variant, take `max(Build #) + 1` for the new slug, and check for a prior stay. Log/update the row after you ship.
-0a. ✅ **Determine output path BEFORE writing anything.** Does an HTML template exist for this variant (Estate + Coconut + Guest type)? If yes → Path A (HTML skeleton, Section 20). If no → Path B (fresh Markdown). Check the registry's "Itinerary doc" field for a linked HTML file. The sat-to-sat couple template is in `~/.claude/skills/dushi-week-builder/references/`.
-0b. ✅ **If using HTML skeleton (Path A): open the template, identify all tokens, and list what changes.** Do NOT start typing day descriptions. Tokens only until you have a complete change list approved.
+0a. ✅ **Identify the correct segment template.** Match the guest type to one of the 6 templates in Section 20 (Couple / Friends / Family teens / Family young kids / Family young adults / Multi gen). This determines both (a) which Airtable items to pull and (b) which HTML file to use (if any). ⚠️ Multi gen template is incomplete — days 7–8 missing.
+0b. ✅ **Determine output path.** Only Couple has an HTML skeleton. All others → pull template items from Itinerary Items V2 by segment Guest Record ID (Section 20) and use as authoritative day schedule. Do NOT invent a schedule from memory.
+0c. ✅ **If using HTML skeleton (Couple, Path A): open the template, identify all tokens, list what changes.** Do NOT touch day copy until you have a complete token + insert/swap list.
 1. ✅ Read this document (you're doing that now)
 2. ✅ Read the value stack: `tc-guest-confirmation/references/value-stack.md`
 3. ✅ Confirm booking package with Ray: Full (All-In), Full (Easy), or Standard
@@ -736,6 +737,83 @@ Do NOT rely on the `~/Downloads` copy — it can be overwritten or lost. If the 
 | Day pages | Only specific requested inserts/swaps |
 | Closing page | H2 personalised ("Lori & Scott — you came back."), body adjusted for returning guest |
 | Crew page | No changes (crew is the same) |
+
+---
+
+### Template Registry — All Six Segment Types (Reviewed 2026-05-25)
+
+All six templates live in **Itinerary Items V2** (base `appFRLV1H76ohiIQS`), linked to "Template" guest records. To find the correct template for a build: filter Itinerary Items V2 by the guest's segment name (below). Each template's Guest record ID is listed for direct lookup.
+
+| Segment | Guest Record ID | Items | HTML File Exists? | Notes |
+|---|---|---|---|---|
+| Couple | `rec7QFzJ2s342F0IZ` | 19 | ✅ `itinerary-standard-sat-to-sat--couple.html` | **Complete. HTML is the primary skeleton for couple builds.** |
+| Friends | `rec2R9SiqXz5VUQVX` | 19 | ❌ Airtable only | Content in Itinerary Items V2; no HTML file yet |
+| Family teens | `recX78q5CWqslAm1e` | 17 | ❌ Airtable only | Content in Itinerary Items V2; no HTML file yet |
+| Family young kids | `recjG9FwdBH0683UX` | 16 | ❌ Airtable only | Content in Itinerary Items V2; no HTML file yet |
+| Family young adults | `recptPrA2LnvarKhu` | 17 | ❌ Airtable only | Content in Itinerary Items V2; no HTML file yet |
+| Multi gen | `reczs1Jiwbh6BVMQO` | 12 | ❌ Airtable only | **INCOMPLETE — Days 7 & 8 are missing. Do not use without flagging this gap.** |
+
+**For builds without an HTML file:** pull all items for the segment template from Itinerary Items V2, sorted by day number, and use them as the authoritative day schedule. Do not invent a schedule from memory.
+
+---
+
+### Day-by-Day Structure — All Templates
+
+All templates share the same core skeleton for Days 1, 5, 6: Airport Pickup + Villa Vis (Day 1), West Side Day + Sunset Club (Day 5), Jan Thiel + Culture Walk + Punda Vibes (Day 6). The differences below are the only things that change between segments.
+
+**COUPLE** — 19 items, all 8 days complete
+- Day 1: Airport + Villa Vis
+- Day 2: Mambo Beach Boulevard + Hemingway's (Sunday)
+- Day 3: Flamingo Hike + Mei Mei salsa
+- Day 4: Guided Snorkel + Booker's Massage + Landhuis dinner
+- Day 5: West Side Day + Sunset Club
+- Day 6: Jan Thiel + Culture Walk + Punda Vibes
+- Day 7: Boat Day (AM + PM) + Pasawá
+- Day 8: Airport + De Gouverneur (1737 / Otrobanda)
+
+**FRIENDS** — 19 items, all 8 days complete
+- Day 1: Airport + Villa Vis
+- Day 2: Mambo Beach Boulevard + Hemingway's
+- Day 3: Flamingo Hike + Line Fishing (PM) + Mei Mei salsa
+- Day 4: Booker's Massage + Landhuis dinner *(no Guided Snorkel)*
+- Day 5–6: same as Couple
+- Day 7: Boat Day (AM + PM) + Pasawá
+- Day 8: Airport + De Gouverneur
+
+**FAMILY TEENS** — 17 items, all 8 days complete
+- Day 1: Airport + Villa Vis
+- Day 2: Mambo Beach Boulevard *(no Hemingway's — teens, late night dropped)*
+- Day 3: Flamingo Hike + Line Fishing + Mei Mei salsa
+- Day 4: Booker's Massage + Landhuis dinner
+- Day 5–6: same as Couple
+- Day 7: Boat Day (AM only) + Pasawá *(afternoon boat slot dropped)*
+- Day 8: Airport + De Gouverneur
+
+**FAMILY YOUNG KIDS** — 16 items, all 8 days complete
+- Day 1: Airport + Villa Vis
+- Day 2: Mambo Beach Boulevard
+- Day 3: Flamingo Hike + Line Fishing *(Mei Mei salsa dropped — no late night for young kids)*
+- Day 4: Booker's Massage + Landhuis dinner
+- Day 5–6: same as Couple
+- Day 7: Boat Day (AM) + Pasawá
+- Day 8: Airport + De Gouverneur
+
+**FAMILY YOUNG ADULTS** — 17 items, all 8 days complete
+- Day 1: Airport + Villa Vis
+- Day 2: Mambo Beach Boulevard
+- Day 3: Flamingo Hike + Line Fishing *(Mei Mei dropped)*
+- Day 4: Guided Snorkel + Booker's Massage + Landhuis dinner
+- Day 5–6: same as Couple
+- Day 7: Boat Day (AM) + Pasawá
+- Day 8: Airport + De Gouverneur
+
+**MULTI GEN** — 12 items, ⚠️ DAYS 7–8 MISSING
+- Day 1: Airport + Villa Vis
+- Day 2: Mambo Beach Boulevard
+- Day 3: Flamingo Hike + Mei Mei salsa *(Line Fishing dropped)*
+- Day 4: Booker's Massage + Landhuis dinner
+- Day 5–6: same as Couple
+- Days 7–8: **NO RECORDS IN AIRTABLE** — must be built manually or flagged to Ray before starting
 
 ---
 
