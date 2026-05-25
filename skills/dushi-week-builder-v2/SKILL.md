@@ -277,3 +277,5 @@ Before handing off:
 - [ ] New/third-party activities ran through Operator Research Protocol
 - [ ] Dushi Week Registry updated (Airtable log, Status, file path)
 - [ ] HTML file saved to guest's working folder, path logged in registry
+- [ ] **Final delivery readthrough** (HTML builds): search for "$35" / "credit" / internal build notes in guest copy; verify Week at a Glance themes match actual days; verify main timeline times match TC Today box times; if Two Coconut, confirm "Included — Two Coconut" on all restaurant dinners (template gap — must be added manually)
+- [ ] Insert-earlier-day chain check: if a restaurant was added to an earlier day than the template, ALL subsequent occurrences re-checked for copy 1/2 status and restaurant-about card moved to earliest day

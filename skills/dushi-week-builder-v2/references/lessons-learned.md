@@ -2,7 +2,7 @@
 
 **MANDATORY READING.** This document must be read BEFORE any other reference file, BEFORE writing any content, BEFORE generating any output. It contains every mistake, correction, insight, and technical lesson learned from real builds. Ignoring this document leads to hallucinated content, dangerous liability language, factual errors, and wasted time.
 
-Last updated: 2026-05-25 (Fairburn Cartel build — first HTML-template-skeleton couple build. Added Section 20: Template-First Rule. HTML template is now the authoritative skeleton for sat-to-sat couple variants — day copy is never rewritten from scratch.) Prior: 2026-05-23 (skill change: output is now **text-only Markdown** — photo/HTML/PDF/DOCX pipeline retired — and a new **Operator Research Protocol** for new/unknown activities). Prior: 2026-05-22 (Adams "Traveling Trio" — first two-coconut all-inclusive LEAD build). Prior: 2026-04-16 (King Cartel build)
+Last updated: 2026-05-25 (Fairburn Cartel build review + Deep North Cartel build — added Section 19 lessons: insert-earlier-day chain check, Glance tracking, internal notes purge, time consistency. Added Section 20 Two Coconut template gap. Added Pre-Build Checklist item 16. Fairburn Cartel build — first HTML-template-skeleton couple build. Added Section 20: Template-First Rule. HTML template is now the authoritative skeleton for sat-to-sat couple variants — day copy is never rewritten from scratch.) Prior: 2026-05-23 (skill change: output is now **text-only Markdown** — photo/HTML/PDF/DOCX pipeline retired — and a new **Operator Research Protocol** for new/unknown activities). Prior: 2026-05-22 (Adams "Traveling Trio" — first two-coconut all-inclusive LEAD build). Prior: 2026-04-16 (King Cartel build)
 
 ---
 
@@ -520,6 +520,12 @@ Do this EVERY TIME before writing a single word:
 13. ✅ Check group size — groups of 5+ need two iCars
 14. ✅ Ask Ray: "Anything special about this guest I should know?"
 15. ✅ List any new / third-party activity with no verified operator (horseback riding, ATV, wine tasting, cooking class, etc.) and run the Operator Research Protocol (Section 1A / SKILL.md) — ask Ray for a preferred operator, then research + forensically fact-check before writing it in.
+16. ✅ **Final delivery readthrough** (HTML builds — do this LAST, before saving):
+    - Search HTML for `$35` and `credit` — delete any found
+    - Search for builder rationale in guest-facing copy ("The briefing...", "this is our default...", "this was requested...") — remove all
+    - Verify Week at a Glance theme column matches actual day content
+    - Verify times in main timeline match TC Today box for the same activity
+    - If Two Coconut build: confirm "Included — Two Coconut" appears on each restaurant dinner (template gap — must be added manually; the HTML template does not do this automatically)
 
 ---
 
@@ -558,6 +564,10 @@ Do this EVERY TIME before writing a single word:
   5. **Restaurant-about on first occurrence only.** If a restaurant appears on Day 1 and again on Day 3, only Day 1 gets the restaurant-about card.
   6. **Two Coconut label.** "Included — Two Coconut" everywhere. Never "$35/person", never "Culinary Pass", never "CP X of N."
   7. **Returning couple letter.** "You came back" framing. Reference the specific moment that proved they'd return (snowstorm, booking before photos were sent). Contrast last trip (full family) with this trip (just the two of them). Closing H2: "[Names] — you came back. That means everything."
+  8. **Insert-earlier chain check is mandatory.** When Brisa Do Mar was added to Day 1, Day 2's existing copy became the second occurrence but still read as copy 1. Caught only in final review.
+  9. **Week at a Glance must be updated with every insert/swap.** Template Glance listed "Coffee Bike" for Sunday but the actual day had Brisa Do Mar.
+  10. **Internal notes removed in review.** Villa Vis block contained "The briefing didn't flag anything against seafood, so this is our default welcome dinner." — removed before delivery.
+  11. **Time consistency flagged.** Culture Walk listed as 4:15 PM in main timeline but 5 PM in TC Today box. Always check both.
 - **Token map for this build:** `{Basecamp}` → Dushi Hideaway · `{First Name}` → Lori · `[Crew name]` → The Fairburn Cartel · `[Guest first names]` → Lori & Scott · Dates → Feb 6–13, 2027
 
 ### Build 4: The King Cartel (Most Corrections)
@@ -643,6 +653,35 @@ If a venue appears more than once in the same week, the second occurrence uses C
 ### Restaurant-About Cards — First Occurrence Only
 A restaurant-about card (the white card with h3 + description + URL) appears only the FIRST TIME a restaurant shows up in the week. Subsequent appearances = time-block only, no card. If adding a restaurant on an earlier day, remove the card from the later day.
 
+### Insert-Earlier-Day Chain Check
+When adding a restaurant to an EARLIER day than it currently appears in the template:
+1. The new day becomes the FIRST occurrence → restaurant-about card moves HERE (remove from old day).
+2. EVERY subsequent occurrence (day 2, 3, etc.) is now one position later in the chain → audit all for copy 1/2 status. A block that was copy 1 (first occurrence) becomes copy 2 (second occurrence).
+3. Do this audit immediately — never add the new day block and move on without checking all other occurrences.
+
+**Fairburn example**: Brisa Do Mar was in template at Day 2 and Day 3. Added to Day 1. Day 2 was still using copy 1 language. Caught only in the final review — required an extra edit session.
+
+### Week at a Glance Must Track Actual Day Content
+The "Theme" column in the Week at a Glance must reflect what the day actually contains. If a breakfast venue changes (template has Coffee Bike → swapped to Brisa Do Mar), update the Glance theme.
+
+The Glance is what guests read first — a mismatch between the Glance and the day pages breaks trust immediately.
+
+**Check after every insert/swap**: does the Glance still match the actual day?
+
+### Internal Notes Must Never Reach Guest Copy
+Before delivery, do a final pass specifically looking for builder-to-builder language embedded in guest-facing copy:
+- ~~"The briefing didn't flag anything against seafood, so this is our default welcome dinner."~~ (found in Villa Vis block, Fairburn build)
+- ~~"This was requested by..."~~
+- ~~"We chose this because..."~~
+- Any sentence starting with "The briefing", "Per the notes", "This is our default" → remove it.
+
+These are internal rationale and must never appear in the delivered HTML.
+
+### Time Consistency: Main Timeline vs TC Today Box
+If an activity appears in the main day timeline with a specific time (e.g., "4:15 PM — Culture Walk with Tcam"), that same time must appear in the TC Today info box at the bottom of that day. Check both whenever you write or edit either one.
+
+Fairburn example: main timeline said 4:15 PM, TC Today box said 5 PM for the same Culture Walk. Both needed to match.
+
 ### Debrief → Booking Channel Check
 Before writing any Airbnb review in a debrief, pull the Pipeline record. Airbnb booking → write Airbnb review. Non-Airbnb → SKIP Airbnb review, ask for Google review instead.
 
@@ -711,6 +750,7 @@ The Activity Catalog labels these entries "Copy 2" — search for the venue name
 - Every meal label: **"Included — Two Coconut"**
 - Never: "$35/person", "Culinary Pass", "CP X of N", "credit", "house account"
 - Before delivering: search the HTML for "$35" and "credit" — delete any instance found
+- ⚠️ **Template gap**: The standard couple HTML template does NOT automatically label restaurant dinners as "Included — Two Coconut." This must be added manually when adapting for a Two Coconut build. Go through each restaurant dinner time-block and add the label at the end of the description. Only genuine additional-cost upsells (daybeds, dolphin swim, extra dives) should say "Additional cost."
 
 ### Restaurant-About Cards — Placement Rule
 
