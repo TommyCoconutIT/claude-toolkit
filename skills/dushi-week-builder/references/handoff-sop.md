@@ -10,11 +10,18 @@ Two skills do the work. You review and approve at two gates.
 | Tool | Access needed |
 |---|---|
 | Claude Code | Desktop app installed on your Mac — https://claude.ai/code |
-| `claude-toolkit` repo | GitHub org member (TommyCoconutIT) — clone + run install.sh |
-| `tommy-os` repo | GitHub org member (TommyCoconutIT) — for pushing microsite code |
+| `claude-toolkit` repo | GitHub org member (TommyCoconutIT) — clone + run `./install.sh` |
+| `tommy-os` repo | GitHub org member (TommyCoconutIT) — clone to `~/Code/tommy-os` |
 | Airtable | Access to base `appFRLV1H76ohiIQS` (Dushi Weeks + Pipeline tables) |
 | TC portal | To read the payment token from the Pipeline record |
 | Vercel | Optional — deploys trigger automatically on merge |
+
+**One-time setup after cloning `tommy-os`:**
+```bash
+cd ~/Code/tommy-os/apps/web
+npm install
+```
+This is required once. The TypeScript check (Step 5) will fail without it.
 
 ---
 
