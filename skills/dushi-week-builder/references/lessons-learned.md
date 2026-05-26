@@ -2,7 +2,7 @@
 
 **MANDATORY READING.** This document must be read BEFORE any other reference file, BEFORE writing any content, BEFORE generating any output. It contains every mistake, correction, insight, and technical lesson learned from real builds. Ignoring this document leads to hallucinated content, dangerous liability language, factual errors, and wasted time.
 
-Last updated: 2026-05-26 (Sagar Cartel build — first Family Young Adults prospect build. Added checklist items 16–18: breakfast audit, upsell audit, bookingUrl token rule. Added Build 6 reference. Added pre-PR breakfast+upsell pass to Section 19.) Prior: 2026-05-25 (Fairburn Cartel build — first HTML-template-skeleton couple build. Added Section 20: Template-First Rule.) Prior: 2026-05-23 (skill change: output is now **text-only Markdown** — photo/HTML/PDF/DOCX pipeline retired — and a new **Operator Research Protocol** for new/unknown activities). Prior: 2026-05-22 (Adams "Traveling Trio" — first two-coconut all-inclusive LEAD build). Prior: 2026-04-16 (King Cartel build)
+Last updated: 2026-05-26 (Moons Cartel build — added Captain Mike boat trip types to Section 14, CP counter grep to Section 3, pre-PR microsite audit to Section 19, and expanded Build #7 corrections in Section 17. Prior: Sagar Cartel build — first Family Young Adults prospect build. Added checklist items 16–18: breakfast audit, upsell audit, bookingUrl token rule. Added Build 6 reference. Added pre-PR breakfast+upsell pass to Section 19.) Prior: 2026-05-25 (Fairburn Cartel build — first HTML-template-skeleton couple build. Added Section 20: Template-First Rule.) Prior: 2026-05-23 (skill change: output is now **text-only Markdown** — photo/HTML/PDF/DOCX pipeline retired — and a new **Operator Research Protocol** for new/unknown activities). Prior: 2026-05-22 (Adams "Traveling Trio" — first two-coconut all-inclusive LEAD build). Prior: 2026-04-16 (King Cartel build)
 
 ---
 
@@ -150,6 +150,11 @@ The standard All-In package includes 5 Culinary Pass restaurant dinners ($35/per
 - **Printable itinerary HTML** — **NEVER** use "$35/person", "Culinary Pass", "credit", or "house account" anywhere: not in `restaurant-about` cards, not in time-block body copy, not in info boxes. The template has zero such language. The `restaurant-about` cards are description-only (restaurant vibe, hours, tips). Run "grep for $35 and credit, delete all" before delivering — same rule as Two Coconut.
 - **Microsite** — Culinary Pass belongs ONLY in `offer.includes` (e.g. "5 Culinary Pass dinners ($35/person credit)") and `goodToKnow` (explain what the pass means and which restaurants it covers). Never in `days[].schedule` titles or body.
 - **Microsite schedule titles** — use venue name only (`"Villa Vis"`, not `"Dinner 1 of 5 — Villa Vis"`). No counters, no credit labels.
+- **PRE-PR GREP (mandatory):** Before opening any One Coconut microsite PR, run:
+  ```
+  grep -n "Culinary Pass Dinner" apps/web/src/features/dushi-microsite/content/<family>.ts
+  ```
+  Must return zero results. The pattern `<strong>Culinary Pass Dinner X of 5...</strong>` appears in schedule bodies on multiple builds and is ALWAYS wrong. Delete every instance found.
 
 ### Two Coconut / Double Dushi — all-inclusive (added 2026-05-22, Adams build)
 
@@ -278,6 +283,17 @@ These OVERRIDE the generic scheduling in island-database.md and the main SKILL.m
 **Zest Beach Café**
 - Great for families — picnic tables in the sand, space for kids to run, visibility
 - The go-to family dinner spot after a big adventure day
+
+### Captain Magic Mike — Two Distinct Boat Trips (added 2026-05-26, Moons build)
+
+Captain Mike runs **two different trips**. They are NOT interchangeable — check the itinerary to see which one the guest has, then use that label everywhere (slug, name, offer.includes, letter, closing).
+
+| Trip | Time | Label to use | Experience |
+|---|---|---|---|
+| **Private Boat Day** | 10 AM – 2 PM | "Private Boat Day with Captain Magic Mike" | Snorkeling (Tugboat Beach, Spanish Water), hidden coves, private beach BBQ |
+| **Private Sunset Cruise** | 3 PM – 7 PM | "Private Sunset Cruise with Captain Magic Mike" | On-water sunset, onboard BBQ, drinks flowing as the light turns |
+
+**Never** label the 10 AM trip a "sunset cruise" — it ends at 2 PM. Check `<h4 class="time-label">` in the approved itinerary HTML for the departure time, then match all microsite references accordingly: experiences slug, experiences name, `offer.includes` line, letter paragraph, closing paragraph, and schedule item title + body.
 
 ### El Capitano (Experience, not restaurant)
 - Luxury self-drive tender boats on Spanish Water. NO license needed.
@@ -531,6 +547,11 @@ Do this EVERY TIME before writing a single word:
 16. ✅ **Breakfast audit** — Every non-arrival day must open with Coffee Bike OR Brisa del Mar. No other breakfast venue. Go day by day before shipping. Coffee Bike is closed Monday → use Brisa del Mar on Mondays.
 17. ✅ **Upsell audit** — Before shipping, verify: (a) west-coast day has Frankie's Beach + Touriffic jet ski; (b) Mambo/Sea Aquarium day has dolphin swim + Mood cabana; (c) Jan Thiel beach days have Papagayo daybed. These are the standard upsell slots — don't leave them empty.
 18. ✅ **bookingUrl token** — Use the Pipeline Airtable record ID (`recXXX...`) as the `t=` parameter, NOT the short token from `fldZIAV3Qr8RaTixS`. Confirmed: portal reads record ID.
+19. ✅ **Cover hero image** — Two steps, every build:
+    1. **Set the Basecamp** on the Pipeline record: update field `fld15SzszbTcHufZT` (linked record) to the correct Basecamp record ID from `tblGc7g7uBedgS3Ui`.
+    2. **Fetch the hero Cloudinary ID** from the Basecamp record: field `fldwENhluLhDMIhdG` returns a slug (e.g. `dushi-hideaway`, `palm-breeze`, `hh-hero-people`).
+    3. **Build the cover URL**: `https://res.cloudinary.com/tommy-coconut/image/upload/w_1600,h_800,c_fill,g_auto,q_auto:best/<slug>`
+    ⚠️ Do NOT use the old `dhschyq40` cloud or the hardcoded versioned Palm Breeze URL from the template skeleton — those are wrong for any estate that isn't Palm Breeze.
 
 ---
 
@@ -581,6 +602,12 @@ Do this EVERY TIME before writing a single word:
   1. **$35/person Culinary Pass in restaurant-about** — added "Culinary Pass credit applies here" to the Brisa do Mar `restaurant-about` card. WRONG. Template has zero credit language. All tiers: `restaurant-about` = description only. Culinary Pass info goes in the microsite only.
   2. **No real guest names** — guest only had a username. Adapted letter salutation to "You two," and massage block accordingly. Don't invent names.
   3. **Dates TBD** — guest had no confirmed dates. Used generic labels ("Your Arrival Saturday", "Day 1 · Sunday") + placeholder ISO dates `2026-01-01`–`2026-01-08`. Update `arrivalDate`, `departureDate`, `dateRangeLabel` in the microsite once dates are confirmed.
+  4. **CP Dinner counter strings in microsite schedule bodies** — `<strong>Culinary Pass Dinner X of 5 — $70 tonight.</strong>` appeared in all 5 dinner schedule bodies. WRONG — the rule says CP language goes ONLY in `offer.includes` and `goodToKnow`. Pre-PR: grep for "Culinary Pass Dinner" in the content file — must return zero results.
+  5. **Boat day mislabelled as sunset cruise** — the approved itinerary was the 10 AM–2 PM Private Boat Day, but the microsite used "sunset cruise" everywhere (slug, experiences card, letter, closing, offer.includes). Always check the time-label in the itinerary to determine which trip type, then match all references. See Section 14 for the two trip types.
+  6. **Invented content in beaches[] card** — Porto Mari's `vibe` and `description` contained "double reef" and "wild pigs" that were not in the Moons itinerary. All `beaches[]` and `experiences[]` card fields must trace to the approved itinerary or verified facts — not invented.
+  7. **Redundant offer.includes lines** — two separate lines described the same boat trip. Pre-PR: read `offer.includes` top-to-bottom and remove logical duplicates.
+  8. **Timing descriptor mismatch in offer.includes** — said "last-night Pasawá" when Pasawá was actually on Day 1. Any timing label ("last-night", "welcome", etc.) in `offer.includes` must match the actual schedule position.
+  9. **Internal ops notes in schedule body** — text intended for TC operations ("confirm dietary specifics with Kelly first", "details not yet shared with the crew") appeared in guest-facing body copy. Scan every body field for any text that implies TC crew action or internal coordination — delete it.
 
 ### Build 6: The Sagar Cartel (First Family Young Adults Prospect Build)
 - **Who**: Sagar (lead — full name unknown at build time)
@@ -687,6 +714,18 @@ Before opening the PR for any microsite build, do a 30-second pass:
 2. Open every day's upsells. Is the west-coast day missing Frankie's or Touriffic? Add them. Is the Mambo day missing dolphin swim or Mood cabana? Add them. Are Jan Thiel beach days missing a Papagayo daybed? Add it.
 This takes 2 minutes and saves a full re-deploy cycle.
 
+### Pre-PR Microsite Content Audit (added 2026-05-26, Moons build)
+
+Run these checks on the content file before opening the PR. Every item on this list caused a post-PR fix on a real build.
+
+1. **CP counter grep** (One Coconut builds only): `grep -n "Culinary Pass Dinner" content/<family>.ts` → must return 0 results.
+2. **Boat day type**: check the itinerary's departure time. 10 AM → "Private Boat Day". 3 PM → "Private Sunset Cruise". Verify the experiences slug, experiences name, offer.includes line, letter paragraph, and closing paragraph all use the same label.
+3. **offer.includes deduplication**: read the array top-to-bottom. Each activity appears once. Remove logical duplicates (e.g., two boat lines, two massage lines).
+4. **offer.includes timing descriptors**: any label like "last-night X" or "welcome X" must match the actual schedule position. Cross-check against the days array.
+5. **Beaches/experiences cards vs itinerary**: every `beaches[].description`, `beaches[].vibe`, and `experiences[].blurb` must trace to the approved itinerary or verified facts. No invented menus, reef names, or animal sightings.
+6. **Internal ops notes**: grep schedule bodies for phrases like "confirm with", "not yet shared", "internal", "ops note". Delete any found.
+7. **expiresAtISO**: set to 48 hours from the deploy time you're about to trigger — not from when the build started.
+
 ### Debrief → Booking Channel Check
 Before writing any Airbnb review in a debrief, pull the Pipeline record. Airbnb booking → write Airbnb review. Non-Airbnb → SKIP Airbnb review, ask for Google review instead.
 
@@ -738,7 +777,7 @@ If in doubt: **leave it alone and ask.**
 | `[Guest first names]` | Both names (e.g., "Lori & Scott") |
 | `[Hometown]` | City they're from |
 | Dates on cover | Arrival and departure dates |
-| Cover hero image URL | Estate-specific image from Cloudinary (check registry for prior build) |
+| Cover hero image URL | Look up from Basecamps table (`tblGc7g7uBedgS3Ui`, field `fldwENhluLhDMIhdG`) → build as `https://res.cloudinary.com/tommy-coconut/image/upload/w_1600,h_800,c_fill,g_auto,q_auto:best/<slug>`. Also set `fld15SzszbTcHufZT` on the Pipeline record first. See checklist item 19. |
 
 ### Copy Source Priority (When a Block Needs New or Changed Content)
 

@@ -62,6 +62,12 @@ From the Q&A JSON, extract these questions:
 Build the booking URL: `https://portal.tommycoconutprivateresorts.com/payments/pay?t=<pipeline_record_id>`
 The `?t=` value is the Pipeline record ID (e.g. `recHq43qTtZAyFIUq`), NOT the short token in `fldZIAV3Qr8RaTixS`.
 
+**Cover hero image — do this every build:**
+1. If `fld15SzszbTcHufZT` (Basecamp/Estate) is empty on the Pipeline record, set it now: `update_records_for_table` with `{"fld15SzszbTcHufZT": ["<basecamp_record_id>"]}`.
+2. Fetch the Cloudinary public ID from the Basecamps table: base `appFRLV1H76ohiIQS` → table `tblGc7g7uBedgS3Ui` → record matching the estate → field `fldwENhluLhDMIhdG` (e.g. `dushi-hideaway`, `palm-breeze`, `hh-hero-people`).
+3. Build the cover image URL: `https://res.cloudinary.com/tommy-coconut/image/upload/w_1600,h_800,c_fill,g_auto,q_auto:best/<slug>`
+4. Use this URL for the `cover-page::before` background in the itinerary HTML. Do NOT use the hardcoded Palm Breeze URL from the template skeleton.
+
 ---
 
 ## STEP 3 — Check the Dushi Weeks registry
@@ -218,6 +224,50 @@ Present the message to the user. Do not send it — Boy sends it.
 
 ---
 
+## STEP 10 — Build the offer email
+
+Generate a branded HTML offer email and save it to the guest's local folder so Boy can send it via Safari → Apple Mail.
+
+**File path**: `~/Desktop/Leads- dushi week/[family]/email-[family]-offer.html`
+(use the same folder the itinerary HTML lives in — lowercase hyphenated family name)
+
+### Email structure
+
+| Section | Content |
+|---|---|
+| **Header** | Navy bar · "Tommy Coconut Private Resorts · Curaçao" in gold, uppercase, tracked |
+| **Hero** | Full-width Cloudinary estate image (`w_1200,h_640,c_fill,g_auto,q_auto:best/<estate-slug>`) with dark gradient overlay · "DUSHI WEEK™" eyebrow (gold) + cartel name (white, Playfair Display) |
+| **Body** | TC voice offer copy — lead with the motivation/Must Life hook from the letter, 2–3 short paragraphs |
+| **Highlights block** | Gold left-border box · "What's included" label · bullet the key inclusions (Two Coconut meals if applicable, headline experiences, iCar, concierge) |
+| **CTA button** | Gold `#FFC125`, navy text, "View Your Dushi Week →" · links to microsite URL · plain URL below button for copy-paste |
+| **Expiry block** | Navy bar · offer deadline in island time · price label |
+| **Dietary note** | Turquoise left-border box (only if dietary restriction exists) · always puts action on guest: "let the server know" — never "TC has handled it" |
+| **Signature** | Boy's name (Playfair Display), role, WhatsApp `+5999 696 8263`, `boy@tommycoconut.com` |
+| **Footer** | Navy bar · "VACATION IS HOLY. 🥥" · TC address |
+
+### Design tokens
+
+| Token | Value |
+|---|---|
+| Navy | `#002D42` |
+| Gold | `#FFC125` |
+| Turquoise | `#7EDCD5` |
+| Background | `#FDFBF7` |
+| Body text | `#4A4A4A` |
+| Fonts | Playfair Display + Lato (Google Fonts) |
+| Max width | 620px, centered |
+
+### Sending instructions (tell Boy after presenting the file)
+
+1. Open the file in **Safari** (`File → Open File`)
+2. `File → Share → Email This Page`
+3. Apple Mail opens with the email fully rendered
+4. Add the guest email as recipient and send
+
+Present the file path to the user. Do not send the email — Boy sends it.
+
+---
+
 ## Summary of what this skill automates vs. what stays human
 
 | Step | Automated | Human |
@@ -234,3 +284,5 @@ Present the message to the user. Do not send it — Boy sends it.
 | Update Airtable | ✅ Claude | — |
 | Write WhatsApp | ✅ Claude | — |
 | Send WhatsApp | — | ✅ Boy sends |
+| Build offer email | ✅ Claude | — |
+| Send offer email | — | ✅ Boy sends |

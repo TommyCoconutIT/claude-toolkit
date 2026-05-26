@@ -162,6 +162,18 @@ Format: ISO with Curaçao offset (`-04:00`), e.g. `"2026-05-28T17:00:00-04:00"`.
 
 7. **Run TypeScript check** from `apps/web/`: `npm run typecheck` (NOT `npx tsc` — it self-installs and bails; in a fresh worktree run `npm install` at the worktree root first). Must exit 0. Catch missing fields or shape mismatches before they hit Vercel.
 
+7a. **Pre-PR content audit** — run this checklist before opening the PR. Every item caused a post-deploy fix on a real build:
+
+   | Check | Command / Action |
+   |---|---|
+   | CP counter strings | `grep -n "Culinary Pass Dinner" content/<family>.ts` → must return 0 |
+   | Boat day type | Check itinerary departure time. 10 AM → "Private Boat Day". 3 PM → "Private Sunset Cruise". Match slug, experiences name, offer.includes, letter, closing. |
+   | offer.includes dupes | Read the array top-to-bottom. Each activity once. Remove duplicates. |
+   | offer.includes timing | "last-night X" / "welcome X" labels must match the actual schedule position. |
+   | Beaches/experiences cards | Every `description`, `vibe`, `blurb` traces to itinerary or verified facts. No invented menus, reef names, or animals. |
+   | Internal ops notes | `grep -n "confirm with\|not yet shared\|internal" content/<family>.ts` → delete any found. |
+   | expiresAtISO | Set to 48 hours from THIS deploy — not from when you built it. |
+
 8. **Verify locally**: open `localhost:3002/<FamilySlug>DushiWeek<N>` and walk every section + every day card. The static fallbacks should render even without Airtable env vars. Test the WhatsApp upsell buttons (they should copy + open `wa.me/?text=…`).
 
 9. **Open a PR** with title `feat(marketing/<family-slug>-dushi-week-<n>): create personalized microsite from itinerary`. Body should list what came from the itinerary verbatim (letter, philosophy, days) and what's defaulted (hero video, music, fallback crew copy).
