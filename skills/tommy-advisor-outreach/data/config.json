@@ -1,0 +1,34 @@
+{
+  "pdf_path": "/Users/littleboss/Downloads/tommy-coconut-advisor-dushi-sheet.pdf",
+  "send_from": "boy@tommycoconut.com",
+  "airtable_base_id": "appgvTQA2jmr63R4G",
+  "airtable_table_id": "tblAYeEEElaubtW06",
+  "airtable_table_name": "Travel Advisor Pipeline",
+  "slack_channel_id": "C0AKR438RJA",
+  "slack_channel_name": "#ops-updates",
+  "wave_to_agencies": {
+    "Wave 1": [
+      {"name": "Villas of Distinction", "type": "Aggregator", "website": "https://villasofdistinction.com"},
+      {"name": "Caribbean Journey", "type": "Advisor Agency", "website": null}
+    ],
+    "Wave 2": [
+      {"name": "Wimco", "type": "Aggregator", "website": "https://wimco.com"},
+      {"name": "Triad Travel Group", "type": "Advisor Agency", "website": null}
+    ],
+    "Wave 3": [
+      {"name": "Brownell", "type": "Advisor Agency", "website": null},
+      {"name": "Frosch", "type": "Advisor Agency", "website": null}
+    ],
+    "Wave 4": [
+      {"name": "SmartFlyer", "type": "Advisor Agency", "website": null},
+      {"name": "Embark Beyond", "type": "Advisor Agency", "website": null},
+      {"name": "Fora", "type": "Advisor Agency", "website": null},
+      {"name": "Indagare", "type": "Advisor Agency", "website": null}
+    ]
+  },
+  "_notes": {
+    "pdf_path": "Boy: confirm this is the right file. Recommend moving it to ~/.claude/skills/tommy-advisor-outreach/data/ so Downloads cleanup doesn't break the skill.",
+    "slack_channel_id": "Verified 2026-05-12 via slack_search_channels — #ops-updates in tommycoconutworkspace.slack.com (correcting the placeholder from the BUILD doc which had C0AL4BTJGSV).",
+    "wave_to_agencies": "Edit this map to add/remove agencies per wave. The prospect mode trigger 'prospect Wave X' reads this. The website field is optional — leave null if unknown and the prospector will discover it."
+  }
+}

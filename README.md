@@ -1,74 +1,117 @@
-# Claude Toolkit
+# Tommy Coconut — Claude Toolkit
 
-Personal Claude Code workflow — templates and skills that make new projects move from idea to deployed-app in hours instead of weeks.
+Shared Claude Code workflow for the TC team. Skills, templates, and SOPs for building Dushi Week itineraries and microsites — consistently, regardless of who's doing the build.
 
-This repo is version-controlled because:
+This repo is the single source of truth. Everyone clones the same repo, runs the same install, gets the same skills. One pull keeps everyone in sync.
 
-- **Backup** — laptop dies, your workflow doesn't
-- **Multi-machine sync** — work laptop, home Mac, future cloud workstation, all use the same toolkit
-- **Iteration** — every refinement to a skill or template is tracked. You can see what worked, roll back what didn't
-- **Sharing** — invite collaborators when a workflow is worth sharing
+---
 
-## Structure
+## What's in here
 
 ```
 claude-toolkit/
-├── install.sh                          ← one-shot machine setup
+├── install.sh                                  ← one-shot machine setup (run once per machine)
 ├── templates/
-│   └── claude-project-starter/         ← symlinked → ~/Templates/claude-project-starter
-│       ├── README.md
-│       ├── init-prompt.md
-│       └── docs/                       ← 8 doc skeletons for new projects
+│   └── claude-project-starter/                 ← doc skeletons for new projects
 └── skills/
-    └── scope-project/                  ← symlinked → ~/.claude/skills/scope-project
-        └── SKILL.md
+    ├── dushi-week-builder/                     ← builds the printable Dushi Week itinerary
+    │   └── references/
+    │       ├── lessons-learned.md              ← read this first, every time
+    │       ├── island-database.md              ← restaurants, beaches, crew bios, cruise logic
+    │       └── itinerary-standard-sat-to-sat--couple.html
+    ├── dushi-week-microsite-from-itinerary/    ← turns the itinerary into a live microsite
+    ├── dushi-week-microsite/                   ← architecture reference for the microsite codebase
+    ├── dushi-week-microsite-two-coconut/       ← variant: two-coconut (booked guest) flow
+    ├── tommy-coconut-voice/                    ← Tommy's voice bible + writing rules
+    ├── tommy-advisor-outreach/                 ← cold email pipeline for travel advisors
+    └── scope-project/                          ← new-project scoping skill
 ```
 
-## Install (any machine)
+---
+
+## Install (new machine — do this once)
 
 ```bash
-git clone git@github.com:hairy-coconut/claude-toolkit.git ~/Code/claude-toolkit
+# 1. Clone the repo
+git clone git@github.com:TommyCoconutIT/claude-toolkit.git ~/Code/claude-toolkit
+
+# 2. Run the installer (creates symlinks into ~/.claude/skills/)
 cd ~/Code/claude-toolkit
 ./install.sh
+
+# 3. Install Claude Code if you haven't already
+# → https://claude.ai/code  (desktop app, free to install)
 ```
 
-The install script creates symlinks so Claude Code finds the skill at `~/.claude/skills/scope-project/` and the templates at `~/Templates/claude-project-starter/`. Once installed, every `git pull` updates everything live.
+After install, every `git pull` updates your skills automatically — no re-running the installer.
 
-## Usage
+---
 
-In any Claude Code session in a fresh directory:
-
-```bash
-mkdir ~/Desktop/<new-project>
-cd ~/Desktop/<new-project>
-claude
-```
-
-Then say "scope a new project" or type `/scope-project`. The skill walks you through 10 scoping questions, fills in 8 spec docs, and stops — no code until you reply `approved`.
-
-## Iterating
-
-When you find yourself wishing the skill asked a different question, or one of the templates had a section it doesn't have:
+## Staying in sync
 
 ```bash
 cd ~/Code/claude-toolkit
-# edit whatever needs changing — the symlinks mean the edit is live immediately
-git add -A && git commit -m "what you changed" && git push
+git pull
 ```
 
-On every other machine: `git pull`. Done.
+That's it. The symlinks mean the updated files are live immediately in your next Claude session.
+
+---
+
+## Building a Dushi Week (the short version)
+
+Full SOP is at `skills/dushi-week-builder/references/handoff-sop.md`. The short version:
+
+1. Get the guest info from the Pipeline record in Airtable
+2. Open Claude Code in any directory → type `/dushi-week-builder`
+3. **Boy reviews + approves the itinerary before you go further** ← hard gate
+4. Type `/dushi-week-microsite-from-itinerary` → Claude builds the microsite code
+5. Open a PR to `TommyCoconutIT/tommy-os` → **Boy reviews + merges** ← hard gate
+6. Wait for Vercel to go green → update Airtable → hand the WhatsApp message to Boy
+
+---
+
+## Two repos — know the difference
+
+| Repo | What it is | Who touches it |
+|---|---|---|
+| `TommyCoconutIT/claude-toolkit` | The skills and SOPs. This repo. | Everyone on the TC team |
+| `TommyCoconutIT/tommy-os` | The website codebase. The microsite code lives here. | TC tech team |
+
+Skills drive what Claude does. The output (TypeScript files) goes into `tommy-os`.
+
+---
+
+## Updating a skill
+
+When something needs to change (a lesson learned, a voice rule update, a new restaurant in the database):
+
+```bash
+# Edit the file directly — changes are live immediately via symlinks
+cd ~/Code/claude-toolkit
+# edit skills/<skill-name>/SKILL.md or references/*.md
+git add -A
+git commit -m "describe what changed and why"
+git push
+```
+
+Everyone on the team gets the update on their next `git pull`. **Do not edit skills only on your local machine** — it breaks consistency for everyone else.
+
+---
 
 ## Adding a new skill
 
 ```bash
 mkdir skills/<new-skill-name>
-# write skills/<new-skill-name>/SKILL.md with frontmatter (name, description) + body
-./install.sh         # creates the symlink at ~/.claude/skills/<new-skill-name>/
+# write skills/<new-skill-name>/SKILL.md
+./install.sh   # creates the symlink
 git add -A && git commit -m "Add <new-skill-name> skill" && git push
 ```
 
+---
+
 ## What's NOT in this repo
 
-- API keys / secrets → keep in `~/Templates/.shared-secrets.env` (gitignored)
-- Project-specific code → goes in its own repo (e.g., `dushi-lingo`)
-- Machine-specific config (Claude settings, shell rc) → out of scope, use a dotfiles repo if you want one
+- API keys / secrets → keep in `~/Templates/.shared-secrets.env` (gitignored everywhere)
+- Project-specific code → goes in `tommy-os` or its own repo
+- Machine-specific Claude settings → `~/.claude/settings.local.json` (gitignored)
