@@ -17,7 +17,16 @@ fetch → build itinerary → build microsite → ship → update Airtable + wri
 Ask the user:
 > "Paste the Pipeline record ID for this guest (starts with `rec`)."
 
-If they give you a name or email instead, search the Pipeline table:
+⚠️ **Two pipeline records exist per guest — make sure you have the right one:**
+
+| Record type | What it is | Used for |
+|---|---|---|
+| **Lead pipeline** | `tblb7gP5D3NYND9a0` — has Q&A, guest profile, phone, email | Fetching guest data (Step 2) |
+| **Offer/payment pipeline** | Britt creates this separately — has Total Amount, Payment_Gateway="Stripe" | `bookingUrl` + `bookingPipelineId` in the microsite |
+
+The user should paste the **offer/payment pipeline ID** — this is what the portal pay page reads at `?t=<id>`. If they paste the lead pipeline ID, the pay page won't find the record. If unsure, ask Britt which `rec…` she created for the offer.
+
+To fetch **guest data**, search the lead pipeline table by email if needed:
 - Base: `appFRLV1H76ohiIQS`
 - Table: `tblb7gP5D3NYND9a0`
 - Search by email field `fldvNQMiLWRW04G2Q`

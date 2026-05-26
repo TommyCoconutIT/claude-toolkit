@@ -143,6 +143,14 @@ File location: `tc-guest-confirmation/references/value-stack.md` (in the skills 
 
 One price from $7,450/week includes: private villa (7 nights + 8th Night Buffer), iCar EV-SUV (8 days), boat charter with Captain Mike (half-day, BBQ included), Wednesday Sunset Club (VIP + hosted BBQ), Flamingo Hike with Happy & Lucky, reef snorkeling with Raymonde, culture walk with Tcam, line fishing with Boy & Britt, Give Back Locally with Kim & Ray, Discovery Dive (intro or guided), 7 dinners total (5 restaurant at $35/person + 1 onboard BBQ + 1 Sunset Club BBQ), WhatsApp concierge, airport transfers (Jeremiah), 60-min massage for the booker, Data Freedom SIM, housekeeping (final + mid-stay), fridge stocked + restocked, photo session at Sunset Club Golden Hour, custom hardcover photo album, beach kit (chairs, safe, snorkels, SUP, cooler), Jan Thiel beach access + parking.
 
+### One Coconut / Standard Dushi Week Full — Culinary Pass framing (added 2026-05-26, Moons build)
+
+The standard All-In package includes 5 Culinary Pass restaurant dinners ($35/person credit). Here is where that information lives and where it NEVER appears:
+
+- **Printable itinerary HTML** — **NEVER** use "$35/person", "Culinary Pass", "credit", or "house account" anywhere: not in `restaurant-about` cards, not in time-block body copy, not in info boxes. The template has zero such language. The `restaurant-about` cards are description-only (restaurant vibe, hours, tips). Run "grep for $35 and credit, delete all" before delivering — same rule as Two Coconut.
+- **Microsite** — Culinary Pass belongs ONLY in `offer.includes` (e.g. "5 Culinary Pass dinners ($35/person credit)") and `goodToKnow` (explain what the pass means and which restaurants it covers). Never in `days[].schedule` titles or body.
+- **Microsite schedule titles** — use venue name only (`"Villa Vis"`, not `"Dinner 1 of 5 — Villa Vis"`). No counters, no credit labels.
+
 ### Two Coconut / Double Dushi — all-inclusive (added 2026-05-22, Adams build)
 
 A fourth offer shape exists beyond the three above, and it CAN apply to the printable itinerary (not just the microsite). The `dushi-week-microsite-two-coconut` skill owns the web/booking side; this is how it shows up in the *document*:
@@ -419,7 +427,7 @@ These OVERRIDE `references/island-database.md`. The database was written before 
 These are TC's OWN prices for paid upgrades on top of a Dushi Week — use these, not third-party online rates. Present as optional upgrades ("your call"), arranged via the WhatsApp group.
 - **Horseback ride on the beach** — **$300 per person.** Guided coastal ride, all levels, helmets/water sorted. (A "must-do" guests often name; it's a paid add-on, not included.)
 - **Frankie's Beach / Playa Franki** (private secluded beach, Landhuis San Nicolas, Santa Martha) — **$250 per person** (supersedes the Adams "$1,500 for the group"). Beach beds, cooler, picnic lunch, total privacy; rocky seafloor = snorkel-and-lounge, not swim. Morning or afternoon slot, ~4 hrs.
-- **Touriffic guided jet ski tour** (operator: Touriffic Curaçao, @tourrific_curacao) — **$650 per jet ski (2 riders).** Launches from **Santa Cruz on the WEST coast (Westpunt area), NOT Caracas Bay/Jan Thiel** (Ray correction, May 2026). Guided run up the wild coast to the **Blue Room** sea cave and the western coves. Pairs with the around-the-island / west-coast day, not an east-side day.
+- **Touriffic guided jet ski tour** (operator: Touriffic Curaçao, @tourrific_curacao) — **$350 per jet ski (2 riders).** Launches from **Santa Cruz on the WEST coast (Westpunt area), NOT Caracas Bay/Jan Thiel** (Ray correction, May 2026). Guided run up the wild coast to the **Blue Room** sea cave and the western coves. Pairs with the around-the-island / west-coast day, not an east-side day.
 - **Extra beach cabana** (when 1 is already included for 2 people): **$125 / 2 persons at Jan Thiel**; **$150 / 2 persons on a west-coast beach day.**
 - **Swim with dolphins** — third-party (Dolphin Academy at the Sea Aquarium, Mambo): **Dolphin Swim ≈ $194 p.p.** (30 min in-water + all-day Sea Aquarium access, Tue–Sat; spectators $20). This is the venue's online price, not a TC price — quote as "about $194."
 - **Estate wellness add-ons** (clinic comes to the estate): massage (booker's included, others extra), manicure, pedicure, private yoga, vitamin-drip IV. No fixed prices captured yet — "just ask in the group."
@@ -563,6 +571,17 @@ Do this EVERY TIME before writing a single word:
   7. **Returning couple letter.** "You came back" framing. Reference the specific moment that proved they'd return (snowstorm, booking before photos were sent). Contrast last trip (full family) with this trip (just the two of them). Closing H2: "[Names] — you came back. That means everything."
 - **Token map for this build:** `{Basecamp}` → Dushi Hideaway · `{First Name}` → Lori · `[Crew name]` → The Fairburn Cartel · `[Guest first names]` → Lori & Scott · Dates → Feb 6–13, 2027
 
+### Build 7: The Moons Cartel (First-Timer Couple, Dates TBD, One Coconut Prospect)
+- **Who**: moons123@icloud.com (no real names at build time)
+- **Villa**: Happy Hideaway | **Package**: Prospect (One Coconut, $10,250) | **Dates**: TBD
+- **Guest type**: Couple, first time in Curaçao
+- **Build #**: 62 | **Slug**: Moons123DushiWeek62 | **Microsite**: tommycoconutprivateresorts.com/Moons123DushiWeek62
+- **Pipeline record**: `recPyHqxX9AtZIFDw`
+- **Key corrections made during this build (don't repeat):**
+  1. **$35/person Culinary Pass in restaurant-about** — added "Culinary Pass credit applies here" to the Brisa do Mar `restaurant-about` card. WRONG. Template has zero credit language. All tiers: `restaurant-about` = description only. Culinary Pass info goes in the microsite only.
+  2. **No real guest names** — guest only had a username. Adapted letter salutation to "You two," and massage block accordingly. Don't invent names.
+  3. **Dates TBD** — guest had no confirmed dates. Used generic labels ("Your Arrival Saturday", "Day 1 · Sunday") + placeholder ISO dates `2026-01-01`–`2026-01-08`. Update `arrivalDate`, `departureDate`, `dateRangeLabel` in the microsite once dates are confirmed.
+
 ### Build 6: The Sagar Cartel (First Family Young Adults Prospect Build)
 - **Who**: Sagar (lead — full name unknown at build time)
 - **Email**: sagar.ram4@hotmail.com | **Phone**: +1 2182341857
@@ -576,7 +595,7 @@ Do this EVERY TIME before writing a single word:
   4. **bookingUrl token = Pipeline record ID** (`recLjOD9MLgs3bAUy`), not short token from `fldZIAV3Qr8RaTixS`. Portal validates by record ID.
   5. **Dolphin swim upsell was missing** from the Mambo day. Always add it (Dolphin Academy, ~$194/person, Tue–Sat).
   6. **Frankie's Beach + Touriffic missing** from west-coast day. Always include both as upsells.
-  7. **Touriffic price**: $650/jet ski (2 riders), launches from west coast (Santa Cruz/Westpunt), NOT Caracas Bay.
+  7. **Touriffic price**: $350/jet ski (2 riders), launches from west coast (Santa Cruz/Westpunt), NOT Caracas Bay.
   8. **Coffee Bike closed Monday**: Day 2 was Monday — use Brisa del Mar instead.
 
 ### Build 4: The King Cartel (Most Corrections)

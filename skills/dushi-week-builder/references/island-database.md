@@ -70,7 +70,7 @@ These are the restaurants typically included in the 5-dinner Culinary Pass. The 
 | **Villa Vis** | Jan Thiel | Poke bowls, fresh seafood | Delivery to villa available. Best-kept dinner spot in Jan Thiel. | Arrival night (at-home dinner). Casual. | — |
 | **Mei Mei** | Landhuis Brakkeput | Upscale island cuisine | Open Wed–Sun. 18th-century plantation house. Playground + mini golf on grounds (also Wed–Sun). | Family dinner after mini golf. Architecture lovers. | meimeicuracao.com |
 | **Restaurant de Gouverneur** | Willemstad | Colonial elegance, fine dining | In the city. Pair with culture walk or Willemstad day. | Post-culture-walk dinner. Romantic. | degouvreneurcuracao.com |
-| **Brisa del Mar** | Caracasbaai | Seafood by the sea | Open Wed–Mon. **Closed Tuesdays.** Hidden gem. | Post-fishing dinner. Ocean views. | brisadelmar.com |
+| **Brisa del Mar** | Caracasbaai | Seafood by the sea | Open Wed–Mon. **Closed Tuesdays.** Hidden gem. | Post-fishing dinner. Ocean views. **Departure day breakfast** (5 min from estate, open Saturdays). | brisadelmar.com |
 | **Pasawa Eatery** | Near Caracasbaai | Local soul food | Tucked away. Owner knows every table. Slow-cooked meats, fresh fish, plantain, grandmother's sauces. | End-of-week soul food. Authentic local. | — |
 
 ### Other Restaurants Worth Knowing
@@ -82,16 +82,25 @@ These are the restaurants typically included in the 5-dinner Culinary Pass. The 
 | **Zest Beach** | Jan Thiel Beach | Lunch/all-day | Picnic tables on the beach, feet in sand. Walk-in only. Spacious setup. Cabanas bookable (TC can reserve and include). | — |
 | **Plasa Bieu** | Willemstad | Local lunch | Old market hall. Traditional Curaçaoan food: stobá, funchi, kabritu, fried plantain. No menus on Instagram. Real local food. Great for adventurous eaters and friends groups. | — |
 | **Pop's Place** | — | Breakfast | Another breakfast option. | — |
-| **Bliss the Berry** | Mambo Boulevard | Healthy lunch | Near Sea Aquarium. Good for post-aquarium lunch. | — |
+| **Bliss the Berry** | Mambo Boulevard | Healthy **lunch** | Near Sea Aquarium. Good for post-aquarium lunch. **NOT a breakfast recommendation** — use Mood for the Mambo day breakfast. | — |
+| **Mood Beach** | Mambo Beach Boulevard | Breakfast / beach club | Calm-water side of Mambo. Preferred breakfast stop on Mambo day. Walk straight to the beach after. Cabana reservable (TC upsell ~$120). | — |
+| **Coffee Bike Curaçao** | Caracasbaai roundabout | Breakfast / coffee | Colombian fiets triciclo. Delia and Jhon. Specialty beans, banana bread. Opens early. **Closed Monday.** Default breakfast for non-Monday mornings near the estate. Replace Disfruta Más with this everywhere. | — |
 
 ### Restaurant Scheduling Rules
 - Always flag dietary allergies at EVERY restaurant mention
 - Always note which Culinary Pass dinner number it is (1 of 5, 2 of 5, etc.)
 - Include restaurant website URL in italics where available
-- Brisa del Mar: **closed Tuesdays**
+- Brisa del Mar: **closed Tuesdays** — good for **departure day breakfast** (Saturday = always open)
 - Mei Mei playground/mini golf: open **Wed–Sun** only
 - Number 10: breakfast/brunch only (closes 3 PM). **Pietermaai strip**, not Jan Thiel.
 - Plasa Bieu: lunch only (closes mid-afternoon)
+- **Coffee Bike: closed Mondays.** On Mondays use Brisa del Mar instead.
+- **The only two breakfast options are Coffee Bike (Tue–Sat/Sun) and Brisa del Mar (Wed–Mon).** Every non-arrival day must have one of these. No exceptions.
+- **Mambo day breakfast → Coffee Bike** (grab early, head to Mambo before cruise crowd). **Mood Beach is lunch**, not breakfast.
+- **Monday breakfast → Brisa del Mar** (Coffee Bike closed Monday).
+- **Departure day breakfast → Brisa del Mar** (Caracasbaai, 5 min from estate, open Sat).
+- **Disfruta Más is retired** as a recommendation. Never use it.
+- **Dolphin swim upsell → always add on the Mambo/Sea Aquarium day** (Dolphin Academy at Sea Aquarium, ~$194/person, spectators $20, Tue–Sat only). This is a third-party price — quote as "~$194."
 
 ---
 
@@ -154,6 +163,7 @@ These cost extra or require special arrangement. Mention as options if relevant 
 - Cooking class. **[no verified operator]**
 - Horseback riding on the beach. **[no verified operator]**
 - **Frankie's Beach / Playa Franki** (private beach experience, west coast) — at **Landhuis San Nicolas, Santa Martha** (west side; down an unpaved road + rocky stairs through mangroves). A fully PRIVATE, secluded beach the group has entirely to themselves: plush shaded beach beds, picnic table, coolers with ice + drinks, and a 3-course picnic lunch. Intimate, rustic, off-the-map — privacy is the product, not luxury. Rocky seafloor, so snorkel rather than swim. Slots: morning (10 AM–2 PM) or afternoon (3 PM–7 PM, pricier), ~4 hours. Booked via WhatsApp to Landhuis San Nicolas (decorations/champagne add-ons available). **Best as an upsell after a Porto Mari lunch on the west-coast day**; the Adams build priced it at **$1,500 for the group**. ⚠️ Do NOT confuse with **frankiesoceanside.com** — that's a 21+ cocktail bar in Oceanside, California, totally unrelated.
+- **Touriffic Jet Ski Tours** (operator: Touriffic Curaçao, @tourrific_curacao) — guided jet ski tours launching from **Santa Cruz on the WEST coast (Westpunt area)** — NOT Caracas Bay/Jan Thiel. Runs up the wild coast to the Blue Room sea cave and western coves. **$350 per jet ski (2 riders).** Best scheduled on west-coast day. Always offer as an upsell alongside Frankie's Beach.
 - **"Don Piet" VIP airport arrival / fast-track meet-and-greet** — **$200 per person** (Ray/user-confirmed, Mrikaucki build 2026-05-24). The moment the guest steps off the plane (first foot off the jet bridge), a Tommy Coconut greeter is waiting holding a sign with their name. The guest simply follows them; the greeter handles luggage, immigration, and customs and walks them past the crowds straight to the car. Normally an upsell; can be folded into an all-in price. **Goes on Arrival Day as the very first touchpoint.** Arrival-only (no equivalent on departure — Jeremiah handles the drop-off). Details beyond this are not documented — do not invent company/booking specifics.
 
 ---

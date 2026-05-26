@@ -590,6 +590,28 @@ Live microsites use Status **"Offer Sent"** even with placeholder/pending pieces
 
 ---
 
+## 37. TypeScript type gotchas — `DushiMicrositeContent` shape (added Moons build, 2026-05-26)
+
+Run `npm run typecheck` from `apps/web/` — always. These four traps bit the Moons build (Build #62):
+
+### `Upsell` requires `id: string`
+Every upsell object needs an explicit `id`. The field is not optional. Use a kebab-slug that describes the upsell + which day if it appears more than once:
+```ts
+{ id: "papagayo-daybed-day1", name: "Papagayo Daybed", blurb: "...", priceLabel: "...", whatsappMessage: "..." }
+{ id: "papagayo-daybed-day5", name: "Papagayo Daybed", ... }  // same upsell, different day — different id
+```
+
+### `CrewMember` has NO `id` field — it has `tier`
+The `CrewMember` type is `{ name, role, bio, cloudinaryId?, tier, whatsappMessage? }`. Do **not** add `id`. Do **not** omit `tier`. Valid tiers: `"primary"` | `"founder"` | `"dog"`. All standard crew (Boy, Britt, Captain Mike, Jeremiah, Raymonde, Julian, Claire, Tcam) are `"primary"`.
+
+### `closing` is `{ heading, paragraphs, signOff }` — nothing else
+Do not add `tagline`, `address`, or any other fields to `closing`. They don't exist in the type and will cause a typecheck failure. The `tagline` ("The treasure is out there. ◆") and `address` belong in the letter section or philosophy section if needed.
+
+### Smart quotes inside double-quoted TypeScript strings
+Never write straight ASCII `"` inside a `"double-quoted"` string — e.g. `"Not "nice." Not "a break."` terminates at the second `"`. Use Unicode curly quotes instead: `"Not “nice.” Not “a break.”"` — or switch to a template literal. The error cascades silently through the rest of the file, generating dozens of false positives that obscure the real line.
+
+---
+
 ## 36. Building from a funnel LEAD — where the data lives + the "Failed" auto-build signal
 
 A two-coconut microsite is usually built for a **lead**, not a booked guest. The lead's funnel data lives in the marketing **"Pipeline"** base `appiQO2iMCRjdMe0F` → **Sessions** `tbl7T49CVkrGv5HNe` (one row per quiz step; merge the `Answers` JSON across rows sharing a **Session ID**; the `complete`-step row holds the full combined payload). The **main** base also has an itinerary **auto-build job** table `tblomZtSy0qeghyPE` keyed off those sessions — a row with **Status "Failed"** (tags `research-incomplete` / `anchor-overlap` / `assembly-failed`) means the automated build choked and a **manual build is needed** (that's usually why a lead lands with you). The quiz answers are the gold for the letter + day plan (must-dos, who's coming, budget, "how did you find us") — use **only** what's there, never invent (hallucination rule). A lead has **no fixed dates/flight** → write the page date-agnostic or with a clearly-labelled **example week**, and set `mode: "prospect"`. (Mirrors memory `reference_marketing_leads_pipeline_base`.)
