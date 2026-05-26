@@ -101,6 +101,26 @@ Static fallback list. In production this is **superseded by Airtable** via the `
 - `"guest"` if booked (no urgency / no offer countdown)
 - `"prospect"` if un-booked (requires an `offer` block: price, expiry, share token, referral credit, WhatsApp message)
 
+**Derive mode from the Pipeline status field (`fldvNoCtn1157G37W`) — do not guess:**
+- Status `Lead` or `Offer Sent` → `mode: "prospect"`
+- Status `Booked`, `On Island`, `Departed`, `Alumni` → `mode: "guest"`
+If you don't have the Pipeline record, ask the user before defaulting.
+
+### Booking URL
+The `bookingUrl` in the `offer` block uses the **Pipeline record ID** as the `?t=` parameter — NOT the short token in `fldZIAV3Qr8RaTixS`.
+
+```typescript
+bookingUrl: "https://portal.tommycoconutprivateresorts.com/payments/pay?t=<PIPELINE_RECORD_ID>"
+// e.g. "https://portal.tommycoconutprivateresorts.com/payments/pay?t=recHq43qTtZAyFIUq"
+```
+
+The field `fldZIAV3Qr8RaTixS` exists in the Pipeline table but is NOT the token the portal uses. Using it will produce an "Invalid payment link" error. Always use the `rec...` record ID.
+
+### Offer expiry
+Set `expiresAtISO` to 48 hours from the moment you deploy — not from when you started the build.
+If you push a hotfix after the initial deploy, reset the expiry to 48 hours from the fix deploy time.
+Format: ISO with Curaçao offset (`-04:00`), e.g. `"2026-05-28T17:00:00-04:00"`.
+
 ### WhatsApp
 - `groupInviteUrl` — the real WhatsApp group invite URL for the family. Default to the **bare** form `https://chat.whatsapp.com/<id>`, but know that the `?mode=gi_t` param's behavior is **inconsistent across guests/devices** (it fixed Bama, it broke Hernandez + King). Don't treat either state as absolute: if the guest reports the link won't open, WebFetch both variants to confirm the group, then ship whichever one their own-phone test says works. See lessons #13 and the memory note `feedback_whatsapp_invite_param.md`.
 - `fallbackTcPhone` — optional concierge phone (E.164, no `+`)

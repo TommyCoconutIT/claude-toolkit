@@ -114,10 +114,15 @@ Invoke `dushi-week-microsite-from-itinerary` skill logic. You already have:
 - The itinerary from Step 5
 - The slug, booking URL, share token, price, expiry from Step 2–3
 
-Set `mode: "prospect"` and populate the `offer` block:
+**Derive mode from the Pipeline status field (`fldvNoCtn1157G37W`) fetched in Step 2:**
+- `Lead` or `Offer Sent` → `mode: "prospect"`
+- `Booked` / `On Island` / `Departed` / `Alumni` → `mode: "guest"` (no offer block needed)
+
+For prospect mode, populate the `offer` block:
 ```typescript
 offer: {
-  expiresAtISO: "<48 hours from now in ISO with -04:00 offset>",
+  expiresAtISO: "<48 hours from deploy time in ISO with -04:00 offset>",
+  // Reset this if you push a hotfix after initial deploy — always 48h from latest push.
   priceLabel: "$[amount] · 7 nights · [N] guests · all-in",
   shareTokenSlug: "[share_token_slug]",
   referralCreditUsd: 500,
