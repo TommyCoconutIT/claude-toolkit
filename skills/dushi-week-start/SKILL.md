@@ -38,7 +38,7 @@ Extract these fields:
 | Estate | `fld15SzszbTcHufZT` | Linked record — use the `.name` value |
 | All-in price (USD) | `fldCkP5EaAocQfUeU` | Number |
 | Share token slug | `fldKJaQGh2XGBDBfT` | E.g. "fairburnloriscott" |
-| Payment token | `fldZIAV3Qr8RaTixS` | Short code for booking URL |
+| Payment token | `fldZIAV3Qr8RaTixS` | Ignore this field — not used for the booking URL |
 | Adults count | `fld3j3KNEbByQVbyQ` | Number |
 | Q&A responses | `fld85HtV5j2DDf8Z9` | JSON string — parse it |
 
@@ -50,7 +50,8 @@ From the Q&A JSON, extract these questions:
 - `"What made you decide to do this vacation now?"` → motivation (use in the letter)
 - `"What catches your eye?"` → activity wishlist
 
-Build the booking URL: `https://portal.tommycoconutprivateresorts.com/payments/pay?t=<payment_token>`
+Build the booking URL: `https://portal.tommycoconutprivateresorts.com/payments/pay?t=<pipeline_record_id>`
+The `?t=` value is the Pipeline record ID (e.g. `recHq43qTtZAyFIUq`), NOT the short token in `fldZIAV3Qr8RaTixS`.
 
 ---
 
