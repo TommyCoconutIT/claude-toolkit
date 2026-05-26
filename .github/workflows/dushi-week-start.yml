@@ -1,0 +1,79 @@
+name: Dushi Week — Build Airtable Itinerary Tasks
+
+# Triggered by the tommy-os portal on two events:
+#   1. Immediately when a lead completes the quiz (lead-submitted Inngest job)
+#   2. 10 minutes after email capture if the quiz is not yet complete (lead-captured Inngest job)
+#
+# Required GitHub secrets:
+#   ANTHROPIC_API_KEY  — Anthropic API key for Claude
+#   AIRTABLE_API_KEY   — Airtable Personal Access Token with base read/write on appFRLV1H76ohiIQS
+
+on:
+  workflow_dispatch:
+    inputs:
+      pipeline_id:
+        description: "Lead Pipeline record ID (starts with rec)"
+        required: true
+        type: string
+
+jobs:
+  build-itinerary:
+    name: Build itinerary tasks for ${{ inputs.pipeline_id }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout claude-toolkit
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Write Airtable MCP config
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+        run: |
+          mkdir -p /tmp/mcp
+          # Write config with the API key resolved from the environment
+          node -e "
+            const config = {
+              mcpServers: {
+                airtable: {
+                  command: 'npx',
+                  args: ['-y', 'airtable-mcp-server'],
+                  env: { AIRTABLE_API_KEY: process.env.AIRTABLE_API_KEY }
+                }
+              }
+            };
+            require('fs').writeFileSync('/tmp/mcp/config.json', JSON.stringify(config, null, 2));
+          "
+
+      - name: Run itinerary builder
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          PIPELINE_ID: ${{ inputs.pipeline_id }}
+        run: |
+          SKILL=$(cat skills/dushi-week-airtable-tasks/SKILL.md)
+
+          cat > /tmp/prompt.txt << PROMPT_EOF
+          ${SKILL}
+
+          ---
+
+          ## THIS RUN
+
+          pipeline_id: ${PIPELINE_ID}
+
+          You are running in fully automated mode triggered by the tommy-os portal.
+          No human is present. Proceed through all steps without stopping.
+          Start immediately at STEP 1 — fetch the Pipeline record.
+          PROMPT_EOF
+
+          claude --print \
+            --mcp-config /tmp/mcp/config.json \
+            "$(cat /tmp/prompt.txt)"
