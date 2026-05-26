@@ -2,7 +2,7 @@
 
 **MANDATORY READING.** This document must be read BEFORE any other reference file, BEFORE writing any content, BEFORE generating any output. It contains every mistake, correction, insight, and technical lesson learned from real builds. Ignoring this document leads to hallucinated content, dangerous liability language, factual errors, and wasted time.
 
-Last updated: 2026-05-25 (Fairburn Cartel build — first HTML-template-skeleton couple build. Added Section 20: Template-First Rule. HTML template is now the authoritative skeleton for sat-to-sat couple variants — day copy is never rewritten from scratch.) Prior: 2026-05-23 (skill change: output is now **text-only Markdown** — photo/HTML/PDF/DOCX pipeline retired — and a new **Operator Research Protocol** for new/unknown activities). Prior: 2026-05-22 (Adams "Traveling Trio" — first two-coconut all-inclusive LEAD build). Prior: 2026-04-16 (King Cartel build)
+Last updated: 2026-05-26 (Sagar Cartel build — first Family Young Adults prospect build. Added checklist items 16–18: breakfast audit, upsell audit, bookingUrl token rule. Added Build 6 reference. Added pre-PR breakfast+upsell pass to Section 19.) Prior: 2026-05-25 (Fairburn Cartel build — first HTML-template-skeleton couple build. Added Section 20: Template-First Rule.) Prior: 2026-05-23 (skill change: output is now **text-only Markdown** — photo/HTML/PDF/DOCX pipeline retired — and a new **Operator Research Protocol** for new/unknown activities). Prior: 2026-05-22 (Adams "Traveling Trio" — first two-coconut all-inclusive LEAD build). Prior: 2026-04-16 (King Cartel build)
 
 ---
 
@@ -148,9 +148,9 @@ One price from $7,450/week includes: private villa (7 nights + 8th Night Buffer)
 A fourth offer shape exists beyond the three above, and it CAN apply to the printable itinerary (not just the microsite). The `dushi-week-microsite-two-coconut` skill owns the web/booking side; this is how it shows up in the *document*:
 
 - **Every breakfast, every lunch, every dinner + open bar at the estate** — the richest tier. NO $35/person credit anywhere.
-- **Never** use "$35/person", "Culinary Pass", "house account", or "CP X of N" framing/badges. Badge dinners as **"Dinner X of 7"** instead. Search the draft for "$35" and "credit" and delete.
-- **Breakfast** is a standing line every day: **Coffee Bike OR Brisa do Mar** ("both right around the corner from the estate").
-- **Lunch** every day, sited by where the day puts them (beach club, boat, west-coast stop, estate). Don't invent a venue — pull it from the day's plan.
+- **Never** use "$35/person", "Culinary Pass", "house account", or "CP X of N" framing/badges. In the **printable itinerary** body copy you may reference the dinner count (e.g. "Dinner 3 of 7"). In the **microsite** schedule item `title` field, **never use "Dinner X of 7" counters** — use the venue name only (e.g. `"Villa Vis"`, not `"Dinner 1 of 7 — Villa Vis"`). Search the draft for "$35" and "credit" and delete.
+- **Breakfast** is a standing line every day: **Coffee Bike OR Brisa do Mar** ("both right around the corner from the estate"). This is **absolute** — even on days anchored at a specific venue (Mambo, west coast, boat day), breakfast is still Coffee Bike or Brisa do Mar. Never substitute a venue-specific option (e.g. Bliss the Berry) for breakfast regardless of where the day is based.
+- **Lunch** every day, sited by where the day puts them (beach club, boat, west-coast stop, estate). Don't invent a venue — pull it from the day's plan. **Mambo day lunch = a named beach club** (e.g. Mood Beach, Cabana Beach) — not an açaí/smoothie bar like Bliss the Berry.
 - Tone: "no credit to track, no receipts to sign. You just show up and live." Gifts, not line items.
 - Dinner count still resolves to **5 restaurants + 2 BBQs = 7** — the welcome dinner being a *restaurant* (e.g. Villa Vis, owner-pickup) is what makes the 5 work.
 
@@ -520,6 +520,9 @@ Do this EVERY TIME before writing a single word:
 13. ✅ Check group size — groups of 5+ need two iCars
 14. ✅ Ask Ray: "Anything special about this guest I should know?"
 15. ✅ List any new / third-party activity with no verified operator (horseback riding, ATV, wine tasting, cooking class, etc.) and run the Operator Research Protocol (Section 1A / SKILL.md) — ask Ray for a preferred operator, then research + forensically fact-check before writing it in.
+16. ✅ **Breakfast audit** — Every non-arrival day must open with Coffee Bike OR Brisa del Mar. No other breakfast venue. Go day by day before shipping. Coffee Bike is closed Monday → use Brisa del Mar on Mondays.
+17. ✅ **Upsell audit** — Before shipping, verify: (a) west-coast day has Frankie's Beach + Touriffic jet ski; (b) Mambo/Sea Aquarium day has dolphin swim + Mood cabana; (c) Jan Thiel beach days have Papagayo daybed. These are the standard upsell slots — don't leave them empty.
+18. ✅ **bookingUrl token** — Use the Pipeline Airtable record ID (`recXXX...`) as the `t=` parameter, NOT the short token from `fldZIAV3Qr8RaTixS`. Confirmed: portal reads record ID.
 
 ---
 
@@ -559,6 +562,22 @@ Do this EVERY TIME before writing a single word:
   6. **Two Coconut label.** "Included — Two Coconut" everywhere. Never "$35/person", never "Culinary Pass", never "CP X of N."
   7. **Returning couple letter.** "You came back" framing. Reference the specific moment that proved they'd return (snowstorm, booking before photos were sent). Contrast last trip (full family) with this trip (just the two of them). Closing H2: "[Names] — you came back. That means everything."
 - **Token map for this build:** `{Basecamp}` → Dushi Hideaway · `{First Name}` → Lori · `[Crew name]` → The Fairburn Cartel · `[Guest first names]` → Lori & Scott · Dates → Feb 6–13, 2027
+
+### Build 6: The Sagar Cartel (First Family Young Adults Prospect Build)
+- **Who**: Sagar (lead — full name unknown at build time)
+- **Email**: sagar.ram4@hotmail.com | **Phone**: +1 2182341857
+- **Villa**: Dushi Hideaway | **Package**: Prospect (All-In, $18,060) | **Dates**: May 31–Jun 7, 2026
+- **Guest type**: Family Young Adults (3 adults, adult kids, first time in Curaçao)
+- **Build #**: 59 | **Slug**: SagarDushiWeek59 | **Microsite**: tommycoconutprivateresorts.com/SagarDushiWeek59
+- **Key corrections made during this build (don't repeat):**
+  1. **Breakfast venues**: Days 1, 3, 5 had no breakfast at all. Days 2 and 4 had wrong venues (Zanzibar, Mood). Required full passthrough after shipping. Run the breakfast audit (checklist #16) before opening the PR.
+  2. **Mood Beach = lunch, not breakfast.** It's a daybeds/cabana lunch spot on the boulevard. Coffee Bike is breakfast on Mambo day.
+  3. **Disfruta Más is retired.** Do not use it. Coffee Bike or Brisa del Mar only.
+  4. **bookingUrl token = Pipeline record ID** (`recLjOD9MLgs3bAUy`), not short token from `fldZIAV3Qr8RaTixS`. Portal validates by record ID.
+  5. **Dolphin swim upsell was missing** from the Mambo day. Always add it (Dolphin Academy, ~$194/person, Tue–Sat).
+  6. **Frankie's Beach + Touriffic missing** from west-coast day. Always include both as upsells.
+  7. **Touriffic price**: $650/jet ski (2 riders), launches from west coast (Santa Cruz/Westpunt), NOT Caracas Bay.
+  8. **Coffee Bike closed Monday**: Day 2 was Monday — use Brisa del Mar instead.
 
 ### Build 4: The King Cartel (Most Corrections)
 - **Who**: Andy (54), Jesica (54), Grace (22), John (20), Mary Kate (18), Andrew (15)
@@ -643,8 +662,19 @@ If a venue appears more than once in the same week, the second occurrence uses C
 ### Restaurant-About Cards — First Occurrence Only
 A restaurant-about card (the white card with h3 + description + URL) appears only the FIRST TIME a restaurant shows up in the week. Subsequent appearances = time-block only, no card. If adding a restaurant on an earlier day, remove the card from the later day.
 
+### Breakfast + Upsell Pass — Do This Before Opening the PR
+Before opening the PR for any microsite build, do a 30-second pass:
+1. Open every day's schedule. Does it start with Coffee Bike or Brisa del Mar? If not, add it.
+2. Open every day's upsells. Is the west-coast day missing Frankie's or Touriffic? Add them. Is the Mambo day missing dolphin swim or Mood cabana? Add them. Are Jan Thiel beach days missing a Papagayo daybed? Add it.
+This takes 2 minutes and saves a full re-deploy cycle.
+
 ### Debrief → Booking Channel Check
 Before writing any Airbnb review in a debrief, pull the Pipeline record. Airbnb booking → write Airbnb review. Non-Airbnb → SKIP Airbnb review, ask for Google review instead.
+
+---
+
+### Tommy Portal — Booking URL Token Is the Pipeline Record ID
+The tommy-portal payment page (`/payments/pay?t=`) uses the **Airtable Pipeline record ID** as the token — NOT the short payment token stored in Pipeline field `fldZIAV3Qr8RaTixS`. Use `recXXXXXXXXXXXXXX` (the record ID, 17 chars starting with `rec`) as the `t=` parameter in `bookingUrl`. Confirmed: Sagar build 2026-05-26.
 
 ---
 
@@ -818,3 +848,31 @@ All templates share the same core skeleton for Days 1, 5, 6: Airport Pickup + Vi
 ---
 
 *This document is a living record. Update it after every build with new corrections, insights, and technical lessons. The goal: zero hallucinations, zero liability language, zero wasted tokens.*
+
+---
+
+## Build #57 — The Fairburn Cartel · May 2026
+
+**Guest:** Lori & Scott Fairburn · Returning couple · Dushi Hideaway · Feb 6–13, 2027
+**Slug:** FairburnDushiWeek57 · **Mode:** prospect (Two Coconut)
+
+### Lesson 1 — Booking URL uses Pipeline record ID, not the short token
+
+The portal payment page (`/payments/pay?t=`) expects the **Pipeline record ID** (e.g. `recHq43qTtZAyFIUq`) as the `?t=` parameter. The Pipeline table has a separate field (`fldZIAV3Qr8RaTixS`) with a short token (e.g. `e4mZktpLilkJ`) — this is NOT what the portal uses. Using the short token produces "Invalid payment link" on the live site. Always build the booking URL as:
+```
+https://portal.tommycoconutprivateresorts.com/payments/pay?t=<PIPELINE_RECORD_ID>
+```
+
+### Lesson 2 — Derive mode from Pipeline status, never guess
+
+We initially shipped in `mode: "guest"` because it wasn't explicit in the itinerary. The book button was missing entirely. Always read the Pipeline status field (`fldvNoCtn1157G37W`) and derive:
+- `Lead` or `Offer Sent` → `mode: "prospect"` (book button, countdown, sticky CTA)
+- `Booked` / `On Island` / `Departed` / `Alumni` → `mode: "guest"` (no offer mechanics)
+
+### Lesson 3 — Reset offer expiry after every hotfix deploy
+
+Set `expiresAtISO` to 48 hours from the **latest deploy**, not from when the build started. We extended the Fairburn timer twice because hotfixes (broken pay link, wrong mode) pushed new deploys after the initial window was set. Any time you push a fix, recalculate and update `expiresAtISO`.
+
+### Lesson 4 — Skills must be in the shared repo or co-workers get inconsistent output
+
+At the start of this build, 5 of 7 skills existed only on Boy's local machine. Co-workers had a frozen, incomplete toolkit. All skills are now in `TommyCoconutIT/claude-toolkit`. After every skill update: commit + push. Co-workers run `git pull` to stay current.
