@@ -95,4 +95,4 @@ jobs:
             echo "You are running in fully automated mode triggered by the tommy-os portal."
             echo "No human is present. Proceed through all steps without stopping."
             echo "Start immediately at STEP 1 — fetch the Pipeline record."
-          } | claude --print --max-turns 40
+          } | claude --print --dangerously-skip-permissions --max-turns 40
