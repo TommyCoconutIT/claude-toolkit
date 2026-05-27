@@ -47,7 +47,7 @@ jobs:
 
           VOICE=$(strip_frontmatter skills/tommy-coconut-voice/SKILL.md)
           SKILL=$(strip_frontmatter skills/dushi-week-airtable-tasks/SKILL.md)
-          BUILDER=$(strip_frontmatter skills/dushi-week-builder/SKILL.md)
+          BUILDER=$(strip_frontmatter skills/dushi-week-builder-v2/SKILL.md)
           LESSONS=$(cat skills/dushi-week-builder/references/lessons-learned.md)
           ISLAND=$(cat skills/dushi-week-builder/references/island-database.md)
 
