@@ -1,6 +1,6 @@
 ---
 name: dushi-week-airtable-tasks
-description: Headless, automated variant of the Dushi Week builder. Reads a lead Pipeline record from Airtable, copies the matching segment template from Itinerary Items V2 verbatim, then analyzes quiz answers to identify personalization opportunities, then applies surgical Voice Bible edits to only those specific records. No HTML, no microsite — just the Airtable tasks. Triggered by GitHub Actions on every new lead.
+description: Headless, automated variant of the Dushi Week builder. Reads a lead Pipeline record from Airtable, copies the matching segment template from Itinerary Items V2 verbatim, then analyzes quiz answers and outputs personalization suggestions as text for human review. No PATCH calls, no HTML, no microsite — just the Airtable tasks. Triggered by GitHub Actions on every new lead.
 ---
 
 # dushi-week-airtable-tasks
@@ -9,13 +9,12 @@ Automated itinerary task generator for Tommy Coconut Private Resorts.
 You are running **headlessly** in GitHub Actions — no human is watching.
 Use `bash` (curl) for all Airtable reads and writes. The `AIRTABLE_API_KEY` environment variable is already set.
 
-**Four-phase flow:**
-1. Find guest segment → copy segment template to Airtable verbatim (99% of records stay as-is)
-2. Analyze quiz answers → identify which specific records can be meaningfully personalized
-3. Apply surgical Voice Bible edits to only those records via PATCH
-4. Print summary
+**Three-phase flow:**
+1. Find guest segment → copy segment template to Airtable verbatim
+2. Analyze quiz answers → output Voice Bible-compliant personalization suggestions as text
+3. Print summary — suggestions are NOT applied to Airtable
 
-**Never rewrite copy that wasn't triggered by a specific quiz answer. Never invent backstory.**
+**Never write or PATCH records based on personalization. Never invent backstory.**
 
 ---
 
@@ -164,44 +163,28 @@ curl -s -X POST "https://api.airtable.com/v0/appFRLV1H76ohiIQS/tblrehbZFtArMtwr5
 
 ---
 
-## STEP 6 — Identify personalization opportunities
+## STEP 6 — Output personalization suggestions
 
-Re-read the quiz answers extracted in Step 1. For each answer, ask: **does any existing itinerary record have a sentence where inserting a real detail from this answer would make it feel written for this specific guest?**
+Re-read the quiz answers extracted in Step 1. For each answer, ask: **does any written itinerary record have a sentence where inserting a real detail from this answer would make it feel written for this specific guest?**
 
-Build a shortlist of record IDs to patch. Rules:
+Print a **Personalization Suggestions** block to stdout. These are suggestions only — do NOT write or PATCH anything to Airtable. A human will review and apply approved changes manually.
+
+Rules:
 - Only use quiz data that is factual and specific (dietary restriction, named activity wish, named reason for trip, group detail)
-- Maximum one personalization per record — one surgical sentence swap or insert, not a rewrite
-- 3–8 records is the target. If quiz answers are sparse, patch fewer or none
-- Do not touch records where no quiz answer is relevant
-- Do not invent context not in the quiz
+- Maximum one suggestion per record — one surgical sentence swap or insert, not a rewrite
+- 3–8 suggestions is the target. If quiz answers are sparse, output fewer or none
+- Do not invent context not present in the quiz
 
-For each record on the shortlist, plan the edit:
+Format each suggestion exactly like this:
+
 ```
-Record ID: <recXXX>
-Day <N> — <Slot> — <Header>
-Quiz signal: "<exact quote or paraphrase from quiz answer>"
-Edit: swap sentence <N> / insert after sentence <N> / adjust detail in sentence <N>
-Draft: "<proposed new sentence — max 1–2 sentences, Voice Bible compliant>"
-```
-
----
-
-## STEP 7 — Apply surgical edits via PATCH
-
-For each record on the shortlist, PATCH only the `Body Text` field (`fldBcHXSRTzi6Tqg6`) — and `Base Pro Tip` (`fldWdPQqDdfQ1gnEc`) if the tip is also being refined:
-
-```bash
-curl -s -X PATCH "https://api.airtable.com/v0/appFRLV1H76ohiIQS/tblrehbZFtArMtwr5/<recordId>" \
-  -H "Authorization: Bearer $AIRTABLE_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "fields": {
-      "fldBcHXSRTzi6Tqg6": "<updated body text>"
-    }
-  }'
+📝 Day <N> — <Slot> — <Header>
+   Current: "<first sentence of the current body text>"
+   Suggested: "<proposed replacement — 1–2 sentences, Voice Bible compliant>"
+   Reason: <one line — which quiz answer drives this change>
 ```
 
-Voice Bible rules apply to every edited sentence:
+Voice Bible rules apply to every suggested sentence:
 - No banned hospitality words (nestled, pampered, tranquil, exclusive, curated, seamless, world-class, unforgettable)
 - Specific over generic — real names, real times, real details from the quiz
 - Objects have feelings, Tommy leads, guest follows
@@ -209,7 +192,7 @@ Voice Bible rules apply to every edited sentence:
 
 ---
 
-## STEP 8 — Done
+## STEP 7 — Done
 
 Print a short summary:
 
@@ -219,10 +202,7 @@ Print a short summary:
    Segment: <guest type>
    Dates: <arrival> → <departure>
    Template records copied: <count>
-   Records personalized: <count> / <total>
-   Personalized items:
-     - Day <N> <Slot> — <Header> (<one-line reason>)
-     - ...
+   Personalization suggestions: <count> (not applied — awaiting human review)
 ```
 
-Do not update the Pipeline status. Do not open a PR. Do not write HTML. Your job is done.
+Do not update the Pipeline status. Do not open a PR. Do not write HTML. Do not PATCH any records. Your job is done.
