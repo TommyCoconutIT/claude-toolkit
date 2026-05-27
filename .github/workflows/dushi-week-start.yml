@@ -39,7 +39,6 @@ jobs:
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
         run: |
           mkdir -p /tmp/mcp
-          # Write config with the API key resolved from the environment
           node -e "
             const config = {
               mcpServers: {
@@ -58,22 +57,32 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           PIPELINE_ID: ${{ inputs.pipeline_id }}
         run: |
-          SKILL=$(cat skills/dushi-week-airtable-tasks/SKILL.md)
+          # Strip YAML frontmatter (---...---) from a skill file before including it
+          strip_frontmatter() {
+            awk 'BEGIN{s=0} /^---$/{s++; next} s>=2{print}' "$1"
+          }
 
-          cat > /tmp/prompt.txt << PROMPT_EOF
-          ${SKILL}
+          VOICE=$(strip_frontmatter skills/tommy-coconut-voice/SKILL.md)
+          SKILL=$(strip_frontmatter skills/dushi-week-airtable-tasks/SKILL.md)
 
-          ---
-
-          ## THIS RUN
-
-          pipeline_id: ${PIPELINE_ID}
-
-          You are running in fully automated mode triggered by the tommy-os portal.
-          No human is present. Proceed through all steps without stopping.
-          Start immediately at STEP 1 — fetch the Pipeline record.
-          PROMPT_EOF
-
-          claude --print \
-            --mcp-config /tmp/mcp/config.json \
-            "$(cat /tmp/prompt.txt)"
+          {
+            echo "# Tommy Coconut Voice Bible"
+            echo ""
+            echo "${VOICE}"
+            echo ""
+            echo "---"
+            echo ""
+            echo "# Itinerary Task Builder"
+            echo ""
+            echo "${SKILL}"
+            echo ""
+            echo "---"
+            echo ""
+            echo "## THIS RUN"
+            echo ""
+            echo "pipeline_id: ${PIPELINE_ID}"
+            echo ""
+            echo "You are running in fully automated mode triggered by the tommy-os portal."
+            echo "No human is present. Proceed through all steps without stopping."
+            echo "Start immediately at STEP 1 — fetch the Pipeline record."
+          } | claude --print --mcp-config /tmp/mcp/config.json
