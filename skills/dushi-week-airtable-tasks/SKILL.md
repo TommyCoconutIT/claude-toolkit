@@ -163,32 +163,52 @@ curl -s -X POST "https://api.airtable.com/v0/appFRLV1H76ohiIQS/tblrehbZFtArMtwr5
 
 ---
 
-## STEP 6 — Output personalization suggestions
+## STEP 6 — Generate and store personalization suggestions
 
 Re-read the quiz answers extracted in Step 1. For each answer, ask: **does any written itinerary record have a sentence where inserting a real detail from this answer would make it feel written for this specific guest?**
-
-Print a **Personalization Suggestions** block to stdout. These are suggestions only — do NOT write or PATCH anything to Airtable. A human will review and apply approved changes manually.
 
 Rules:
 - Only use quiz data that is factual and specific (dietary restriction, named activity wish, named reason for trip, group detail)
 - Maximum one suggestion per record — one surgical sentence swap or insert, not a rewrite
-- 3–8 suggestions is the target. If quiz answers are sparse, output fewer or none
+- 3–8 suggestions is the target. If quiz answers are sparse, produce fewer or none
 - Do not invent context not present in the quiz
-
-Format each suggestion exactly like this:
-
-```
-📝 Day <N> — <Slot> — <Header>
-   Current: "<first sentence of the current body text>"
-   Suggested: "<proposed replacement — 1–2 sentences, Voice Bible compliant>"
-   Reason: <one line — which quiz answer drives this change>
-```
 
 Voice Bible rules apply to every suggested sentence:
 - No banned hospitality words (nestled, pampered, tranquil, exclusive, curated, seamless, world-class, unforgettable)
 - Specific over generic — real names, real times, real details from the quiz
 - Objects have feelings, Tommy leads, guest follows
 - Never invent a fact not present in the quiz data
+
+### 6a — PATCH each suggested record's Custom Notes field
+
+For each suggested item, PATCH its `Custom Notes` field (`fldzXDgi0Es2J77Sb`) with the following two-line format. **Do NOT touch `Body Text` (`fldBcHXSRTzi6Tqg6`) — the template copy stays unchanged until the human accepts.**
+
+```
+[AI] <proposed replacement body text — 1–2 sentences, Voice Bible compliant>
+Reason: <one line — which quiz answer drives this change>
+```
+
+```bash
+curl -s -X PATCH "https://api.airtable.com/v0/appFRLV1H76ohiIQS/tblrehbZFtArMtwr5/<recordId>" \
+  -H "Authorization: Bearer $AIRTABLE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "fields": {
+      "fldzXDgi0Es2J77Sb": "[AI] <suggested body text>\nReason: <reason>"
+    }
+  }'
+```
+
+### 6b — Print summary to stdout
+
+After all PATCHes, print a readable summary:
+
+```
+📝 Day <N> — <Slot> — <Header>
+   Current: "<first sentence of the current body text>"
+   Suggested: "<same text written to CUSTOM_NOTES after [AI] prefix>"
+   Reason: <reason>
+```
 
 ---
 
@@ -202,7 +222,7 @@ Print a short summary:
    Segment: <guest type>
    Dates: <arrival> → <departure>
    Template records copied: <count>
-   Personalization suggestions: <count> (not applied — awaiting human review)
+   Personalization suggestions: <count> (stored in Custom Notes — awaiting human accept/decline in portal)
 ```
 
 Do not update the Pipeline status. Do not open a PR. Do not write HTML. Do not PATCH any records. Your job is done.
