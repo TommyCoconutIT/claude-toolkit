@@ -166,6 +166,7 @@ A fourth offer shape exists beyond the three above, and it CAN apply to the prin
 - **Lunch** every day, sited by where the day puts them (beach club, boat, west-coast stop, estate). Don't invent a venue — pull it from the day's plan. **Mambo day lunch = a named beach club** (e.g. Mood Beach, Cabana Beach) — not an açaí/smoothie bar like Bliss the Berry.
 - Tone: "no credit to track, no receipts to sign. You just show up and live." Gifts, not line items.
 - Dinner count still resolves to **5 restaurants + 2 BBQs = 7** — the welcome dinner being a *restaurant* (e.g. Villa Vis, owner-pickup) is what makes the 5 work.
+- **HTML CSS classes:** use `.tc-badge` and `.tc-line` (not `.cp-badge` / `.cp-line`) — those names leaked internal "CP" framing. Kluginbill build corrected this.
 
 ---
 
@@ -796,9 +797,12 @@ The Activity Catalog labels these entries "Copy 2" — search for the venue name
 
 ### Two Coconut (All-Inclusive) Framing
 
-- Every meal label: **"Included — Two Coconut"**
-- Never: "$35/person", "Culinary Pass", "CP X of N", "credit", "house account"
-- Before delivering: search the HTML for "$35" and "credit" — delete any instance found
+- **NEVER** mention "Two Coconut" anywhere in the guest-facing printable itinerary. It is internal TC terminology only.
+- Never: "$35/person", "Culinary Pass", "CP X of N", "credit", "house account", "Included — Two Coconut"
+- Do NOT add any dinner counter label (cp-line, tc-line, or similar) under dinner time blocks. Remove those CSS classes entirely.
+- In the Week at a Glance table: no badges next to dinner venue names.
+- Good to Know section header: "Your Included Dinners" (no package name)
+- Before delivering: search the HTML for "$35", "credit", "Two Coconut", "Culinary Pass", "CP " — all must return zero results.
 
 ### Restaurant-About Cards — Placement Rule
 
@@ -835,7 +839,7 @@ All six templates live in **Itinerary Items V2** (base `appFRLV1H76ohiIQS`), lin
 | Segment | Guest Record ID | Items | HTML File Exists? | Notes |
 |---|---|---|---|---|
 | Couple | `rec7QFzJ2s342F0IZ` | 19 | ✅ `itinerary-standard-sat-to-sat--couple.html` | **Complete. HTML is the primary skeleton for couple builds.** |
-| Friends | `rec2R9SiqXz5VUQVX` | 19 | ❌ Airtable only | Content in Itinerary Items V2; no HTML file yet |
+| Friends | `rec2R9SiqXz5VUQVX` | 19 | ✅ Use Kluginbill Cartel as skeleton | Trip record ID in Itinerary Items V2 = `recahcqUFxVBCIjfE` (NOT the Guest Record ID). HTML built Kluginbill build #67. |
 | Family teens | `recX78q5CWqslAm1e` | 17 | ❌ Airtable only | Content in Itinerary Items V2; no HTML file yet |
 | Family young kids | `recjG9FwdBH0683UX` | 16 | ❌ Airtable only | Content in Itinerary Items V2; no HTML file yet |
 | Family young adults | `recptPrA2LnvarKhu` | 17 | ❌ Airtable only | Content in Itinerary Items V2; no HTML file yet |
@@ -902,6 +906,30 @@ All templates share the same core skeleton for Days 1, 5, 6: Airport Pickup + Vi
 - Day 4: Booker's Massage + Landhuis dinner
 - Day 5–6: same as Couple
 - Days 7–8: **NO RECORDS IN AIRTABLE** — must be built manually or flagged to Ray before starting
+
+## 23. STRUCTURAL OVERLOAD RULES — Chrissymag Cartel Review
+
+Added 2026-05-27 after reviewing the Chrissymag Cartel itinerary (Build #67, Friends segment, 10 guests, Feb 26–Mar 5 2027). The build packed too many events into single days and created physically impossible timing. These rules prevent recurrence.
+
+### 23.1 Anti-Overload Rule
+If a day contains an "All Day" anchor block (Mambo Beach Boulevard, West Side Day, Jan Thiel Beach all day, Boat Day), that day may have at most **ONE additional major evening event**. Never pair an all-day beach block with both a happy hour AND a private dinner on the same day. If a Private Chef BBQ is confirmed by Ray, it replaces — not supplements — any other evening event.
+
+### 23.2 Boat Day Isolation Rule
+Boat Day with Captain Magic Mike is a full-day anchor. If the itinerary shows a 10 AM–2 PM Private Boat Day, the day may have **ONE relaxed evening event** (e.g., Pasawá). Never schedule Boat Day on the same day as Culture Walk + Punda Vibes — the drive timing is impossible (2 PM return + rest + 4:15 PM Culture Walk at Brion Plein = minimum 90 min shortfall). Boat Day demands its own day or a completely free evening.
+
+### 23.3 Timing Realism Pass
+Before shipping, scan every day for a "Rest until X" block followed by an off-estate activity at X+15 minutes or less. If found, flag it: a "Rest until 4:00 PM" block preceding a 4:15 PM Culture Walk in Willemstad (45 min drive) is physically impossible. Minimum buffer: rest end time + 90 minutes + drive time before the next off-estate commitment.
+
+### 23.4 Breakfast Grep Enhancement
+Add to post-build verification (Pre-Build Checklist #16):
+```bash
+# Every non-arrival day must have Coffee Bike or Brisa del Mar
+grep -n "Day [2-8]" your-file.html | xargs -I {} grep -A 20 "{}" | grep -i "coffee\|brisa"
+# Count must equal number of non-arrival days. Days with zero hits = missing breakfast.
+```
+
+### 23.5 V8 Token Migration Reminder
+If the approved original or skeleton predates May 2026, run the V8 design-token migration (Cormorant Garamond + Inter, `#0A2330` → `--color-ink`, `#FAF6EF` → `--color-cream`, `#6CE3DF` → `--color-turq`) before any token personalization. Do not ship pre-V5 CSS.
 
 ---
 
