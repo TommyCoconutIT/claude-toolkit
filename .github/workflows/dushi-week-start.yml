@@ -47,17 +47,38 @@ jobs:
 
           VOICE=$(strip_frontmatter skills/tommy-coconut-voice/SKILL.md)
           SKILL=$(strip_frontmatter skills/dushi-week-airtable-tasks/SKILL.md)
+          BUILDER=$(strip_frontmatter skills/dushi-week-builder/SKILL.md)
+          LESSONS=$(cat skills/dushi-week-builder/references/lessons-learned.md)
+          ISLAND=$(cat skills/dushi-week-builder/references/island-database.md)
 
           {
-            echo "# Tommy Coconut Voice Bible"
+            echo "# Itinerary Builder — Logic & Planning Guide"
             echo ""
-            echo "${VOICE}"
+            echo "${BUILDER}"
             echo ""
             echo "---"
             echo ""
-            echo "# Itinerary Task Builder"
+            echo "# Island Database"
+            echo ""
+            echo "${ISLAND}"
+            echo ""
+            echo "---"
+            echo ""
+            echo "# Lessons Learned"
+            echo ""
+            echo "${LESSONS}"
+            echo ""
+            echo "---"
+            echo ""
+            echo "# Itinerary Task Builder — Airtable Write Instructions"
             echo ""
             echo "${SKILL}"
+            echo ""
+            echo "---"
+            echo ""
+            echo "# Tommy Coconut Voice Bible"
+            echo ""
+            echo "${VOICE}"
             echo ""
             echo "---"
             echo ""
