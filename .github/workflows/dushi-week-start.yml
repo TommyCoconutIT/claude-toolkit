@@ -34,27 +34,10 @@ jobs:
       - name: Install Claude Code CLI
         run: npm install -g @anthropic-ai/claude-code
 
-      - name: Write Airtable MCP config
-        env:
-          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-        run: |
-          mkdir -p /tmp/mcp
-          node -e "
-            const config = {
-              mcpServers: {
-                airtable: {
-                  command: 'npx',
-                  args: ['-y', 'airtable-mcp-server'],
-                  env: { AIRTABLE_API_KEY: process.env.AIRTABLE_API_KEY }
-                }
-              }
-            };
-            require('fs').writeFileSync('/tmp/mcp/config.json', JSON.stringify(config, null, 2));
-          "
-
       - name: Run itinerary builder
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
           PIPELINE_ID: ${{ inputs.pipeline_id }}
         run: |
           # Strip YAML frontmatter (---...---) from a skill file before including it
@@ -85,4 +68,4 @@ jobs:
             echo "You are running in fully automated mode triggered by the tommy-os portal."
             echo "No human is present. Proceed through all steps without stopping."
             echo "Start immediately at STEP 1 — fetch the Pipeline record."
-          } | claude --print --mcp-config /tmp/mcp/config.json
+          } | claude --print
