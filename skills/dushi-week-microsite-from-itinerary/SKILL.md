@@ -173,6 +173,8 @@ Format: ISO with Curaçao offset (`-04:00`), e.g. `"2026-05-28T17:00:00-04:00"`.
    | Beaches/experiences cards | Every `description`, `vibe`, `blurb` traces to itinerary or verified facts. No invented menus, reef names, or animals. |
    | Internal ops notes | `grep -n "confirm with\|not yet shared\|internal" content/<family>.ts` → delete any found. |
    | expiresAtISO | Set to 48 hours from THIS deploy — not from when you built it. |
+   | **Map pin audit** | For every `days[].mapPins` array: each pin must match the restaurants and experiences actually on that day. If a restaurant was swapped (e.g. Komé → Pasawá), the map pin must be swapped too. Run `grep -n "mapPins" content/<family>.ts` and cross-check each pin against that day's `restaurants[]` and `schedule[]`. |
+   | **Email/microsite expiry sync** | If you also built the offer email HTML: the expiry text in the email (e.g. "Thursday, May 29 · 3:00 PM island time") must match `expiresAtISO` in the content file. Convert `expiresAtISO` to island time (UTC-4) and verify they say the same time. A 1-hour mismatch looks unprofessional. |
 
 8. **Verify locally**: open `localhost:3002/<FamilySlug>DushiWeek<N>` and walk every section + every day card. The static fallbacks should render even without Airtable env vars. Test the WhatsApp upsell buttons (they should copy + open `wa.me/?text=…`).
 

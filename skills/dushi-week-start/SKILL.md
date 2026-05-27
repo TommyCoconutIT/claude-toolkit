@@ -17,14 +17,14 @@ fetch → build itinerary → build microsite → ship → update Airtable + wri
 Ask the user:
 > "Paste the Pipeline record ID for this guest (starts with `rec`)."
 
-⚠️ **Two pipeline records exist per guest — make sure you have the right one:**
+⚠️ **Two pipeline records may exist per guest — confirm which one to use:**
 
 | Record type | What it is | Used for |
 |---|---|---|
 | **Lead pipeline** | `tblb7gP5D3NYND9a0` — has Q&A, guest profile, phone, email | Fetching guest data (Step 2) |
-| **Offer/payment pipeline** | Britt creates this separately — has Total Amount, Payment_Gateway="Stripe" | `bookingUrl` + `bookingPipelineId` in the microsite |
+| **Offer/payment pipeline** | Britt sometimes creates this separately — has Total Amount, Payment_Gateway="Stripe" | `bookingUrl` + `bookingPipelineId` in the microsite |
 
-The user should paste the **offer/payment pipeline ID** — this is what the portal pay page reads at `?t=<id>`. If they paste the lead pipeline ID, the pay page won't find the record. If unsure, ask Britt which `rec…` she created for the offer.
+**In practice, Britt sometimes uses the same lead pipeline record for both guest data and the payment URL.** Ask the user: "Is the booking URL the same record as the lead, or did Britt create a separate offer record?" If they give you the lead record ID and say "use this for the payment link" — do it. The portal reads the price field from whatever record ID you pass via `?t=`. Do not assume separate records unless Britt says so.
 
 To fetch **guest data**, search the lead pipeline table by email if needed:
 - Base: `appFRLV1H76ohiIQS`
@@ -138,15 +138,24 @@ For prospect mode, populate the `offer` block:
 offer: {
   expiresAtISO: "<48 hours from deploy time in ISO with -04:00 offset>",
   // Reset this if you push a hotfix after initial deploy — always 48h from latest push.
-  priceLabel: "$[amount] · 7 nights · [N] guests · all-in",
+  // ⚠️ The expiry time in the offer email HTML must match this value — keep them in sync.
+  priceLabel: "$[amount] · 7 nights · [N] guests · Two Coconut all-in",
+  // ^ For One Coconut / Standard builds: "$[amount] · 7 nights · [N] guests · all-in" (no package label)
   shareTokenSlug: "[share_token_slug]",
   referralCreditUsd: 500,
-  whatsappMessage: "Hi Britt — it's [Guest Names]. We want to lock the Dushi Week ([dates], [estate]). Send the payment link.",
-  bookingUrl: "https://portal.tommycoconutprivateresorts.com/payments/pay?t=[payment_token]",
+  whatsappMessage: "Hi Britt — it's the [Family] Cartel. We want to lock the Dushi Week ([dates], [estate]). Send the payment link.",
+  // ^ If guest names ARE known: "Hi Britt — it's [First Name] & [First Name]."
+  // ^ If dates are TBD: omit the dates from the message.
+  bookingUrl: "https://portal.tommycoconutprivateresorts.com/payments/pay?t=[pipeline_record_id]",
   bookingPipelineId: "[pipeline_record_id]",
   paymentAmountUsd: [amount],
 }
 ```
+
+**Dietary in `offer.includes` (prospect mode):**
+- If dietary Q&A answer is `"Yes"` but no details → add as last include: `"Dietary needs noted — your chef will confirm details before arrival"`
+- If dietary is `"No"` or blank → omit the dietary line entirely
+- NEVER write specific restrictions (e.g. "gluten-free") in prospect mode — those are collected post-booking
 
 Set `whatsapp.groupInviteUrl` to `"REPLACE_WITH_[FAMILY]_GROUP_INVITE"` — remind the user to fill this before sending the link.
 
@@ -163,11 +172,23 @@ After the user replies `merged`:
 
 Poll until green:
 ```bash
+# 1. Capture the SHA of the merge commit first (from the branch or PR)
+MERGE_SHA=$(cd /Users/littleboss/Code/tommy-os && git rev-parse origin/main)
+
+# 2. Poll until a new deployment with that SHA appears and reaches success
 until gh api repos/TommyCoconutIT/tommy-os/deployments \
-  --jq '[.[] | select(.environment=="Production")] | first | .statuses_url' \
-  | xargs gh api --jq '.[] | select(.state) | .state' | grep -q "success"; do sleep 30; done
+  --jq '[.[] | select(.environment=="Production – tommy-web")] | first | .sha' \
+  | grep -q "$MERGE_SHA"; do echo "waiting for deploy..."; sleep 30; done
+
+# 3. Wait for state: success
+DEPLOY_ID=$(gh api repos/TommyCoconutIT/tommy-os/deployments \
+  --jq '[.[] | select(.environment=="Production – tommy-web")] | first | .id')
+until gh api repos/TommyCoconutIT/tommy-os/deployments/$DEPLOY_ID/statuses \
+  --jq 'first | .state' | grep -q "success"; do sleep 15; done
 echo "Deploy green"
 ```
+
+⚠️ **Environment name is `"Production – tommy-web"` — NOT `"Production"`.** Using the wrong name returns no results and makes the poll hang forever.
 
 Or just check: `gh run list --repo TommyCoconutIT/tommy-os --limit 3`
 
@@ -228,8 +249,8 @@ Present the message to the user. Do not send it — Boy sends it.
 
 Generate a branded HTML offer email and save it to the guest's local folder so Boy can send it via Safari → Apple Mail.
 
-**File path**: `~/Desktop/Leads- dushi week/[family]/email-[family]-offer.html`
-(use the same folder the itinerary HTML lives in — lowercase hyphenated family name)
+**File path**: `~/Desktop/Leads-dushi-week/[family]/email-[family]-offer.html`
+(use the same folder the itinerary HTML lives in — lowercase hyphenated family name, no spaces)
 
 ### Email structure
 
@@ -242,7 +263,7 @@ Generate a branded HTML offer email and save it to the guest's local folder so B
 | **CTA button** | Gold `#FFC125`, navy text, "View Your Dushi Week →" · links to microsite URL · plain URL below button for copy-paste |
 | **Expiry block** | Navy bar · offer deadline in island time · price label |
 | **Dietary note** | Turquoise left-border box (only if dietary restriction exists) · always puts action on guest: "let the server know" — never "TC has handled it" |
-| **Signature** | Boy's name (Playfair Display), role, WhatsApp `+5999 696 8263`, `boy@tommycoconut.com` |
+| **Signature** | "Tommy Coconut" (Playfair Display), "Tommy Coconut Private Resorts", WhatsApp `+5999 696 8263`, `info@tommycoconut.com` — no personal name, no personal email |
 | **Footer** | Navy bar · "VACATION IS HOLY. 🥥" · TC address |
 
 ### Design tokens

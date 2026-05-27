@@ -2,7 +2,7 @@
 
 **MANDATORY READING.** This document must be read BEFORE any other reference file, BEFORE writing any content, BEFORE generating any output. It contains every mistake, correction, insight, and technical lesson learned from real builds. Ignoring this document leads to hallucinated content, dangerous liability language, factual errors, and wasted time.
 
-Last updated: 2026-05-26 (Moons Cartel build — added Captain Mike boat trip types to Section 14, CP counter grep to Section 3, pre-PR microsite audit to Section 19, and expanded Build #7 corrections in Section 17. Prior: Sagar Cartel build — first Family Young Adults prospect build. Added checklist items 16–18: breakfast audit, upsell audit, bookingUrl token rule. Added Build 6 reference. Added pre-PR breakfast+upsell pass to Section 19.) Prior: 2026-05-25 (Fairburn Cartel build — first HTML-template-skeleton couple build. Added Section 20: Template-First Rule.) Prior: 2026-05-23 (skill change: output is now **text-only Markdown** — photo/HTML/PDF/DOCX pipeline retired — and a new **Operator Research Protocol** for new/unknown activities). Prior: 2026-05-22 (Adams "Traveling Trio" — first two-coconut all-inclusive LEAD build). Prior: 2026-04-16 (King Cartel build)
+Last updated: 2026-05-27 (Lafrance Cartel build #67 — added Build #67 section at end: map pin audit rule, email/microsite expiry sync, no-names standard, pipeline record double duty, pull-main-before-hotfix rule. Prior: 2026-05-26 Moons Cartel build — added Captain Mike boat trip types to Section 14, CP counter grep to Section 3, pre-PR microsite audit to Section 19, and expanded Build #7 corrections in Section 17. Prior: Sagar Cartel build — first Family Young Adults prospect build. Added checklist items 16–18: breakfast audit, upsell audit, bookingUrl token rule. Added Build 6 reference. Added pre-PR breakfast+upsell pass to Section 19.) Prior: 2026-05-25 (Fairburn Cartel build — first HTML-template-skeleton couple build. Added Section 20: Template-First Rule.) Prior: 2026-05-23 (skill change: output is now **text-only Markdown** — photo/HTML/PDF/DOCX pipeline retired — and a new **Operator Research Protocol** for new/unknown activities). Prior: 2026-05-22 (Adams "Traveling Trio" — first two-coconut all-inclusive LEAD build). Prior: 2026-04-16 (King Cartel build)
 
 ---
 
@@ -934,6 +934,48 @@ If the approved original or skeleton predates May 2026, run the V8 design-token 
 ---
 
 *This document is a living record. Update it after every build with new corrections, insights, and technical lessons. The goal: zero hallucinations, zero liability language, zero wasted tokens.*
+
+---
+
+## Build #67 — The Lafrance Cartel · May 2026
+
+**Guest:** jlafrance1@outlook.com · Couple, no names shared · Dushi Hideaway · Two Coconut All-Inclusive · $14,350 · Dates TBD
+**Slug:** LafranceDushiWeek67 · **Mode:** prospect · **Pipeline:** `recDuK6yOIHKtAYPD`
+
+### Lesson 1 — Map pins must be updated when restaurants are swapped
+
+When Day 3's dinner was changed from Komé → Pasawá Box Eatery during a hotfix, the schedule and `restaurants[]` were updated but the `mapPins` array was not. The Komé pin (wrong restaurant, wrong location) shipped to production and required a third PR.
+
+**Rule:** After any restaurant swap, grep `mapPins` for the old restaurant name and update the pin. Add this to the pre-PR map pin audit (see pre-PR checklist in `dushi-week-microsite-from-itinerary/SKILL.md`).
+
+### Lesson 2 — Offer email expiry and microsite expiresAtISO must match
+
+The offer email was written with "3:00 PM island time" and the microsite `expiresAtISO` was set to `16:00` (4 PM). One hour difference. Neither value was wrong in isolation; they just weren't checked against each other. Required another PR to align.
+
+**Rule:** After setting `expiresAtISO`, convert it to island time (UTC-4) and verify it matches the expiry text in the offer email HTML. If you're building the email and the microsite in the same session, set the time in one place first and copy it to the other.
+
+### Lesson 3 — No-names builds: use cartel name throughout
+
+This guest never shared real names. Correct approach (confirmed during build):
+- `family.members: []`, `primaryGuest: ""`, `bookerGuest: ""`
+- Letter salutation: `"You two,"` (not a placeholder — leave it exactly like that)
+- Crew `whatsappMessage` starters: `"Hi Boy — it's the Lafrance family. "` (use family surname, not Cartel name)
+- `offer.whatsappMessage`: `"Hi Britt — it's the Lafrance family. We want to lock the Dushi Week (Dushi Hideaway). Send the payment link."`
+- Do NOT use placeholder text like `[Guest Names]` — write the cartel/family name directly
+
+### Lesson 4 — Pipeline record may serve double duty as payment record
+
+The skill previously warned "if you paste the lead pipeline ID the pay page won't work." In this build, the user gave the lead pipeline record ID and confirmed it was also the payment record — and it worked. Britt doesn't always create a separate offer record.
+
+**Rule:** Don't assume two records exist. Ask the user: "Is there a separate offer/payment pipeline record, or is `recXXX` the one Britt wants?" If they confirm it's the same record, use it for both `bookingUrl` and `bookingPipelineId`.
+
+### Lesson 5 — Pull main before opening each hotfix branch
+
+When three hotfix PRs were merged in sequence (PRs #399, #401, #402), the branch for #402 was created before #401 merged to main. The result was a merge conflict on the same line. Always pull `origin/main` and create a fresh branch from HEAD after each PR merges — never reuse a stale base.
+
+```bash
+git checkout main && git pull && git checkout -b fix/<next-fix>
+```
 
 ---
 
