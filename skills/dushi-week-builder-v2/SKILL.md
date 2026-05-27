@@ -42,16 +42,20 @@ Cover page, personal letter, philosophy page, Week at a Glance, closing page, an
 
 ## The Six Segment Templates
 
-| Segment | Airtable Guest Record ID | Items | Notes |
-|---|---|---|---|
-| Couple | `rec7QFzJ2s342F0IZ` | 19 | Complete. HTML shell available. |
-| Friends | `rec2R9SiqXz5VUQVX` | 19 | Complete. Airtable only. |
-| Family teens | `recX78q5CWqslAm1e` | 17 | Complete. Airtable only. |
-| Family young kids | `recjG9FwdBH0683UX` | 16 | Complete. Airtable only. |
-| Family young adults | `recptPrA2LnvarKhu` | 17 | Complete. Airtable only. |
-| Multi gen | `reczs1Jiwbh6BVMQO` | 12 | ⚠️ Days 7–8 missing — flag to Ray before starting. |
+Each segment has a **Template Trip** in the Trips table (`tblomZtSy0qeghyPE`). The complete week lives as Itinerary Items V2 records linked to that Trip.
 
-To pull template items for a segment: `list_records_for_table` on Itinerary Items V2, filter by the Guest Record ID above (field `fldjwBB7eAU9BPa8j`), sort by day number (`fldPlg98rFGiaCCSH` asc) then time-of-day.
+| Segment | Template Trip Nickname (`Trip Nickname`) | Items |
+|---|---|---|
+| Couple | `Template Couple` | 19 |
+| Friends | `Template Friends` | 19 |
+| Family teens | `Template Family teens` | 17 |
+| Family young kids | `Template Family young kids` | 16 |
+| Family young adults | `Template Family young adults` | 17 |
+| Multi gen | `Template Multi gen` | 16 |
+
+To pull template items for a segment: `list_records_for_table` on **Itinerary Items V2**, filter with `SEARCH("<Template Trip Nickname>", ARRAYJOIN({Trip Name (lookup)}))` using the **full nickname** from the table above. Sort by Day Number (`fldPlg98rFGiaCCSH` asc) then Sort Order (`fldwpxPJaMXbSd3P5` asc).
+
+⚠️ **Do not filter by Guest Record ID or `Guests Total (lookup)` (`fldjwBB7eAU9BPa8j`).** All template Trips share the same template guest — that filter returns items from every template mixed together.
 
 ---
 

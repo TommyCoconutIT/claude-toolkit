@@ -10,9 +10,9 @@ You are running **headlessly** in GitHub Actions — no human is watching.
 Use `bash` (curl) for all Airtable reads and writes. The `AIRTABLE_API_KEY` environment variable is already set.
 
 **Three-phase flow:**
-1. Find guest segment → copy segment template to Airtable verbatim
+1. Read Pipeline `Segment` → pick the matching Template Trip → copy its Itinerary Items V2 records 1:1
 2. Analyze quiz answers → output Voice Bible-compliant personalization suggestions as text
-3. Print summary — suggestions are NOT applied to Airtable
+3. Print summary — suggestions are NOT applied to Body Text until human approval
 
 **Never write or PATCH records based on personalization. Never invent backstory.**
 
@@ -52,20 +52,38 @@ Parse `Quiz Answers Raw` as JSON. Extract at minimum:
 
 ---
 
-## STEP 2 — Determine guest type & template record ID
+## STEP 2 — Determine segment & template Trip
 
-Using `Segment`, adult/child/infant counts, and quiz answers, classify into one of the six segments and look up its template Guest Record ID:
+Read `Segment` (`fldnh3gJKZH9BQS8s`) from the Pipeline record. This is the **only** source for picking the template — do not re-derive segment from adult/child counts or quiz answers.
 
-| Guest type | When | Template Guest Record ID |
+Map the Pipeline segment value to the exact **Template Trip Nickname** in the Trips table:
+
+| Pipeline `Segment` | Template Trip Nickname | Expected item count |
 |---|---|---|
-| **couple** | 2 adults, no kids | `rec7QFzJ2s342F0IZ` |
-| **friends** | 3+ adults, no kids | `rec2R9SiqXz5VUQVX` |
-| **family-teens** | kids 10–17 | `recX78q5CWqslAm1e` |
-| **family-young-kids** | children under 10 | `recjG9FwdBH0683UX` |
-| **family-young-adults** | kids 18–25 | `recptPrA2LnvarKhu` |
-| **multi-gen** | mixed adults + kids across age brackets | `reczs1Jiwbh6BVMQO` |
+| `couple` | `Template Couple` | 19 |
+| `friends` | `Template Friends` | 19 |
+| `family-young-kids` | `Template Family young kids` | 16 |
+| `family-teens` | `Template Family teens` | 17 |
+| `family-young-adults` | `Template Family young adults` | 17 |
+| `multi-gen` | `Template Multi gen` | 16 |
 
-⚠️ If `multi-gen` is selected, note that Days 7–8 are missing from the template — flag this in the summary output.
+If `Segment` is blank, halt and print an error — do not guess.
+
+Optionally verify the template Trip exists:
+
+```bash
+TEMPLATE_NAME="Template Couple"  # from table above
+
+curl -s "https://api.airtable.com/v0/appFRLV1H76ohiIQS/tblomZtSy0qeghyPE" \
+  -H "Authorization: Bearer $AIRTABLE_API_KEY" \
+  -G --data-urlencode 'filterByFormula={Trip Nickname}="'"${TEMPLATE_NAME}"'"' \
+  --data-urlencode "fields[]=Trip Nickname" \
+  --data-urlencode "fields[]=Segment"
+```
+
+You should get exactly one Trip record back. Store its record ID for logging — but **do not** use `{Trip} = "recXXX"` as a filter on Itinerary Items (that formula does not match via the REST API in this base). Use the Trip Name lookup filter in Step 4 instead.
+
+⚠️ **Never filter template items by Guest Record ID or `Guests Total (lookup)`.** All six template Trips share the same template guest (`rec7QFzJ2s342F0IZ`). Filtering by guest ID returns a mixed bag of items from every template — that is the bug you must avoid.
 
 ---
 
@@ -91,36 +109,65 @@ curl -s -X DELETE "https://api.airtable.com/v0/appFRLV1H76ohiIQS/tblrehbZFtArMtw
 
 ---
 
-## STEP 4 — Fetch the segment template items
+## STEP 4 — Fetch the template week (1:1 source)
 
-Pull all template items for the guest's segment. Filter by the Template Guest Record ID from Step 2 using field `fldjwBB7eAU9BPa8j`. Sort by day number ascending.
+Pull **every** Itinerary Items V2 record belonging to the template Trip — and **only** that Trip.
+
+Use the full Template Trip Nickname from Step 2 in a `Trip Name (lookup)` filter. Use the **complete name** (e.g. `Template Family young kids`, not `Template Family young`) to avoid matching the wrong family template:
 
 ```bash
-TEMPLATE_GUEST_ID="rec7QFzJ2s342F0IZ"  # replace with actual value from Step 2
+TEMPLATE_NAME="Template Couple"  # exact value from Step 2 table
 
 curl -s "https://api.airtable.com/v0/appFRLV1H76ohiIQS/tblrehbZFtArMtwr5" \
   -H "Authorization: Bearer $AIRTABLE_API_KEY" \
-  -G --data-urlencode "filterByFormula=SEARCH(\"${TEMPLATE_GUEST_ID}\", ARRAYJOIN({fldjwBB7eAU9BPa8j}))" \
+  -G --data-urlencode 'filterByFormula=SEARCH("'"${TEMPLATE_NAME}"'", ARRAYJOIN({Trip Name (lookup)}))' \
   --data-urlencode "sort[0][field]=fldPlg98rFGiaCCSH" \
-  --data-urlencode "sort[0][direction]=asc"
+  --data-urlencode "sort[0][direction]=asc" \
+  --data-urlencode "sort[1][field]=fldwpxPJaMXbSd3P5" \
+  --data-urlencode "sort[1][direction]=asc"
 ```
 
-Page through all results using the `offset` parameter if needed (Airtable returns max 100 records per page).
+Page through all results using the `offset` parameter (max 100 records per page).
 
-For each template record, store:
-- `fldPlg98rFGiaCCSH` — Day Number
-- `fldDekHGP9CCIfgJl` — Slot
-- `fldQx8ZJCw7Mw652T` — Header
-- `fldBcHXSRTzi6Tqg6` — Body Text
-- `fldwpxPJaMXbSd3P5` — Sort Order
-- `fldWdPQqDdfQ1gnEc` — Base Pro Tip
-- `fldAkfpwgSUP8tVWG` — Show Pro Tip
+**Validation — halt if this fails:**
+- Record count must exactly match the Expected item count from Step 2
+- Every returned record's `Trip Name (lookup)` must contain the template name
+- If count is wrong or any record belongs to a different template, **stop** — do not write anything
+
+For each template record, store these **writable** fields (by field ID):
+
+| Field | Field ID | Copy? |
+|---|---|---|
+| Activity Catalog | `fldgERH9Wh0Pl9zkp` | ✅ yes |
+| Day Number | `fldPlg98rFGiaCCSH` | ✅ yes |
+| Slot | `fldDekHGP9CCIfgJl` | ✅ yes |
+| Header | `fldQx8ZJCw7Mw652T` | ✅ yes (if present) |
+| Body Text | `fldBcHXSRTzi6Tqg6` | ✅ yes — verbatim |
+| Sort Order | `fldwpxPJaMXbSd3P5` | ✅ yes (if present) |
+| Status | `fldt7AsmEOz8Jgzc0` | ✅ yes — copy from template |
+| Base Pro Tip | `fldWdPQqDdfQ1gnEc` | ✅ yes — verbatim |
+| Show Pro Tip | `fldAkfpwgSUP8tVWG` | ✅ yes (if present) |
+| Show About | `fldnO7FOyDt9WVqxE` | ✅ yes (if present) |
+| About Story | `fldt4lKoGD8iJbVi5` | ✅ yes (if present) |
+| Is Hero For Day | `fldH4nM55rGIyxYxn` | ✅ yes (if present) |
+| Manual Override Reason | `fldy9Dpgfhx2zXsJj` | ✅ yes (if present) |
+
+**Do NOT copy** these (lookups, formulas, or wrong links):
+- `Trip` — template Trip link stays on the template; new items link to Pipeline only
+- `Pipeline` — set to the new lead's Pipeline ID in Step 5
+- `Custom Notes` — leave blank (Step 6 writes AI suggestions here)
+- Any field ending in `(lookup)` or `(from …)` — computed, not writable
+- `Item Name` — formula field
 
 ---
 
-## STEP 5 — Write itinerary items to Airtable
+## STEP 5 — Write itinerary items to Airtable (1:1 clone)
 
-For each template record fetched in Step 4, create a new record in `Itinerary Items V2` linked to the new Pipeline. **Copy every field value verbatim from the template — do not rewrite body text or pro tips.** Only the Pipeline link is different.
+Create **exactly one new record per template record** — same count, same fields, same values. The **only** differences from the template are:
+1. `Pipeline` link → the new lead's `PIPELINE_ID`
+2. No `Trip` link (lead-stage items are Pipeline-only until booking)
+
+**Do not add, remove, reorder, or rewrite any template items.** Do not pull activities from Activity Catalog separately. Do not invent slots.
 
 Batch up to 10 records per POST request:
 
@@ -133,13 +180,14 @@ curl -s -X POST "https://api.airtable.com/v0/appFRLV1H76ohiIQS/tblrehbZFtArMtwr5
       {
         "fields": {
           "fldWzo3ZUygqaiwyB": ["PIPELINE_ID"],
+          "fldgERH9Wh0Pl9zkp": ["ACTIVITY_CATALOG_ID_FROM_TEMPLATE"],
           "fldPlg98rFGiaCCSH": 1,
           "fldDekHGP9CCIfgJl": "Morning",
-          "fldQx8ZJCw7Mw652T": "<header from template>",
-          "fldBcHXSRTzi6Tqg6": "<body text copied verbatim from template>",
-          "fldwpxPJaMXbSd3P5": 1,
-          "fldt7AsmEOz8Jgzc0": "Draft",
-          "fldWdPQqDdfQ1gnEc": "<pro tip copied verbatim from template>",
+          "fldQx8ZJCw7Mw652T": "<header copied verbatim>",
+          "fldBcHXSRTzi6Tqg6": "<body text copied verbatim>",
+          "fldwpxPJaMXbSd3P5": 110,
+          "fldt7AsmEOz8Jgzc0": "Suggested",
+          "fldWdPQqDdfQ1gnEc": "<pro tip copied verbatim>",
           "fldAkfpwgSUP8tVWG": true
         }
       }
@@ -147,19 +195,26 @@ curl -s -X POST "https://api.airtable.com/v0/appFRLV1H76ohiIQS/tblrehbZFtArMtwr5
   }'
 ```
 
-**Field reference:**
+After all batches complete, verify: `records_created == template_records_fetched`. If not, report the mismatch in the summary.
 
-| Field | Field ID | Type | Notes |
-|---|---|---|---|
-| Pipeline | `fldWzo3ZUygqaiwyB` | Array | `["PIPELINE_ID"]` — array with one record ID |
-| Day Number | `fldPlg98rFGiaCCSH` | Number | copied from template |
-| Slot | `fldDekHGP9CCIfgJl` | Select | copied from template |
-| Header | `fldQx8ZJCw7Mw652T` | Text | copied from template |
-| Body Text | `fldBcHXSRTzi6Tqg6` | Text | **copied verbatim — do not rewrite** |
-| Sort Order | `fldwpxPJaMXbSd3P5` | Number | copied from template |
-| Status | `fldt7AsmEOz8Jgzc0` | Select | always `"Draft"` |
-| Base Pro Tip | `fldWdPQqDdfQ1gnEc` | Text | copied from template |
-| Show Pro Tip | `fldAkfpwgSUP8tVWG` | Checkbox | copied from template |
+**Field reference (writes only):**
+
+| Field | Field ID | Notes |
+|---|---|---|
+| Pipeline | `fldWzo3ZUygqaiwyB` | `["PIPELINE_ID"]` — the only link on lead-stage items |
+| Activity Catalog | `fldgERH9Wh0Pl9zkp` | copied from template |
+| Day Number | `fldPlg98rFGiaCCSH` | copied from template |
+| Slot | `fldDekHGP9CCIfgJl` | copied from template |
+| Header | `fldQx8ZJCw7Mw652T` | copied from template |
+| Body Text | `fldBcHXSRTzi6Tqg6` | **copied verbatim — do not rewrite** |
+| Sort Order | `fldwpxPJaMXbSd3P5` | copied from template |
+| Status | `fldt7AsmEOz8Jgzc0` | copied from template |
+| Base Pro Tip | `fldWdPQqDdfQ1gnEc` | copied from template |
+| Show Pro Tip | `fldAkfpwgSUP8tVWG` | copied from template |
+| Show About | `fldnO7FOyDt9WVqxE` | copied from template (if set) |
+| About Story | `fldt4lKoGD8iJbVi5` | copied from template (if set) |
+| Is Hero For Day | `fldH4nM55rGIyxYxn` | copied from template (if set) |
+| Manual Override Reason | `fldy9Dpgfhx2zXsJj` | copied from template (if set) |
 
 ---
 
@@ -219,10 +274,12 @@ Print a short summary:
 ```
 ✅ Itinerary tasks written for pipeline_id: <id>
    Guest: <FirstName> <LastName> (<email>)
-   Segment: <guest type>
+   Segment: <segment>
+   Template Trip: <Template Trip Nickname>
    Dates: <arrival> → <departure>
-   Template records copied: <count>
+   Template records fetched: <count> (expected: <expected count>)
+   Records created: <count>
    Personalization suggestions: <count> (stored in Custom Notes — awaiting human accept/decline in portal)
 ```
 
-Do not update the Pipeline status. Do not open a PR. Do not write HTML. Do not PATCH any records. Your job is done.
+Do not update the Pipeline status. Do not open a PR. Do not write HTML. Do not PATCH Body Text. Your job is done.
