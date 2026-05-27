@@ -10,9 +10,9 @@ You are running **headlessly** in GitHub Actions — no human is watching.
 Use `bash` (curl) for all Airtable reads and writes. The `AIRTABLE_API_KEY` environment variable is already set.
 
 **Three-phase flow:**
-1. Read Pipeline `Segment` → pick the matching Template Trip → copy its Itinerary Items V2 records 1:1
-2. Analyze quiz answers → output Voice Bible-compliant personalization suggestions as text
-3. Print summary — suggestions are NOT applied to Body Text until human approval
+1. **Steps 1–5 (no AI):** GitHub Actions runs `scripts/clone-template-itinerary.py` — reads Pipeline `Segment`, picks the template Trip, deletes stale lead items, clones every writable field 1:1 (including checkbox flags), verifies the copy, then exits.
+2. **Step 6 (AI):** Claude reads quiz answers → writes Voice Bible-compliant personalization suggestions to `Custom Notes` only.
+3. **Step 7:** Print summary — suggestions are NOT applied to Body Text until human approval
 
 **Never write or PATCH records based on personalization. Never invent backstory.**
 
@@ -60,12 +60,12 @@ Map the Pipeline segment value to the exact **Template Trip Nickname** in the Tr
 
 | Pipeline `Segment` | Template Trip Nickname | Expected item count |
 |---|---|---|
-| `couple` | `Template Couple` | 19 |
-| `friends` | `Template Friends` | 19 |
-| `family-young-kids` | `Template Family young kids` | 16 |
-| `family-teens` | `Template Family teens` | 17 |
-| `family-young-adults` | `Template Family young adults` | 17 |
-| `multi-gen` | `Template Multi gen` | 16 |
+| `couple` | `Template Couple` | 21 |
+| `friends` | `Template Friends` | 22 |
+| `family-young-kids` | `Template Family young kids` | 18 |
+| `family-teens` | `Template Family teens` | 19 |
+| `family-young-adults` | `Template Family young adults` | 20 |
+| `multi-gen` | `Template Multi gen` | 18 |
 
 If `Segment` is blank, halt and print an error — do not guess.
 
@@ -134,7 +134,7 @@ Page through all results using the `offset` parameter (max 100 records per page)
 - Every returned record's `Trip Name (lookup)` must contain the template name
 - If count is wrong or any record belongs to a different template, **stop** — do not write anything
 
-For each template record, store these **writable** fields (by field ID):
+For each template record, store these **writable** fields (exact Airtable names — use names in POST JSON, not IDs):
 
 | Field | Field ID | Copy? |
 |---|---|---|
@@ -145,12 +145,13 @@ For each template record, store these **writable** fields (by field ID):
 | Body Text | `fldBcHXSRTzi6Tqg6` | ✅ yes — verbatim |
 | Sort Order | `fldwpxPJaMXbSd3P5` | ✅ yes (if present) |
 | Status | `fldt7AsmEOz8Jgzc0` | ✅ yes — copy from template |
-| Base Pro Tip | `fldWdPQqDdfQ1gnEc` | ✅ yes — verbatim |
-| Show Pro Tip | `fldAkfpwgSUP8tVWG` | ✅ yes (if present) |
-| Show About | `fldnO7FOyDt9WVqxE` | ✅ yes (if present) |
+| Base Pro Tip | `fldWdPQqDdfQ1gnEc` | ✅ yes — verbatim (if present) |
+| Show Base Pro Tip? | `fldAkfpwgSUP8tVWG` | ✅ **required** — copy checkbox exactly (include `true` when template has it checked) |
+| Show About? | `fldnO7FOyDt9WVqxE` | ✅ **required** — copy checkbox exactly (include `true` when template has it checked) |
 | About Story | `fldt4lKoGD8iJbVi5` | ✅ yes (if present) |
 | Is Hero For Day | `fldH4nM55rGIyxYxn` | ✅ yes (if present) |
-| Manual Override Reason | `fldy9Dpgfhx2zXsJj` | ✅ yes (if present) |
+
+⚠️ **Checkbox fields are the most common clone bug.** If you omit `Show About?` or `Show Base Pro Tip?` from the POST payload when the template has them checked, the portal will not render About cards or Pro Tips. Always read these two fields from each template record and include them in the create payload when `true`.
 
 **Do NOT copy** these (lookups, formulas, or wrong links):
 - `Trip` — template Trip link stays on the template; new items link to Pipeline only
@@ -163,13 +164,29 @@ For each template record, store these **writable** fields (by field ID):
 
 ## STEP 5 — Write itinerary items to Airtable (1:1 clone)
 
+> **In GitHub Actions this step runs automatically before Claude is invoked.** The workflow executes `python3 scripts/clone-template-itinerary.py` with `PIPELINE_ID` and `AIRTABLE_API_KEY`. Claude sessions must **skip** Steps 1–5 and start at Step 6.
+
 Create **exactly one new record per template record** — same count, same fields, same values. The **only** differences from the template are:
 1. `Pipeline` link → the new lead's `PIPELINE_ID`
 2. No `Trip` link (lead-stage items are Pipeline-only until booking)
 
 **Do not add, remove, reorder, or rewrite any template items.** Do not pull activities from Activity Catalog separately. Do not invent slots.
 
-Batch up to 10 records per POST request:
+### 5a — Run the deterministic clone script (preferred)
+
+Use the repo script so checkbox flags and body text copy cannot be dropped:
+
+```bash
+python3 scripts/clone-template-itinerary.py
+```
+
+Requires `PIPELINE_ID` and `AIRTABLE_API_KEY` in the environment (already set in GitHub Actions).
+
+The script deletes existing lead items, clones all template fields listed in Step 4, and **verifies every copied field matches the template** (including `Show About?` and `Show Base Pro Tip?`). If verification fails, it exits non-zero — halt and do not proceed to Step 6.
+
+### 5b — Manual curl fallback (only if the script fails)
+
+Batch up to 10 records per POST request. Use **field names** in JSON (not IDs):
 
 ```bash
 curl -s -X POST "https://api.airtable.com/v0/appFRLV1H76ohiIQS/tblrehbZFtArMtwr5" \
@@ -179,23 +196,27 @@ curl -s -X POST "https://api.airtable.com/v0/appFRLV1H76ohiIQS/tblrehbZFtArMtwr5
     "records": [
       {
         "fields": {
-          "fldWzo3ZUygqaiwyB": ["PIPELINE_ID"],
-          "fldgERH9Wh0Pl9zkp": ["ACTIVITY_CATALOG_ID_FROM_TEMPLATE"],
-          "fldPlg98rFGiaCCSH": 1,
-          "fldDekHGP9CCIfgJl": "Morning",
-          "fldQx8ZJCw7Mw652T": "<header copied verbatim>",
-          "fldBcHXSRTzi6Tqg6": "<body text copied verbatim>",
-          "fldwpxPJaMXbSd3P5": 110,
-          "fldt7AsmEOz8Jgzc0": "Suggested",
-          "fldWdPQqDdfQ1gnEc": "<pro tip copied verbatim>",
-          "fldAkfpwgSUP8tVWG": true
+          "Pipeline": ["PIPELINE_ID"],
+          "Activity Catalog": ["ACTIVITY_CATALOG_ID_FROM_TEMPLATE"],
+          "Day Number": 1,
+          "Slot": "Evening",
+          "Header": "<header copied verbatim>",
+          "Body Text": "<body text copied verbatim>",
+          "Sort Order": 110,
+          "Status": "Suggested",
+          "Base Pro Tip": "<pro tip copied verbatim>",
+          "Show Base Pro Tip?": true,
+          "Show About?": true
         }
       }
     ]
   }'
 ```
 
-After all batches complete, verify: `records_created == template_records_fetched`. If not, report the mismatch in the summary.
+After all batches complete:
+- `records_created == template_records_fetched` — if not, report mismatch and halt
+- Re-fetch lead items and confirm **every** template row with `Show About? = true` has the same flag on the lead clone
+- Re-fetch lead items and confirm **every** template row with `Show Base Pro Tip? = true` has the same flag on the lead clone
 
 **Field reference (writes only):**
 
@@ -210,11 +231,10 @@ After all batches complete, verify: `records_created == template_records_fetched
 | Sort Order | `fldwpxPJaMXbSd3P5` | copied from template |
 | Status | `fldt7AsmEOz8Jgzc0` | copied from template |
 | Base Pro Tip | `fldWdPQqDdfQ1gnEc` | copied from template |
-| Show Pro Tip | `fldAkfpwgSUP8tVWG` | copied from template |
-| Show About | `fldnO7FOyDt9WVqxE` | copied from template (if set) |
+| Show Base Pro Tip? | `fldAkfpwgSUP8tVWG` | **must copy when template checked** |
+| Show About? | `fldnO7FOyDt9WVqxE` | **must copy when template checked** |
 | About Story | `fldt4lKoGD8iJbVi5` | copied from template (if set) |
 | Is Hero For Day | `fldH4nM55rGIyxYxn` | copied from template (if set) |
-| Manual Override Reason | `fldy9Dpgfhx2zXsJj` | copied from template (if set) |
 
 ---
 
@@ -279,6 +299,8 @@ Print a short summary:
    Dates: <arrival> → <departure>
    Template records fetched: <count> (expected: <expected count>)
    Records created: <count>
+   Show About? rows copied: <count> (must match template)
+   Show Base Pro Tip? rows copied: <count> (must match template)
    Personalization suggestions: <count> (stored in Custom Notes — awaiting human accept/decline in portal)
 ```
 
