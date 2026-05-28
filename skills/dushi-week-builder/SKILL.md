@@ -15,6 +15,20 @@ Then follow the Pre-Build Checklist in Section 16 of lessons-learned.md before p
 
 ---
 
+## ⚠️ STEP ZERO POINT FIVE — Run the Pre-Build Checklist BEFORE every GATE 1
+
+The Section 16 checklist is **not** "before you write the first word" — it's "before you ever ask Boy to review." Every time you're about to say "itinerary is ready" / "GATE 1," **literally scan**:
+
+- **Section 16 #16 — Breakfast audit.** Every non-arrival day opens with Coffee Bike OR Brisa do Mar. No other venue. No exceptions. Coffee Bike closed Monday → Brisa.
+- **Section 16 #17 — Upsell audit.** West-coast day = Frankie's + Touriffic. Mambo/Sea Aquarium day = Dolphin Swim + Mood cabana. Jan Thiel beach day = Papagayo daybed + Zest cabana. **Upsells are geography-locked — when a day's anchor changes, audit the upsells immediately.**
+- **Section 16 #17a + Section 5 + Section 8 — Optional activities in info-box only.** Reef snorkel with Raymonde (Tue), line fishing (Mon), padel (Sat), Give Back Locally (Fri) go **only** in the TC Today info box, **never** in a main schedule time-block. If you see any of these in a `time-block` — delete.
+- **Section 20 Token Map — Day-page h2 dates.** When arrival/departure are confirmed, every `<h2 class="day-date">` includes the real date (`Saturday · August 29, 2026`), not just the weekday.
+- **Section 2 — Liability language.** No "we've handled it," "kitchen knows," "chef has been briefed," "every restaurant has been flagged." Dietary action always lives with the guest.
+
+**Show Boy what you checked as part of the GATE 1 message** — e.g. "Audit clean: ✅ breakfast (Coffee Bike or Brisa, all 6 non-arrival days) · ✅ upsells geography-locked · ✅ optional activities info-box only · ✅ no liability language · ✅ real dates on all 8 day-page h2s." If you can't tell Boy what you checked, you didn't check it, and Boy ends up doing the audit for you. Don't.
+
+---
+
 ## STEP 0.5 — Look Back (Dushi Week Registry)
 
 **Every Dushi Week we generate is logged in one Airtable table. Check it BEFORE you build, and update it AFTER you ship.** This is how we avoid re-research, duplicate builds, and slug-number collisions — and how we honor returning guests.

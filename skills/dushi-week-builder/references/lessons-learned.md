@@ -383,6 +383,9 @@ Framing: "Boy & Britt are fishing at Caracas Bay this afternoon. If you feel lik
 - "all our energy goes into the week" NOT "every dollar goes into the week" (less transactional)
 - "Every Experience Is an Invitation" — not "Gift" (updated from earlier builds)
 
+### Anniversary / Milestone Surprises — In-Person Only (added 2026-05-28, Greene #69)
+For anniversary, honeymoon, birthday, or any milestone build: the TC surprises (in-room champagne, flowers, handwritten welcome notes, Don Piet VIP airport greet, etc.) are **in-person moments Britt and the crew pull when guests are on-island — they NEVER appear in the offer, itinerary, microsite, or email.** Boy's words on the Greene anniversary build: in-room champagne is "Marriott style"; the VIP airport greet is "a surprise we'd do when they are here without them knowing." The page promises the week; the surprises stay unannounced. The only milestone moments that go in writing are the ones the guest already chose (e.g. they booked the sunset cruise) or the ones the standard week already delivers (Sunset Club golden-hour portrait, Wednesday album, etc. — frame those out loud, don't add new ones).
+
 ### Sign-off Rules by Context
 - Public Airbnb reply: `Vacation is holy.\n— Tommy 🥥`
 - WhatsApp (first-time guests): `Vacation is holy.\nT 🥥\nTommy Coconut Private Resorts`
@@ -583,6 +586,21 @@ Do this EVERY TIME before writing a single word:
 - **Guest type**: Family with Adult Children (18-25)
 - **Key insight**: No bedtime constraint. Nightlife viable. Split activities. Intro dive real option. Easter Sunday was a factor. Pietermaai nightlife for adult kids.
 
+### Build #69: The Greene Cartel (20-Year Anniversary Couple, Two Coconut, Dushi Hideaway)
+- **Who**: aatgreene@gmail.com — no real names shared at build time
+- **Villa**: Dushi Hideaway | **Package**: Two Coconut All-In ($14,350) | **Dates**: Aug 29 – Sep 5, 2026
+- **Guest type**: Couple — 20-year wedding anniversary, first-time Curaçao
+- **Build #**: 69 | **Slug**: GreeneDushiWeek69 | **Pipeline**: `recCQ4I4TEbLFpDvk`
+- **Microsite**: https://www.tommycoconutprivateresorts.com/GreeneDushiWeek69
+- **Reference template used**: Lafrance Cartel #67 (same estate, same package, same no-names, same price)
+- **Key deviations from the standard Sat-to-Sat couple skeleton (Boy-directed during the build):**
+  1. **Day 1 Sunday**: Pasawá dinner → **Date Night at the House · Private Chef BBQ** (~7 PM). Boy explicitly approved Two Coconut + Date Night for this anniversary couple — see the Section 3 rule. The Chrissymag/Section 3 rule still applies: don't auto-include, always confirm.
+  2. **Day 3 Tuesday**: Pasawá dinner → **Zest · Live at the Beach 7:30 PM**. Tuesday is the all-day Jan Thiel beach day; Zest's Tuesday acoustic act is the right anchor.
+  3. **Day 5 Thursday**: Chobolobo dropped. Slow estate morning → Plasa Bieu lunch (~12:30) → Punda souvenir shopping → **Culture Walk with Tcam 4:15 PM** → De Gouverneur 6:30 → Punda Vibes. Note: the **shore snorkel mention belongs ONLY in the TC Today info box on Tuesday** (per Section 5 + 8), never as a main-timeline block on Thursday — I broke this rule mid-build and Boy caught it.
+  4. **Day 6 Friday**: Private Boat Day (10 AM–2 PM) → **Mambo morning + Private Sunset Cruise (3–7 PM with onboard BBQ)**. Guest selected "Sunset cruise with onboard BBQ" on the funnel. When the cruise is the Friday boat trip, the Zest Friday Spritz dinner block is **removed** — the BBQ on the boat IS dinner. Mambo upsells (Mood cabana lunch + Dolphin Swim) move to Friday too, since the Friday morning is now the Mambo anchor; they no longer go on Wednesday for this build (Lesson 7 from Chrissymag, Section 17 — upsells are geography-locked).
+- **Pattern: anniversary "named anchor moments" in the letter.** The Greene letter names four moments out loud as the anniversary anchors — Sunday intro dive, Sunday Date Night, Wednesday Sunset Club portrait (with album), Friday sunset cruise. Two of these are already package-default; two are guest-driven. Calling them out by day in the letter makes the milestone feel built, without requiring TC to invent extra inclusions.
+- **What Boy explicitly rejected for this build:** in-room champagne ("Marriott style"), Don Piet VIP airport greet ("a surprise we'd do when they are here without them knowing"). Frankie's Beach as an anniversary-picnic re-frame ("leave it as the generic upsell"). Horseback ride (operator unverified — skip until researched). See Section 9's new Anniversary/Milestone Surprises rule.
+
 ### Build 5: The Fairburn Cartel (First HTML-Template Skeleton Build)
 - **Who**: Lori & Scott Francisco-Fairburn (fairburnloriscott@gmail.com)
 - **Villa**: Dushi Hideaway | **Package**: Two Coconut (All-Inclusive, 2CCM) | **Dates**: Feb 6–13, 2027
@@ -738,6 +756,14 @@ Before writing any Airbnb review in a debrief, pull the Pipeline record. Airbnb 
 
 ---
 
+### Apply Boy's corrections as RULES, not as spot-fixes (added 2026-05-28, Greene build #69)
+When Boy flags one breach of a documented rule, the rule is the lesson — fix every instance, not just the one he caught. On the Greene build Boy flagged Bliss the Berry as a Day 4 breakfast. The actual rule ("Coffee Bike OR Brisa do Mar, every non-arrival day — absolute") was already in Section 3 and Section 16 #16. The right response wasn't "swap Day 4." It was "audit every non-arrival day's breakfast." Same logic for any other documented rule: when one violation surfaces, sweep the whole build before saying "fixed."
+
+### Run the Pre-Build Checklist BEFORE every GATE 1 (added 2026-05-28, Greene build #69)
+Section 16's checklist isn't a "before you write the first word" checklist — it's a "before you ever ask Boy to review" checklist. On the Greene build I shipped GATE 1 with three documented-rule breaches (Bliss the Berry on Day 4, shore snorkel as a main-timeline block on Thursday, Culture Walk dropped) that the existing checklist would have caught — items #16 (breakfast audit), #17a (optional activities in info-box only), and the obligation rule in Section 8. The rule from here: every GATE 1 ("itinerary is ready") must be preceded by a literal scan of Section 16 #16–#17a and Sections 5 + 8, **with results visible to Boy as part of the GATE 1 message** ("audit clean: ✅ breakfast, ✅ Mambo upsells, ✅ optional activities in info box only"). If you can't tell Boy what you checked, you didn't check it.
+
+---
+
 ### Tommy Portal — Booking URL Token Is the Pipeline Record ID
 The tommy-portal payment page (`/payments/pay?t=`) uses the **Airtable Pipeline record ID** as the token — NOT the short payment token stored in Pipeline field `fldZIAV3Qr8RaTixS`. Use `recXXXXXXXXXXXXXX` (the record ID, 17 chars starting with `rec`) as the `t=` parameter in `bookingUrl`. Confirmed: Sagar build 2026-05-26.
 
@@ -784,6 +810,7 @@ If in doubt: **leave it alone and ask.**
 | `[Guest first names]` | Both names (e.g., "Lori & Scott") |
 | `[Hometown]` | City they're from |
 | Dates on cover | Arrival and departure dates |
+| **Day-page `h2.day-date` headers** | When arrival/departure are confirmed, every day's `<h2 class="day-date">` must include the real date — `Weekday · Month D, YYYY` (e.g. `Saturday · August 29, 2026`), not just `Saturday`. Required on all 8 day-pages: Arrival, Day 1–6, Departure. Boy flagged this on the Greene build #69 — the Pipeline had exact dates, the printable HTML showed weekday only. Only ship weekday-only when dates are genuinely TBD (rare). |
 | Cover hero image URL | Look up from Basecamps table (`tblGc7g7uBedgS3Ui`, field `fldwENhluLhDMIhdG`) → build as `https://res.cloudinary.com/tommy-coconut/image/upload/w_1600,h_800,c_fill,g_auto,q_auto:best/<slug>`. Also set `fld15SzszbTcHufZT` on the Pipeline record first. See checklist item 19. |
 
 ### Copy Source Priority (When a Block Needs New or Changed Content)
