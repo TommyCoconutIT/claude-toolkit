@@ -1,9 +1,26 @@
 ---
 name: dushi-week-builder
-description: "Build personalized Dushi Week itineraries for Tommy Coconut Private Resorts guests. Use this skill whenever the user asks to create, edit, or update a guest itinerary, trip plan, Dushi Week schedule, or vacation week for any Tommy Coconut guest — whether from scratch or modifying an existing one. Also trigger when the user mentions 'itinerary', 'Dushi Week', 'guest week', 'trip plan', 'schedule their week', or any reference to planning a guest's stay in Curacao at a TC villa. This skill contains the full island knowledge database, guest type intelligence, scheduling logic, cruise ship awareness, and a verified-operator research protocol for new activities. TWO OUTPUT PATHS: (A) HTML template skeleton — when a standard HTML template exists for the variant, use it as the authoritative skeleton and only personalize tokens + specific requested blocks; (B) fresh Markdown — for new variants with no HTML template. See lessons-learned.md Section 10 and Section 20."
+description: "⚠️ DEPRECATED as of 2026-05-28. This is the v1 Dushi Week itinerary builder, retired after Build #70 Momajaa burned multiple rewrite cycles on freelanced copy. Use `dushi-week-builder-v2` instead — it pulls day content from Airtable Itinerary Items V2 (single source of truth) instead of letting the agent invent content from memory. This skill is retained only as a reference for historical builds. Do not invoke for new builds."
 ---
 
-# Dushi Week Builder
+# 🛑 DEPRECATED — Do NOT use this skill for new builds
+
+**This is `dushi-week-builder` (v1), retired 2026-05-28.**
+
+**Use [`dushi-week-builder-v2`](../dushi-week-builder-v2/SKILL.md) instead.** v2 is Airtable-first: day content (time blocks, activity descriptions, info boxes) is pulled live from Airtable Itinerary Items V2 (base `appFRLV1H76ohiIQS`) where Ray and Britt maintain the canonical copy. The HTML shell provides structure only. v2 prevents the failure mode that retired v1: the agent inventing day content from memory and burning the user's credits on rewrite cycles.
+
+**Why v1 was retired:** Build #70 (Momajaa Cartel, May 2026) burned multiple GATE 1 rewrite cycles because the agent — running v1 — freelanced day-block copy, day subtitles, banner titles, restaurant descriptions, and crew bios instead of pulling from template/Airtable. v1's design allowed this (it described template-first as a *priority*, not a *requirement*). v2 makes it impossible by sourcing day content from Airtable directly.
+
+**If a session lands here by mistake** (e.g. `dushi-week-start` was outdated, or a co-worker's `git pull` was stale, or someone typed `/dushi-week-builder` literally):
+1. Stop. Do not invoke this skill's logic.
+2. Read `dushi-week-builder-v2/SKILL.md` instead.
+3. Tell the user: "I was about to use the deprecated v1 builder — switching to v2."
+
+The content below is left in place only so historical builds (Builds 1–70) remain readable. Lessons learned from Build #70 and earlier are mirrored in `dushi-week-builder-v2/references/lessons-learned.md`.
+
+---
+
+# Dushi Week Builder (v1 — deprecated)
 
 ## ⚠️ STEP ZERO — Read Before Anything Else
 
