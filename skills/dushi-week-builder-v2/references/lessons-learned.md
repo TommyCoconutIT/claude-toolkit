@@ -484,9 +484,10 @@ Near the Sea Aquarium; thrives ON cruise days (lean into the buzz). **Cabana Bea
 
 ### Diving
 - Available for BOTH Standard and Dushi Week Full packages
-- Resident divemaster **Julian** (+599 9 665 7276)
+- Resident divemaster **Julian**
 - NOT an add-on — included for all guests
 - Kids under 8 cannot dive. Ages 8-10: Bubblemaker (shallow only).
+- ⚠️ **Julian's phone (+599 9 665 7276) is CREW-INTERNAL ONLY** — never put it in guest-facing copy (itinerary time blocks, microsite schedule bodies, restaurant cards, email, Good to Know, crew bios). Guests reach Julian via the WhatsApp group only. Added 2026-05-28 (Boy correction on Momajaa #70 build). Same rule applies to any other operational TC phone number unless explicitly told otherwise — the WhatsApp group is the guest channel.
 - For young families: "If Mom and Dad want to try an intro dive, Boy hangs out with the kids."
 
 ### Batido

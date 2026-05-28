@@ -145,7 +145,7 @@ These cost extra or require special arrangement. Mention as options if relevant 
 
 > ⚠️ **OPERATOR RESEARCH REQUIRED.** Entries below marked **[no verified operator]** are *names only* — there is no documented, fact-checked operator, location, hours, price, or contact. **Never invent those details.** Before writing any such activity into an itinerary, run the **Operator Research Protocol** (SKILL.md → "New / Unknown Activities"; lessons-learned.md Section 1A): ask the user for a preferred operator, then do wide, deep, forensic research and fact-check it — or research and recommend the best option if they have none. Once verified + approved, record the operator details (and date checked) here so the next build reuses them. The TC-run experiences above (flamingo hike, reef snorkel, boat day, etc.) are already verified and need no research.
 
-- **Intro dive** (no experience needed) — divemaster **Julian** (+599 9 665 7276). Great for adult kids, adventurous couples, friends. Mention in Good to Know as available via WhatsApp group.
+- **Intro dive** (no experience needed) — divemaster **Julian**. Great for adult kids, adventurous couples, friends. Mention in Good to Know as available via WhatsApp group. ⚠️ Julian's phone (+599 9 665 7276) is **CREW-INTERNAL ONLY** — never put it in guest-facing copy (itinerary, microsite, email, crew bios). Guests reach Julian via the WhatsApp group, period.
 - **Guided dive** (certified divers only) — divemaster Julian. Mention if guest mentions dive certification.
 - Extra massages (in-house, poolside) — arranged via TC.
 - Additional boat days — Captain Magic Mike.
