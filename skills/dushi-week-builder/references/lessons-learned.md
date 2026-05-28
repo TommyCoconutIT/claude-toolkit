@@ -198,11 +198,13 @@ These OVERRIDE the generic scheduling in island-database.md and the main SKILL.m
 - **Line Fishing**: MONDAYS ONLY, Caracas Bay, ~4 PM with Boy & Britt. OPTIONAL. Never schedule as mandatory.
 - **Reef Snorkeling**: TUESDAYS ONLY, 9 AM, walk-in at Tugboat Beach (#1 snorkel spot in Curaçao). If boat day is also Tuesday, Captain Mike takes them by boat.
 - **Give Back Locally**: FRIDAYS ONLY, 10-11:30 AM. NEVER in main itinerary.
-- **Sunset Club**: WEDNESDAYS (when running)
+- **Sunset Club**: WEDNESDAYS (when running). **Always paired with Mambo Beach Boulevard** — never schedule Sunset Club on a non-Mambo day, and never schedule Mambo without Sunset Club following it.
 - **Flamingo Hike**: ANY weekday, 7 AM. Suggest early in the week. Always moveable.
-- **Culture Walk (Tcam)**: Normally THURSDAYS, 5 PM from Brion Plein. Can sometimes move — always confirm.
+- **Culture Walk (Tcam)**: THURSDAYS, 4:15 PM from Brion Plein. **Always followed by De Gouverneur dinner** — these are a permanent pair. Culture Walk → Punda Vibes → De Gouverneur is the canonical Thursday evening. Never separate them.
 - **Punda Vibes**: THURSDAYS, 6-10 PM, fireworks at 8:15 PM
-- **Padel**: SATURDAYS, 09:00–11:00 AM (moved from Sundays 4 PM — for good, per Ray May 2026)
+- **Padel**: SATURDAYS, 09:00–11:00 AM (moved from Sundays 4 PM — for good, per Ray May 2026). **Info box only — NEVER in main schedule time blocks.**
+- **Salsa**: MONDAY ONLY, at Mei Mei (Landhuis Brakkeput Mei Mei), 9:15 PM with Heinrich Provence. There is **no Sunday salsa**. "Hemingway's Sunday Salsa" is wrong and was removed from builds. Salsa = Monday = Mei Mei. Full stop.
+- **Zanzibar Saturday Happy Hour**: SATURDAYS ONLY, 5 PM. Always present on the guest's first Saturday on-island — whether that is arrival day or Day 1. This is Saturday-specific, not arrival-specific. Do not combine with Mambo Beach Boulevard on the same day — Zanzibar HH follows a Jan Thiel beach day, not a Mambo day.
 
 ### West Coast Day
 - Schedule on the **BEST zero-ship day** — not locked to any specific day of the week
@@ -229,12 +231,15 @@ These OVERRIDE the generic scheduling in island-database.md and the main SKILL.m
 
 ## 6. RESTAURANT DEEP KNOWLEDGE
 
-### Preferred Dinner Schedule
-- **Welcome dinner: Villa Vis** — owner personally picks guests up. Check closed days (Tue+Wed) first. If guests don't want fish-only, use Brisa do Mar or Mei Mei.
+### Preferred Dinner Schedule (Canonical — confirmed Chrissymag build May 2026)
+- **Arrival night: Villa Vis** — owner personally picks guests up. Check closed days (Tue+Wed) first. If guests don't want fish-only, use Brisa do Mar or Mei Mei.
+- **First Saturday (Day 1 if Fri arrival, or arrival night if Sat arrival): Zanzibar Happy Hour** — not a sit-down dinner, the beach happy hour IS the evening.
+- **Post-west-coast day (Sunday in standard): Pasawá Box Eatery** — on the drive home from the west coast. Right on Caracasbaaiweg, 5 min from the estate. Casual, energetic, 10-person group-friendly.
 - **Monday: Mei Mei** — salsa lesson at 9:15 PM as dessert. For adults/young adults. If small children, schedule Wed-Sun so kids can do 30 min mini golf + playground before dinner.
-- **Thursday: De Gouverneur** — combine with culture walk (Tcam 5 PM) and Punda Vibes (6-10 PM, fireworks 8:15 PM). The perfect Willemstad evening.
-- **Friday: Brisa do Mar** — live music on Fridays. Always try to schedule here on Friday.
-- **Last dinner: Pasawa Eatery** — authentic local soul food. Emotional close.
+- **Wednesday: Sunset Club BBQ** — on-site at Coconut Beach. Not a restaurant.
+- **Thursday: De Gouverneur** — combine with culture walk (Tcam 4:15 PM from Brion Plein) and Punda Vibes (6-10 PM, fireworks 8:15 PM). Already in Willemstad — no second drive. This is the canonical last-real-dinner-of-the-week. **Pasawá is NOT the Thursday dinner.**
+- **Departure day: No restaurant** — De Gouverneur covered Thursday. Departure day is 8th Night Buffer only.
+- **Friday (in Sat-to-Sat standard, Day 7): Brisa do Mar** — live music on Fridays.
 
 ### Restaurant Details
 
@@ -546,7 +551,8 @@ Do this EVERY TIME before writing a single word:
 14. ✅ Ask Ray: "Anything special about this guest I should know?"
 15. ✅ List any new / third-party activity with no verified operator (horseback riding, ATV, wine tasting, cooking class, etc.) and run the Operator Research Protocol (Section 1A / SKILL.md) — ask Ray for a preferred operator, then research + forensically fact-check before writing it in.
 16. ✅ **Breakfast audit** — Every non-arrival day must open with Coffee Bike OR Brisa del Mar. No other breakfast venue. Go day by day before shipping. Coffee Bike is closed Monday → use Brisa del Mar on Mondays.
-17. ✅ **Upsell audit** — Before shipping, verify: (a) west-coast day has Frankie's Beach + Touriffic jet ski; (b) Mambo/Sea Aquarium day has dolphin swim + Mood cabana; (c) Jan Thiel beach days have Papagayo daybed. These are the standard upsell slots — don't leave them empty.
+17. ✅ **Upsell audit** — Before shipping, verify: (a) west-coast day has Frankie's Beach + Touriffic jet ski; (b) Mambo/Sea Aquarium day has dolphin swim + Mood cabana; (c) Jan Thiel beach days have Papagayo daybed + Zest Cabana. These are geography-locked — **do not put Mambo upsells (Dolphin Swim, Mood Cabana) on Jan Thiel days, and vice versa.** Dolphin Academy is at the Sea Aquarium next to Mambo (2 min away), not Jan Thiel (15 min away). Move upsells when days move.
+17a. ✅ **Optional activities in info boxes only** — Padel, line fishing, Give Back Locally, reef snorkel with Raymonde, and any "join us" activity go ONLY in the TC Today info box. Never in a main schedule time block. If you see padel as a `time-block` in the HTML or a `schedule[]` entry in the `.ts` — delete it.
 18. ✅ **bookingUrl token** — Use the Pipeline Airtable record ID (`recXXX...`) as the `t=` parameter, NOT the short token from `fldZIAV3Qr8RaTixS`. Confirmed: portal reads record ID.
 19. ✅ **Cover hero image** — Two steps, every build:
     1. **Set the Basecamp** on the Pipeline record: update field `fld15SzszbTcHufZT` (linked record) to the correct Basecamp record ID from `tblGc7g7uBedgS3Ui`.
@@ -934,6 +940,92 @@ If the approved original or skeleton predates May 2026, run the V8 design-token 
 ---
 
 *This document is a living record. Update it after every build with new corrections, insights, and technical lessons. The goal: zero hallucinations, zero liability language, zero wasted tokens.*
+
+---
+
+## Build #67 — The Chrissymag Cartel · May 2026
+
+**Guest:** chrissymag21@gmail.com · Friends group (10 guests) · Happy Hideaway + Dushi Hideaway · Two Coconut All-Inclusive · $34,650 · Feb 26 – Mar 5, 2027
+**Slug:** Chrissymag21DushiWeek67 · **Mode:** prospect · **Pipeline:** pending (Britt)
+**Segment:** Friends · **Arrival:** Friday (non-standard, Fri-to-Fri) · **Theme:** graduation trip
+
+### Lesson 1 — Skeleton day assignments are canonical. Don't reorganize them.
+
+The skeleton has hard rules for which activities happen on which weekday. These are not creative choices — they're operational facts (bands play on specific nights, Tcam walks on Thursdays, etc.). The Chrissymag build violated four of them before they were corrected:
+
+| Wrong | Correct |
+|---|---|
+| Mambo + Zanzibar HH on the same day | Mambo → Sunset Club (Wed). Zanzibar HH on Saturdays only (Jan Thiel). |
+| Hemingway's Sunday Salsa | No such thing. Salsa = Monday, Mei Mei, 9:15 PM. |
+| Pasawá on Thursday | Thursday = Culture Walk → De Gouverneur. Pasawá goes on Sunday (post-west-coast). |
+| De Gouverneur on departure day | De Gouverneur is Thursday night (already in Willemstad). Departure day has no restaurant. |
+
+**Rule:** Before assigning any dinner or evening activity, check Section 5 (Fixed Activity Days) and Section 6 (Preferred Dinner Schedule). If a day doesn't map to the skeleton, ask Boy before inventing a new assignment.
+
+### Lesson 2 — Fri-to-Fri remapping: arrival day shifts, weekday anchors stay
+
+The standard skeleton is Sat-to-Sat. For Fri-to-Fri (Chrissymag) the mapping is:
+
+| Standard skeleton | Chrissymag equivalent |
+|---|---|
+| Arrival Sat: Villa Vis → Zanzibar HH | Arrival Fri: Villa Vis only. Zanzibar HH → Day 1 Saturday (still Saturday-specific). |
+| Day 1 Sun: relaxed beach day | Day 1 Sat: Jan Thiel all day → Zanzibar HH 5 PM |
+| Day 5 Wed: Mambo + Sunset Club | Day 5 Wed: Mambo + Sunset Club (same) |
+| Day 6 Thu: Culture Walk + De Gouverneur | Day 6 Thu: Boat Day + Culture Walk + De Gouverneur (same) |
+| Day 7 Fri: Boat Day + Pasawá | Day 7 Thu: (merged with Culture Walk day above — both on Thursday) |
+| Day 8 Sat: De Gouverneur | Day 8 Fri: Departure only, no restaurant |
+
+**Key insight:** Zanzibar Happy Hour is Saturday-specific — it stays on Saturday even if Saturday is no longer arrival day. Don't move it.
+
+### Lesson 3 — Optional activities caused repeated correction loops
+
+Padel appeared in the main schedule multiple times across multiple sessions. The rule is absolute: **padel, line fishing, reef snorkel, Give Back Locally = info box ONLY.** No exceptions. If a schedule block says "Padel" anywhere outside the TC Today info box — delete it.
+
+### Lesson 4 — Private Chef BBQ is not a default Two Coconut inclusion
+
+It was added without Boy confirming it, and had to be removed. The rule: only include Private Chef BBQ if Boy explicitly says "this guest has the BBQ." When in doubt, leave it out. Two Coconut All-Inclusive covers food and drink — not specifically a private chef at the estate.
+
+### Lesson 5 — TypeScript smart-quote normalisation breaks inner quoted text
+
+A bulk script replaced U+201C/U+201D (curly quotes) with ASCII double quotes across the file. This correctly fixed string delimiter issues but broke three strings where curly quotes were text content inside a double-quoted literal:
+- `"explore art"` inside a string became `"explore art"` — breaking the string
+- Same for `"please vacate by 10 AM."` and `"good enough"`
+
+**Rule:** After any bulk quote-normalisation pass, grep for unescaped inner quotes:
+```bash
+grep -n '"[^"]*"[^"]*"' your-file.ts
+```
+Any match inside a string literal needs the inner quotes escaped as `\"...\"`
+
+### Lesson 6 — AI slop in time block titles
+
+Two titles were flagged and removed:
+- `"Head to Coconut Beach. Do not be late."` — performative urgency, cringe
+- `"Culture Walk with Tcam (You're Welcome)"` — self-congratulatory
+
+**Rule:** Time block titles are factual labels: what it is, where, when. Never add editorial commentary, urgency language, or humor to a title. Those go in the body copy if anywhere.
+
+### Lesson 7 — Upsells are geography-locked; move them when days move
+
+When Saturday changed from Mambo to Jan Thiel, the Mambo upsells (Dolphin Swim at Sea Aquarium, Mood Beach Cabana) stayed on Saturday. They were then wrong — Dolphin Academy is 2 min from Mambo, 15 min from Jan Thiel.
+
+**Rule:** Dolphin Swim + Mood Cabana = Mambo day. Papagayo Daybed + Zest Cabana = Jan Thiel day. When a day's anchor changes, audit the upsells immediately.
+
+### Lesson 8 — Offer email and microsite expiry must be set together
+
+The offer email had May 29 expiry; the microsite had been reset to May 30. Caused a mismatch that required an email re-edit before shipping.
+
+**Rule:** Set `expiresAtISO` first. Convert to human-readable island time (UTC-4). Copy that string verbatim into the offer email expiry block. Do both in the same edit pass.
+
+### Lesson 9 — Chrissymag HTML is now the canonical Friends Fri-to-Fri skeleton
+
+`~/Desktop/Leads - dushi week/chrissymag/itinerary-chrissymag-cartel.html` is the reference template for:
+- Segment: Friends (10 guests)
+- Arrival: Friday (Fri-to-Fri)
+- Package: Two Coconut All-Inclusive
+- Estate: Happy Hideaway + Dushi Hideaway (Two Coconut)
+
+Save a durable copy to `~/.claude/skills/dushi-week-builder/references/` before the Desktop folder is cleaned up.
 
 ---
 
