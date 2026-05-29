@@ -156,7 +156,8 @@ For each template record, store these **writable** fields (exact Airtable names 
 
 When the lead's **Date Arrival** is set, the script remaps each template item's `Day Number` based on its `Weekday` field and the guest's arrival day of week:
 
-- `day_number = (weekday_dow - arrival_dow) % 7 + 1`  (Monday=0 … Sunday=6)
+- **Day 1 items are always pinned to Day 1** — arrival-day activities stay on the arrival day regardless of weekday.
+- For all other items: `day_number = (weekday_dow - arrival_dow) % 7 + 1`  (Monday=0 … Sunday=6)
 - Items whose computed day falls beyond the trip window (departure − arrival) are **skipped**.
 - Fallback: if no arrival date is set, OR if a template item has no `Weekday` value, `Day Number` is copied verbatim — preserving the Saturday-to-Saturday default.
 

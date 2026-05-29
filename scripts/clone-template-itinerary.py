@@ -137,9 +137,14 @@ def build_create_fields(
     out: dict = {"Lead": [lead_id]}
 
     weekday_str = template_fields.get("Weekday")
+    template_day_number = template_fields.get("Day Number")
     day_number_override: int | None = None
 
-    if weekday_str and arrival_dow is not None:
+    # Day 1 items are always the arrival-day activities — pin them to Day 1
+    # regardless of their Weekday value or the guest's arrival weekday.
+    if template_day_number == 1:
+        day_number_override = 1
+    elif weekday_str and arrival_dow is not None:
         day_number_override = remap_day_number(weekday_str, arrival_dow, trip_length)
         if day_number_override is None:
             return None  # outside trip window — skip
