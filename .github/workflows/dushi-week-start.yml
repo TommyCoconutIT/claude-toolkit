@@ -35,6 +35,7 @@ jobs:
         env:
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
           PIPELINE_ID: ${{ inputs.pipeline_id }}
+          TEMPLATE_TRIP_NAME: ${{ vars.TEMPLATE_TRIP_NAME || 'Template — Master' }}
         run: python3 scripts/clone-template-itinerary.py
 
       - name: Install Claude Code CLI

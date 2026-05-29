@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Clone Itinerary Items V2 from a segment template Trip onto a lead Pipeline.
+"""Clone Itinerary Items V2 from the master template Trip onto a lead Pipeline.
 
 Copies every writable template field 1:1. The only differences on the new records:
   - Pipeline link → lead PIPELINE_ID
@@ -7,6 +7,9 @@ Copies every writable template field 1:1. The only differences on the new record
 
 Usage:
   PIPELINE_ID=recXXX AIRTABLE_API_KEY=patXXX python3 scripts/clone-template-itinerary.py
+
+Optional env vars:
+  TEMPLATE_TRIP_NAME  Trip name to clone from (default: "Template — Master")
 
 Exits 0 on success, 1 on validation failure.
 """
@@ -24,14 +27,7 @@ BASE_ID = "appFRLV1H76ohiIQS"
 IIV2_TABLE = "tblrehbZFtArMtwr5"
 PIPELINE_TABLE = "tblb7gP5D3NYND9a0"
 
-SEGMENT_TO_TEMPLATE: dict[str, tuple[str, int]] = {
-    "couple": ("Template Couple", 21),
-    "friends": ("Template Friends", 22),
-    "family-young-kids": ("Template Family young kids", 18),
-    "family-teens": ("Template Family teens", 19),
-    "family-young-adults": ("Template Family young adults", 20),
-    "multi-gen": ("Template Multi gen", 18),
-}
+TEMPLATE_TRIP_NAME = os.environ.get("TEMPLATE_TRIP_NAME", "Template — Master")
 
 # Writable fields copied verbatim from template → lead (Airtable field names).
 COPY_FIELDS = [
@@ -48,6 +44,7 @@ COPY_FIELDS = [
     "About Story",
     "Is Hero For Day",
 ]
+
 
 def api(method: str, path: str, body: dict | None = None) -> dict:
     key = os.environ["AIRTABLE_API_KEY"]
@@ -109,10 +106,7 @@ def build_create_fields(template_fields: dict, pipeline_id: str) -> dict:
         value = template_fields[name]
         if value is None:
             continue
-        if name == "Activity Catalog" and isinstance(value, list):
-            out[name] = value
-        else:
-            out[name] = value
+        out[name] = value
     return out
 
 
@@ -148,21 +142,11 @@ def main() -> int:
 
     pipeline = api("GET", f"{PIPELINE_TABLE}/{pipeline_id}")
     fields = pipeline.get("fields", {})
-    segment = fields.get("Segment")
-    if not segment:
-        print("ERROR: Pipeline Segment is blank — cannot pick template", file=sys.stderr)
-        return 1
-
-    if segment not in SEGMENT_TO_TEMPLATE:
-        print(f"ERROR: Unknown Segment {segment!r}", file=sys.stderr)
-        return 1
-
-    template_name, expected_count = SEGMENT_TO_TEMPLATE[segment]
     guest = f"{fields.get('FirstName', '')} {fields.get('LastName', '')}".strip()
     email = fields.get("Email", "")
 
     print(f"Pipeline: {pipeline_id} ({guest} / {email})")
-    print(f"Segment: {segment} → {template_name} (expected {expected_count} items)")
+    print(f"Template: {TEMPLATE_TRIP_NAME}")
 
     existing = list_records(
         IIV2_TABLE,
@@ -174,24 +158,24 @@ def main() -> int:
 
     template_records = list_records(
         IIV2_TABLE,
-        f'SEARCH("{template_name}", ARRAYJOIN({{Trip Name (lookup)}}))',
+        f'SEARCH("{TEMPLATE_TRIP_NAME}", ARRAYJOIN({{Trip Name (lookup)}}))',
         sort=[
             ("fldPlg98rFGiaCCSH", "asc"),
             ("fldwpxPJaMXbSd3P5", "asc"),
         ],
     )
 
-    if len(template_records) != expected_count:
+    if len(template_records) == 0:
         print(
-            f"ERROR: Template {template_name!r} returned {len(template_records)} items, "
-            f"expected {expected_count}. Halting — nothing written.",
+            f"ERROR: Template {TEMPLATE_TRIP_NAME!r} returned 0 items — "
+            "check the Trip Name in Airtable.",
             file=sys.stderr,
         )
         return 1
 
     for rec in template_records:
         trip_names = rec.get("fields", {}).get("Trip Name (lookup)", [])
-        if not any(template_name in (name or "") for name in trip_names):
+        if not any(TEMPLATE_TRIP_NAME in (name or "") for name in trip_names):
             print(
                 f"ERROR: Record {rec['id']} belongs to wrong template: {trip_names}",
                 file=sys.stderr,
@@ -244,7 +228,7 @@ def main() -> int:
 
     print()
     print(f"✅ Cloned {len(created)} itinerary items for {pipeline_id}")
-    print(f"   Template: {template_name}")
+    print(f"   Template: {TEMPLATE_TRIP_NAME}")
     print(f"   Show About? rows: {about_on_template} template → {about_on_lead} lead")
     print(f"   Show Base Pro Tip? rows: {pro_on_template} template → {pro_on_lead} lead")
 
