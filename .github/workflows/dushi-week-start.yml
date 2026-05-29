@@ -144,3 +144,55 @@ jobs:
             echo "Write the result to Lead.letterSuggestion (fldpsqZHzDTqHfm3Z) on the Leads table (tblxw3UgaOTAmz4FQ) in base appFRLV1H76ohiIQS."
             echo "You are running in fully automated mode triggered by the tommy-os portal. No human is present."
           } | claude --print --dangerously-skip-permissions --max-turns 30
+
+      - name: Write offer email body (Step 8, AI)
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+          LEAD_ID: ${{ inputs.lead_id }}
+        run: |
+          strip_frontmatter() {
+            awk 'BEGIN{s=0} /^---$/{s++; next} s>=2{print}' "$1"
+          }
+
+          OFFER=$(strip_frontmatter skills/dushi-week-offer-email/SKILL.md)
+          VOICE=$(strip_frontmatter skills/tommy-coconut-voice/SKILL.md)
+          LESSONS=$(cat skills/dushi-week-builder/references/lessons-learned.md)
+
+          {
+            echo "# Dushi Week — Offer Email Writer"
+            echo ""
+            echo "${OFFER}"
+            echo ""
+            echo "---"
+            echo ""
+            echo "# Tommy Coconut Voice Bible"
+            echo ""
+            echo "${VOICE}"
+            echo ""
+            echo "---"
+            echo ""
+            echo "# Lessons Learned (sections 2, 3, 9 are most relevant)"
+            echo ""
+            echo "${LESSONS}"
+            echo ""
+            echo "---"
+            echo ""
+            echo "## THIS RUN — AUTOMATED MODE"
+            echo ""
+            echo "lead_id: ${LEAD_ID}"
+            echo ""
+            echo "Data source: read all guest data from the Leads table (tblxw3UgaOTAmz4FQ, base appFRLV1H76ohiIQS) using the lead_id above."
+            echo "The Leads table has: Name, Email, Quiz Answers Raw (fldJgpYTgIENXmkOD), Date Arrival, Date Departure, Offer Weekly Rate, and Basecamp (linked field)."
+            echo "If a Basecamp is linked, fetch its Cloudinary public ID from the Basecamps table (tblGc7g7uBedgS3Ui, field fldwENhluLhDMIhdG) for the hero image URL."
+            echo ""
+            echo "Run Steps 1–3 of the skill using the Leads table instead of Pipeline. Skip Step 1C (Dushi Weeks registry) — omit the microsite URL."
+            echo "Run Step 4 to assemble the template props (guestName, arrivalDate, departureDate, offerWeeklyRate; set shareUrl to empty string — it will be filled in by the portal)."
+            echo ""
+            echo "STOP after Step 3. Do NOT run Step 5 (no confirmation, no Pipeline status update, no send)."
+            echo ""
+            echo "Write the result to Lead.offerEmail (fld8gf1p2mzTTGWXa) on the Leads table (tblxw3UgaOTAmz4FQ) in base appFRLV1H76ohiIQS."
+            echo "Format: the 2–3 body paragraphs (Steps 2) as plain rich text. Include the inclusions list (Step 3) as bullet points below the body."
+            echo "This field is read by the Send Microsite action — write clean, final copy."
+            echo "You are running in fully automated mode triggered by the tommy-os portal. No human is present."
+          } | claude --print --dangerously-skip-permissions --max-turns 30
