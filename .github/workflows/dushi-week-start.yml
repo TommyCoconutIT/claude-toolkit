@@ -11,14 +11,14 @@ name: Dushi Week — Build Airtable Itinerary Tasks
 on:
   workflow_dispatch:
     inputs:
-      pipeline_id:
-        description: "Lead Pipeline record ID (starts with rec)"
+      lead_id:
+        description: "Leads table record ID (starts with rec)"
         required: true
         type: string
 
 jobs:
   build-itinerary:
-    name: Build itinerary tasks for ${{ inputs.pipeline_id }}
+    name: Build itinerary tasks for ${{ inputs.lead_id }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -34,7 +34,7 @@ jobs:
       - name: Clone template itinerary (Steps 1–5, no AI)
         env:
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-          PIPELINE_ID: ${{ inputs.pipeline_id }}
+          LEAD_ID: ${{ inputs.lead_id }}
           TEMPLATE_TRIP_NAME: ${{ vars.TEMPLATE_TRIP_NAME || 'Template — Master' }}
         run: python3 scripts/clone-template-itinerary.py
 
@@ -45,7 +45,7 @@ jobs:
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
-          PIPELINE_ID: ${{ inputs.pipeline_id }}
+          LEAD_ID: ${{ inputs.lead_id }}
         run: |
           # Strip YAML frontmatter (---...---) from a skill file before including it
           strip_frontmatter() {
@@ -96,9 +96,9 @@ jobs:
             echo ""
             echo "## THIS RUN"
             echo ""
-            echo "pipeline_id: ${PIPELINE_ID}"
+            echo "lead_id: ${LEAD_ID}"
             echo ""
-            echo "Steps 1–5 are ALREADY COMPLETE. The clone script ran before this session and wrote all Itinerary Items V2 records 1:1 from the segment template (including Show About? and Show Base Pro Tip? checkboxes)."
+            echo "Steps 1–5 are ALREADY COMPLETE. The clone script ran before this session and wrote all Itinerary Items V2 records 1:1 from the master template (including Show About? and Show Base Pro Tip? checkboxes)."
             echo "Do NOT re-clone, delete, or rewrite Body Text. Start immediately at STEP 6 — read quiz answers and PATCH Custom Notes with [AI] personalization suggestions only."
             echo "You are running in fully automated mode triggered by the tommy-os portal. No human is present."
           } | claude --print --dangerously-skip-permissions --max-turns 40

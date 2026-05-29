@@ -25,7 +25,7 @@ import urllib.request
 
 BASE_ID = "appFRLV1H76ohiIQS"
 IIV2_TABLE = "tblrehbZFtArMtwr5"
-PIPELINE_TABLE = "tblb7gP5D3NYND9a0"
+LEADS_TABLE = "tblxw3UgaOTAmz4FQ"
 
 TEMPLATE_TRIP_NAME = os.environ.get("TEMPLATE_TRIP_NAME", "Template — Master")
 
@@ -98,8 +98,8 @@ def delete_records(record_ids: list[str]) -> None:
         api("DELETE", f"{IIV2_TABLE}?{query}")
 
 
-def build_create_fields(template_fields: dict, pipeline_id: str) -> dict:
-    out: dict = {"Pipeline": [pipeline_id]}
+def build_create_fields(template_fields: dict, lead_id: str) -> dict:
+    out: dict = {"Lead": [lead_id]}
     for name in COPY_FIELDS:
         if name not in template_fields:
             continue
@@ -132,25 +132,25 @@ def compare_template_to_lead(template: dict, lead: dict) -> list[str]:
 
 
 def main() -> int:
-    pipeline_id = os.environ.get("PIPELINE_ID")
-    if not pipeline_id:
-        print("ERROR: PIPELINE_ID env var is required", file=sys.stderr)
+    lead_id = os.environ.get("LEAD_ID")
+    if not lead_id:
+        print("ERROR: LEAD_ID env var is required", file=sys.stderr)
         return 1
     if not os.environ.get("AIRTABLE_API_KEY"):
         print("ERROR: AIRTABLE_API_KEY env var is required", file=sys.stderr)
         return 1
 
-    pipeline = api("GET", f"{PIPELINE_TABLE}/{pipeline_id}")
-    fields = pipeline.get("fields", {})
-    guest = f"{fields.get('FirstName', '')} {fields.get('LastName', '')}".strip()
+    lead = api("GET", f"{LEADS_TABLE}/{lead_id}")
+    fields = lead.get("fields", {})
+    guest = fields.get("Name", "").strip()
     email = fields.get("Email", "")
 
-    print(f"Pipeline: {pipeline_id} ({guest} / {email})")
+    print(f"Lead: {lead_id} ({guest} / {email})")
     print(f"Template: {TEMPLATE_TRIP_NAME}")
 
     existing = list_records(
         IIV2_TABLE,
-        f'SEARCH("{pipeline_id}", ARRAYJOIN({{Pipeline}}))',
+        f'SEARCH("{lead_id}", ARRAYJOIN({{Lead}}))',
     )
     if existing:
         print(f"Deleting {len(existing)} existing lead itinerary item(s)...")
@@ -187,7 +187,7 @@ def main() -> int:
         batch = template_records[i : i + 10]
         payload = {
             "records": [
-                {"fields": build_create_fields(r["fields"], pipeline_id)}
+                {"fields": build_create_fields(r["fields"], lead_id)}
                 for r in batch
             ]
         }
@@ -227,7 +227,7 @@ def main() -> int:
     pro_on_lead = sum(1 for r in created if r["fields"].get("Show Base Pro Tip?"))
 
     print()
-    print(f"✅ Cloned {len(created)} itinerary items for {pipeline_id}")
+    print(f"✅ Cloned {len(created)} itinerary items for {lead_id}")
     print(f"   Template: {TEMPLATE_TRIP_NAME}")
     print(f"   Show About? rows: {about_on_template} template → {about_on_lead} lead")
     print(f"   Show Base Pro Tip? rows: {pro_on_template} template → {pro_on_lead} lead")
