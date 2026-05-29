@@ -22,6 +22,7 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
+from datetime import date
 
 BASE_ID = "appFRLV1H76ohiIQS"
 IIV2_TABLE = "tblrehbZFtArMtwr5"
@@ -29,10 +30,17 @@ LEADS_TABLE = "tblxw3UgaOTAmz4FQ"
 
 TEMPLATE_TRIP_NAME = os.environ.get("TEMPLATE_TRIP_NAME", "Template — Master")
 
+# Monday=0 … Sunday=6, matching Python's date.weekday().
+_DOW = {
+    "Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3,
+    "Friday": 4, "Saturday": 5, "Sunday": 6,
+}
+
 # Writable fields copied verbatim from template → lead (Airtable field names).
 COPY_FIELDS = [
     "Activity Catalog",
     "Day Number",
+    "Weekday",
     "Slot",
     "Header",
     "Body Text",
@@ -98,32 +106,73 @@ def delete_records(record_ids: list[str]) -> None:
         api("DELETE", f"{IIV2_TABLE}?{query}")
 
 
-def build_create_fields(template_fields: dict, lead_id: str) -> dict:
+def remap_day_number(
+    weekday_str: str,
+    arrival_dow: int,
+    trip_length: int | None,
+) -> int | None:
+    """Return the 1-based day number for this weekday given the arrival day of week.
+
+    Returns None when the computed day falls outside the trip window.
+    Saturday-to-Saturday (arrival_dow == 5) always maps Day 1 → Saturday,
+    which matches the template exactly (no change).
+    """
+    template_dow = _DOW.get(weekday_str)
+    if template_dow is None:
+        return None
+    days_offset = (template_dow - arrival_dow) % 7
+    day_number = days_offset + 1
+    if trip_length is not None and day_number > trip_length:
+        return None
+    return day_number
+
+
+def build_create_fields(
+    template_fields: dict,
+    lead_id: str,
+    arrival_dow: int | None,
+    trip_length: int | None,
+) -> dict | None:
+    """Return fields for a new record, or None if the item falls outside the trip window."""
     out: dict = {"Lead": [lead_id]}
+
+    weekday_str = template_fields.get("Weekday")
+    day_number_override: int | None = None
+
+    if weekday_str and arrival_dow is not None:
+        day_number_override = remap_day_number(weekday_str, arrival_dow, trip_length)
+        if day_number_override is None:
+            return None  # outside trip window — skip
+
     for name in COPY_FIELDS:
+        if name == "Day Number" and day_number_override is not None:
+            out["Day Number"] = day_number_override
+            continue
         if name not in template_fields:
             continue
         value = template_fields[name]
         if value is None:
             continue
         out[name] = value
+
     return out
 
 
-def record_key(fields: dict) -> tuple:
+def record_key(fields: dict, use_weekday: bool = False) -> tuple:
     ac = fields.get("Activity Catalog") or []
     ac_id = ac[0] if ac else None
-    return (
-        fields.get("Day Number"),
-        fields.get("Slot"),
-        ac_id,
-        fields.get("Sort Order"),
-    )
+    if use_weekday:
+        return (fields.get("Weekday"), fields.get("Slot"), ac_id, fields.get("Sort Order"))
+    return (fields.get("Day Number"), fields.get("Slot"), ac_id, fields.get("Sort Order"))
 
 
-def compare_template_to_lead(template: dict, lead: dict) -> list[str]:
+def compare_template_to_lead(
+    template: dict, lead: dict, skip_fields: set[str] = frozenset()
+) -> list[str]:
     mismatches: list[str] = []
     for name in COPY_FIELDS:
+        if name in skip_fields:
+            continue
         t_val = template.get(name)
         l_val = lead.get(name)
         if t_val != l_val:
@@ -145,8 +194,32 @@ def main() -> int:
     guest = fields.get("Name", "").strip()
     email = fields.get("Email", "")
 
+    # Parse arrival/departure dates for day-number remapping.
+    arrival_dow: int | None = None
+    trip_length: int | None = None
+    arrival_date_str = fields.get("Date Arrival")
+    departure_date_str = fields.get("Date Departure")
+
+    if arrival_date_str:
+        try:
+            arrival_dt = date.fromisoformat(str(arrival_date_str)[:10])
+            arrival_dow = arrival_dt.weekday()  # Monday=0 … Sunday=6
+            if departure_date_str:
+                departure_dt = date.fromisoformat(str(departure_date_str)[:10])
+                trip_length = (departure_dt - arrival_dt).days + 1
+        except ValueError:
+            print(
+                f"WARNING: Could not parse dates ({arrival_date_str!r}, {departure_date_str!r})"
+                " — falling back to template Day Numbers.",
+                file=sys.stderr,
+            )
+
+    remapping = arrival_dow is not None
     print(f"Lead: {lead_id} ({guest} / {email})")
     print(f"Template: {TEMPLATE_TRIP_NAME}")
+    if remapping:
+        dow_name = next(k for k, v in _DOW.items() if v == arrival_dow)
+        print(f"Arrival: {arrival_date_str} ({dow_name}), trip length: {trip_length} day(s) — remapping day numbers")
 
     existing = list_records(
         IIV2_TABLE,
@@ -182,36 +255,55 @@ def main() -> int:
             )
             return 1
 
+    # Build the fields for every template record; skip items outside the trip window.
+    records_to_create = []
+    skipped = 0
+    for r in template_records:
+        new_fields = build_create_fields(r["fields"], lead_id, arrival_dow, trip_length)
+        if new_fields is None:
+            skipped += 1
+        else:
+            records_to_create.append(new_fields)
+
+    if skipped:
+        print(f"Skipped {skipped} template item(s) outside the trip window.")
+
     created: list[dict] = []
-    for i in range(0, len(template_records), 10):
-        batch = template_records[i : i + 10]
-        payload = {
-            "records": [
-                {"fields": build_create_fields(r["fields"], lead_id)}
-                for r in batch
-            ]
-        }
+    for i in range(0, len(records_to_create), 10):
+        batch = records_to_create[i : i + 10]
+        payload = {"records": [{"fields": f} for f in batch]}
         result = api("POST", IIV2_TABLE, payload)
         created.extend(result.get("records", []))
 
-    if len(created) != len(template_records):
+    if len(created) != len(records_to_create):
         print(
-            f"ERROR: Created {len(created)} records but template had {len(template_records)}",
+            f"ERROR: Created {len(created)} records but expected {len(records_to_create)}",
             file=sys.stderr,
         )
         return 1
 
-    template_by_key = {record_key(r["fields"]): r["fields"] for r in template_records}
-    lead_by_key = {record_key(r["fields"]): r["fields"] for r in created}
+    # Use Weekday-based keys when remapping so Day Number differences don't confuse the lookup.
+    skip_verify = {"Day Number"} if remapping else set()
+    template_by_key = {
+        record_key(r["fields"], use_weekday=remapping): r["fields"]
+        for r in template_records
+        if record_key(r["fields"], use_weekday=remapping)[0] is not None  # skip items with no key
+    }
+    lead_by_key = {
+        record_key(r["fields"], use_weekday=remapping): r["fields"]
+        for r in created
+    }
 
     flag_mismatches = 0
     for key, template_fields in template_by_key.items():
         lead_fields = lead_by_key.get(key)
         if not lead_fields:
-            print(f"ERROR: Missing lead record for template key {key}", file=sys.stderr)
-            flag_mismatches += 1
+            # When remapping, template items outside the window won't have a lead record — OK.
+            if not remapping:
+                print(f"ERROR: Missing lead record for template key {key}", file=sys.stderr)
+                flag_mismatches += 1
             continue
-        diffs = compare_template_to_lead(template_fields, lead_fields)
+        diffs = compare_template_to_lead(template_fields, lead_fields, skip_fields=skip_verify)
         if diffs:
             flag_mismatches += 1
             day = template_fields.get("Day Number")
@@ -229,6 +321,8 @@ def main() -> int:
     print()
     print(f"✅ Cloned {len(created)} itinerary items for {lead_id}")
     print(f"   Template: {TEMPLATE_TRIP_NAME}")
+    if remapping:
+        print(f"   Day remapping: active ({skipped} template item(s) outside trip window skipped)")
     print(f"   Show About? rows: {about_on_template} template → {about_on_lead} lead")
     print(f"   Show Base Pro Tip? rows: {pro_on_template} template → {pro_on_lead} lead")
 

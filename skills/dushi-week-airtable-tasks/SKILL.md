@@ -139,7 +139,8 @@ For each template record, store these **writable** fields (exact Airtable names 
 | Field | Field ID | Copy? |
 |---|---|---|
 | Activity Catalog | `fldgERH9Wh0Pl9zkp` | ✅ yes |
-| Day Number | `fldPlg98rFGiaCCSH` | ✅ yes |
+| Day Number | `fldPlg98rFGiaCCSH` | ✅ yes — remapped from Weekday + arrival date when dates are set (see below) |
+| Weekday | `fldvGlMSB0DiQUFo1` | ✅ yes — drives the day-number remapping |
 | Slot | `fldDekHGP9CCIfgJl` | ✅ yes |
 | Header | `fldQx8ZJCw7Mw652T` | ✅ yes (if present) |
 | Body Text | `fldBcHXSRTzi6Tqg6` | ✅ yes — verbatim |
@@ -150,6 +151,16 @@ For each template record, store these **writable** fields (exact Airtable names 
 | Show About? | `fldnO7FOyDt9WVqxE` | ✅ **required** — copy checkbox exactly (include `true` when template has it checked) |
 | About Story | `fldt4lKoGD8iJbVi5` | ✅ yes (if present) |
 | Is Hero For Day | `fldH4nM55rGIyxYxn` | ✅ yes (if present) |
+
+### Day-number remapping (arrival-date aware)
+
+When the lead's **Date Arrival** is set, the script remaps each template item's `Day Number` based on its `Weekday` field and the guest's arrival day of week:
+
+- `day_number = (weekday_dow - arrival_dow) % 7 + 1`  (Monday=0 … Sunday=6)
+- Items whose computed day falls beyond the trip window (departure − arrival) are **skipped**.
+- Fallback: if no arrival date is set, OR if a template item has no `Weekday` value, `Day Number` is copied verbatim — preserving the Saturday-to-Saturday default.
+
+This means the master template must have `Weekday` set on every item for remapping to work. Set it once in Airtable; the script handles the math at clone time.
 
 ⚠️ **Checkbox fields are the most common clone bug.** If you omit `Show About?` or `Show Base Pro Tip?` from the POST payload when the template has them checked, the portal will not render About cards or Pro Tips. Always read these two fields from each template record and include them in the create payload when `true`.
 
@@ -224,7 +235,8 @@ After all batches complete:
 |---|---|---|
 | Pipeline | `fldWzo3ZUygqaiwyB` | `["PIPELINE_ID"]` — the only link on lead-stage items |
 | Activity Catalog | `fldgERH9Wh0Pl9zkp` | copied from template |
-| Day Number | `fldPlg98rFGiaCCSH` | copied from template |
+| Day Number | `fldPlg98rFGiaCCSH` | remapped from Weekday + arrival date; verbatim copy when no dates |
+| Weekday | `fldvGlMSB0DiQUFo1` | copied from template |
 | Slot | `fldDekHGP9CCIfgJl` | copied from template |
 | Header | `fldQx8ZJCw7Mw652T` | copied from template |
 | Body Text | `fldBcHXSRTzi6Tqg6` | **copied verbatim — do not rewrite** |
