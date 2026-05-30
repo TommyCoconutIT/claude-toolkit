@@ -122,7 +122,7 @@ For **Two Coconut / Double Dushi** builds:
   - "Morning cruise with beach BBQ" → "Private Boat Day with Captain Magic Mike (morning cruise + beach BBQ)"
   - "Sunset cruise" → "Private Sunset Cruise with Captain Magic Mike"
   - Null / no answer → omit — do not invent a boat type
-- "Welcome massage for two"
+- "Bookers Massage"
 - "Sunset Club Wednesday"
 - "Flamingo Hike at dawn"
 - "Concierge via WhatsApp — Boy, Britt & the crew"
@@ -131,9 +131,9 @@ For **Two Coconut / Double Dushi** builds:
 For **One Coconut / Standard** builds:
 - "[N] nights at [Estate Name]"
 - "Airport pickup + SUV for the week" — same Q&A gate as above
-- "Culinary Pass — 5 dinners at the island's best tables ($35/person/dinner)"
+- "Seven dinners. Every one of them handled."
 - **Boat line** — same Q&A lookup as Two Coconut above
-- "Welcome massage for two"
+- "Bookers Massage"
 - "Sunset Club Wednesday"
 - "Flamingo Hike at dawn"
 - "Concierge via WhatsApp — Boy, Britt & the crew"
