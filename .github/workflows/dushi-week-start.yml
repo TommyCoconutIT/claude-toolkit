@@ -30,6 +30,17 @@ on:
         required: false
         type: boolean
         default: false
+      only:
+        description: "Run ONE step only (manual re-run, e.g. just rewrite the offer email). 'all' = full pipeline."
+        required: false
+        type: choice
+        default: all
+        options:
+          - all
+          - clone
+          - personalization
+          - letter
+          - offer_email
 
 jobs:
   build-itinerary:
@@ -47,6 +58,7 @@ jobs:
           node-version: "20"
 
       - name: Clone template itinerary (Steps 1–5, no AI)
+        if: ${{ inputs.only == 'all' || inputs.only == 'clone' }}
         env:
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
           LEAD_ID: ${{ inputs.lead_id }}
@@ -56,11 +68,11 @@ jobs:
         run: python3 scripts/clone-template-itinerary.py
 
       - name: Install Claude Code CLI
-        if: ${{ !inputs.skip_ai }}
+        if: ${{ (inputs.only == 'all' && !inputs.skip_ai) || inputs.only == 'personalization' || inputs.only == 'letter' || inputs.only == 'offer_email' }}
         run: npm install -g @anthropic-ai/claude-code
 
       - name: Generate personalization suggestions (Step 6, AI)
-        if: ${{ !inputs.skip_ai }}
+        if: ${{ (inputs.only == 'all' && !inputs.skip_ai) || inputs.only == 'personalization' }}
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
@@ -123,7 +135,7 @@ jobs:
           } | claude --print --model sonnet --dangerously-skip-permissions --max-turns 8
 
       - name: Write personalised letter (Step 7, AI)
-        if: ${{ !inputs.skip_ai }}
+        if: ${{ (inputs.only == 'all' && !inputs.skip_ai) || inputs.only == 'letter' }}
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
@@ -159,7 +171,7 @@ jobs:
           } | claude --print --model sonnet --dangerously-skip-permissions --max-turns 6
 
       - name: Write offer email body (Step 8, AI)
-        if: ${{ !inputs.skip_ai }}
+        if: ${{ (inputs.only == 'all' && !inputs.skip_ai) || inputs.only == 'offer_email' }}
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
