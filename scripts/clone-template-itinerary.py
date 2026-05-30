@@ -257,16 +257,35 @@ def main() -> int:
             f"{trip_length} day(s). Truncating + pinning departure day (no weekday remap)."
         )
 
+    # REBUILD vs auto-flow:
+    #   - Auto-flow (lead-submitted/captured): idempotent — if items already
+    #     exist, skip cloning so retries don't wipe AI edits.
+    #   - Rebuild (manual, REBUILD=true): force-regenerate — delete every existing
+    #     item EXCEPT those in PRESERVE_ITEM_IDS, then clone the template fresh.
+    rebuild = os.environ.get("REBUILD", "").strip().lower() in ("1", "true", "yes")
+    preserve_ids = {
+        p.strip()
+        for p in os.environ.get("PRESERVE_ITEM_IDS", "").split(",")
+        if p.strip()
+    }
+
     existing = list_records(
         IIV2_TABLE,
         f'SEARCH("{lead_id}", ARRAYJOIN({{Lead}}))',
     )
     if existing:
+        if not rebuild:
+            print(
+                f"Found {len(existing)} existing itinerary item(s) for {lead_id} — "
+                "skipping template clone. AI personalization will run on existing items."
+            )
+            return 0
+        to_delete = [r["id"] for r in existing if r["id"] not in preserve_ids]
+        delete_records(to_delete)
         print(
-            f"Found {len(existing)} existing itinerary item(s) for {lead_id} — "
-            "skipping template clone. AI personalization will run on existing items."
+            f"Rebuild: deleted {len(to_delete)} existing item(s), "
+            f"preserved {len(preserve_ids & {r['id'] for r in existing})} — re-cloning template."
         )
-        return 0
 
     template_records = list_records(
         IIV2_TABLE,
