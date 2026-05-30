@@ -120,7 +120,7 @@ jobs:
             echo "Steps 1–5 are ALREADY COMPLETE. The clone script ran before this session and wrote all Itinerary Items V2 records 1:1 from the master template (including Show About? and Show Base Pro Tip? checkboxes)."
             echo "Do NOT re-clone, delete, or rewrite Body Text. Start immediately at STEP 6 — read quiz answers and PATCH Custom Notes with [AI] personalization suggestions only."
             echo "You are running in fully automated mode triggered by the tommy-os portal. No human is present."
-          } | claude --print --dangerously-skip-permissions --max-turns 40
+          } | claude --print --model sonnet --dangerously-skip-permissions --max-turns 8
 
       - name: Write personalised letter (Step 7, AI)
         if: ${{ !inputs.skip_ai }}
@@ -135,7 +135,6 @@ jobs:
 
           LETTER=$(strip_frontmatter skills/dushi-week-letter/SKILL.md)
           VOICE=$(strip_frontmatter skills/tommy-coconut-voice/SKILL.md)
-          LESSONS=$(cat skills/dushi-week-builder/references/lessons-learned.md)
 
           {
             echo "# Dushi Week — Letter Writer"
@@ -150,12 +149,6 @@ jobs:
             echo ""
             echo "---"
             echo ""
-            echo "# Lessons Learned (sections 1, 2, and 9 are most relevant for the letter)"
-            echo ""
-            echo "${LESSONS}"
-            echo ""
-            echo "---"
-            echo ""
             echo "## THIS RUN"
             echo ""
             echo "lead_id: ${LEAD_ID}"
@@ -163,7 +156,7 @@ jobs:
             echo "Write the personalised letter for this lead. Follow the skill instructions exactly."
             echo "Write the result to Lead.letterSuggestion (fldpsqZHzDTqHfm3Z) on the Leads table (tblxw3UgaOTAmz4FQ) in base appFRLV1H76ohiIQS."
             echo "You are running in fully automated mode triggered by the tommy-os portal. No human is present."
-          } | claude --print --dangerously-skip-permissions --max-turns 30
+          } | claude --print --model sonnet --dangerously-skip-permissions --max-turns 6
 
       - name: Write offer email body (Step 8, AI)
         if: ${{ !inputs.skip_ai }}
@@ -178,7 +171,6 @@ jobs:
 
           OFFER=$(strip_frontmatter skills/dushi-week-offer-email/SKILL.md)
           VOICE=$(strip_frontmatter skills/tommy-coconut-voice/SKILL.md)
-          LESSONS=$(cat skills/dushi-week-builder/references/lessons-learned.md)
 
           {
             echo "# Dushi Week — Offer Email Writer"
@@ -190,12 +182,6 @@ jobs:
             echo "# Tommy Coconut Voice Bible"
             echo ""
             echo "${VOICE}"
-            echo ""
-            echo "---"
-            echo ""
-            echo "# Lessons Learned (sections 2, 3, 9 are most relevant)"
-            echo ""
-            echo "${LESSONS}"
             echo ""
             echo "---"
             echo ""
@@ -216,7 +202,7 @@ jobs:
             echo "Format: the 2–3 body paragraphs (Steps 2) as plain rich text. Include the inclusions list (Step 3) as bullet points below the body."
             echo "This field is read by the Send Microsite action — write clean, final copy."
             echo "You are running in fully automated mode triggered by the tommy-os portal. No human is present."
-          } | claude --print --dangerously-skip-permissions --max-turns 30
+          } | claude --print --model sonnet --dangerously-skip-permissions --max-turns 6
 
       - name: Revalidate portal cache
         env:
