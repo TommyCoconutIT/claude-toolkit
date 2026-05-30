@@ -269,22 +269,27 @@ def main() -> int:
         if p.strip()
     }
 
-    existing = list_records(
-        IIV2_TABLE,
-        f'SEARCH("{lead_id}", ARRAYJOIN({{Lead}}))',
-    )
-    if existing:
+    # Existing items for this lead come from the lead's own linked field — NOT a
+    # `SEARCH(lead_id, ARRAYJOIN({Lead}))` formula. ARRAYJOIN of a linked field
+    # yields the linked record's PRIMARY value (the lead's name), never its record
+    # ID, so that formula always returned 0 — which silently broke both the
+    # auto-flow's skip-if-exists guard and the rebuild delete. The link field
+    # gives the item record IDs directly.
+    existing_ids = [
+        i for i in (fields.get("Itinerary Items V2") or []) if isinstance(i, str)
+    ]
+    if existing_ids:
         if not rebuild:
             print(
-                f"Found {len(existing)} existing itinerary item(s) for {lead_id} — "
+                f"Found {len(existing_ids)} existing itinerary item(s) for {lead_id} — "
                 "skipping template clone. AI personalization will run on existing items."
             )
             return 0
-        to_delete = [r["id"] for r in existing if r["id"] not in preserve_ids]
+        to_delete = [i for i in existing_ids if i not in preserve_ids]
         delete_records(to_delete)
         print(
             f"Rebuild: deleted {len(to_delete)} existing item(s), "
-            f"preserved {len(preserve_ids & {r['id'] for r in existing})} — re-cloning template."
+            f"preserved {len(preserve_ids & set(existing_ids))} — re-cloning template."
         )
 
     template_records = list_records(
