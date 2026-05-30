@@ -132,7 +132,7 @@ jobs:
             echo "Steps 1–5 are ALREADY COMPLETE. The clone script ran before this session and wrote all Itinerary Items V2 records 1:1 from the master template (including Show About? and Show Base Pro Tip? checkboxes)."
             echo "Do NOT re-clone, delete, or rewrite Body Text. Start immediately at STEP 6 — read quiz answers and PATCH Custom Notes with [AI] personalization suggestions only."
             echo "You are running in fully automated mode triggered by the tommy-os portal. No human is present."
-          } | claude --print --model sonnet --dangerously-skip-permissions --max-turns 8
+          } | claude --print --model sonnet --dangerously-skip-permissions --max-turns 40
 
       - name: Write personalised letter (Step 7, AI)
         if: ${{ (inputs.only == 'all' && !inputs.skip_ai) || inputs.only == 'letter' }}
@@ -168,7 +168,7 @@ jobs:
             echo "Write the personalised letter for this lead. Follow the skill instructions exactly."
             echo "Write the result to Lead.letterSuggestion (fldpsqZHzDTqHfm3Z) on the Leads table (tblxw3UgaOTAmz4FQ) in base appFRLV1H76ohiIQS."
             echo "You are running in fully automated mode triggered by the tommy-os portal. No human is present."
-          } | claude --print --model sonnet --dangerously-skip-permissions --max-turns 6
+          } | claude --print --model sonnet --dangerously-skip-permissions --max-turns 30
 
       - name: Write offer email body (Step 8, AI)
         if: ${{ (inputs.only == 'all' && !inputs.skip_ai) || inputs.only == 'offer_email' }}
@@ -214,7 +214,7 @@ jobs:
             echo "Format: the 2–3 body paragraphs (Steps 2) as plain rich text. Include the inclusions list (Step 3) as bullet points below the body."
             echo "This field is read by the Send Microsite action — write clean, final copy."
             echo "You are running in fully automated mode triggered by the tommy-os portal. No human is present."
-          } | claude --print --model sonnet --dangerously-skip-permissions --max-turns 6
+          } | claude --print --model sonnet --dangerously-skip-permissions --max-turns 30
 
       - name: Revalidate portal cache
         env:
