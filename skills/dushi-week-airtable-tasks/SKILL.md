@@ -152,16 +152,25 @@ For each template record, store these **writable** fields (exact Airtable names 
 | About Story | `fldt4lKoGD8iJbVi5` | ✅ yes (if present) |
 | Is Hero For Day | `fldH4nM55rGIyxYxn` | ✅ yes (if present) |
 
-### Day-number remapping (arrival-date aware)
+### Day-number remapping (arrival-date + trip-length aware)
 
-When the lead's **Date Arrival** is set, the script remaps each template item's `Day Number` based on its `Weekday` field and the guest's arrival day of week:
+The script sizes and shifts the week from two inputs on the lead: the arrival weekday (drives the *weekday remap*) and the trip length in days (drives *truncation* and *departure-day pinning*). They are independent — either can be present without the other.
 
+**Trip length** is resolved in this order:
+1. **Date Arrival + Date Departure both set** → `trip_length = (departure − arrival) + 1` days, and the arrival weekday is known (full weekday remap runs).
+2. **No usable departure date, but `Requested Nights` set** → `trip_length = Requested Nights + 1` days (7 nights → 8 day numbers, matching the Saturday-to-Saturday template). If Date Arrival is also set, the weekday remap still runs; if not, no weekday remap — but truncation + departure pinning still apply.
+3. **Neither** → trip length unknown; no truncation.
+
+> **`Requested Nights`** (Leads table `tblxw3UgaOTAmz4FQ`, field `fldstdigWldQQTtwY`, Number) is the quiz "how many nights?" answer promoted to a real writable field, so date-less leads still get a correctly sized week. It is the fallback in case 2 above. `Nights Stayed` (`fld3bgzgEashRO0kT`) is a *formula* (`departure − arrival`) and is blank without dates — it cannot be used for date-less leads, which is why `Requested Nights` exists. When both dates are set they win and `Requested Nights` is ignored. The lead-intake flow must populate this field from the quiz answer.
+
+**Per-item rules (in priority order):**
 - **Day 1 items are always pinned to Day 1** — arrival-day activities stay on the arrival day regardless of weekday.
-- For all other items: `day_number = (weekday_dow - arrival_dow) % 7 + 1`  (Monday=0 … Sunday=6)
-- Items whose computed day falls beyond the trip window (departure − arrival) are **skipped**.
-- Fallback: if no arrival date is set, OR if a template item has no `Weekday` value, `Day Number` is copied verbatim — preserving the Saturday-to-Saturday default.
+- **Departure-day items (the template's *last* day, e.g. Day 8) are always pinned to the FINAL itinerary day** (`= trip_length`), whatever the stay length — 4 nights → Day 5, 10 nights → Day 11. When trip length is unknown they stay verbatim. This is a dedicated branch *before* the weekday remap, because a Saturday departure and a Saturday arrival share a weekday — without it the remap would collapse the departure block onto Day 1.
+- **All other items, when the arrival weekday is known:** `day_number = (weekday_dow − arrival_dow) % 7 + 1`  (Monday=0 … Sunday=6). Items whose computed day exceeds `trip_length` are **skipped**.
+- **All other items, when only the trip length is known (no arrival weekday):** `Day Number` is copied verbatim, but anything past `trip_length` is **skipped**.
+- Fallback: if neither arrival weekday nor trip length is known, OR a template item has no `Weekday` value, `Day Number` is copied verbatim — preserving the Saturday-to-Saturday default.
 
-This means the master template must have `Weekday` set on every item for remapping to work. Set it once in Airtable; the script handles the math at clone time.
+This means the master template must have `Weekday` set on every item for the weekday remap, and its last day's items represent the departure day. Set both once in Airtable; the script handles the math at clone time.
 
 ⚠️ **Checkbox fields are the most common clone bug.** If you omit `Show About?` or `Show Base Pro Tip?` from the POST payload when the template has them checked, the portal will not render About cards or Pro Tips. Always read these two fields from each template record and include them in the create payload when `true`.
 
