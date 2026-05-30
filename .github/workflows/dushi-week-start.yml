@@ -15,6 +15,21 @@ on:
         description: "Leads table record ID (starts with rec)"
         required: true
         type: string
+      rebuild:
+        description: "Force regenerate: delete existing items (except preserved) before cloning"
+        required: false
+        type: boolean
+        default: false
+      preserve_item_ids:
+        description: "Comma-separated Itinerary Item record IDs to keep across a rebuild"
+        required: false
+        type: string
+        default: ""
+      skip_ai:
+        description: "Clone only — skip the AI personalization + copy steps (no tokens spent)"
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   build-itinerary:
@@ -36,12 +51,16 @@ jobs:
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
           LEAD_ID: ${{ inputs.lead_id }}
           TEMPLATE_TRIP_NAME: ${{ vars.TEMPLATE_TRIP_NAME || 'Template — Master' }}
+          REBUILD: ${{ inputs.rebuild }}
+          PRESERVE_ITEM_IDS: ${{ inputs.preserve_item_ids }}
         run: python3 scripts/clone-template-itinerary.py
 
       - name: Install Claude Code CLI
+        if: ${{ !inputs.skip_ai }}
         run: npm install -g @anthropic-ai/claude-code
 
       - name: Generate personalization suggestions (Step 6, AI)
+        if: ${{ !inputs.skip_ai }}
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
@@ -104,6 +123,7 @@ jobs:
           } | claude --print --dangerously-skip-permissions --max-turns 40
 
       - name: Write personalised letter (Step 7, AI)
+        if: ${{ !inputs.skip_ai }}
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
@@ -146,6 +166,7 @@ jobs:
           } | claude --print --dangerously-skip-permissions --max-turns 30
 
       - name: Write offer email body (Step 8, AI)
+        if: ${{ !inputs.skip_ai }}
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
