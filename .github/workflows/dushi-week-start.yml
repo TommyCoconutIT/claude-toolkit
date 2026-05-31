@@ -213,6 +213,13 @@ jobs:
             echo "Write the result to Lead.offerEmail (fld8gf1p2mzTTGWXa) on the Leads table (tblxw3UgaOTAmz4FQ) in base appFRLV1H76ohiIQS."
             echo "Format: the 2–3 body paragraphs (Steps 2) as plain rich text. Include the inclusions list (Step 3) as bullet points below the body."
             echo "This field is read by the Send Microsite action — write clean, final copy."
+            echo ""
+            echo "ALSO derive the cartel name and write it to Lead.\"Cartel Name\" (fldAlbFowFnfa2l4A) on the same Leads table/base."
+            echo "TC gives each guest group a name in the form \"The [Family] Cartel\" (e.g. \"The Adams Cartel\", \"The Bama Famjam Cartel\")."
+            echo "Pick a short, memorable family/group token from the guest name or quiz answers, then write the full display value \"The [Token] Cartel\"."
+            echo "The portal derives the microsite slug ({Token}DushiWeek{#}) from this field and auto-assigns the number — do NOT invent a number or URL here."
+            echo "If Lead.\"Cartel Name\" is already set, leave it unchanged."
+            echo ""
             echo "You are running in fully automated mode triggered by the tommy-os portal. No human is present."
           } | claude --print --model sonnet --dangerously-skip-permissions --max-turns 40
 
