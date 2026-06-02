@@ -141,11 +141,16 @@ def build_create_fields(
     template_day_number = template_fields.get("Day Number")
     day_number_override: int | None = None
 
+    is_arrival_item = template_day_number == 1
+    is_departure_item = (
+        max_template_day is not None and template_day_number == max_template_day
+    )
+
     # Day 1 items are always the arrival-day activities — pin them to Day 1
     # regardless of their Weekday value or the guest's arrival weekday.
-    if template_day_number == 1:
+    if is_arrival_item:
         day_number_override = 1
-    elif max_template_day is not None and template_day_number == max_template_day:
+    elif is_departure_item:
         # Departure-day items (the last day in the template) always land on the
         # FINAL itinerary day, whatever the stay length. Pin them to trip_length
         # when we know it (this also prevents the weekday remap from collapsing a
@@ -153,15 +158,23 @@ def build_create_fields(
         # When trip_length is unknown, leave the template Day Number verbatim.
         if trip_length is not None:
             day_number_override = trip_length
-    elif weekday_str and arrival_dow is not None:
-        day_number_override = remap_day_number(weekday_str, arrival_dow, trip_length)
-        if day_number_override is None:
+    else:
+        # Regular activity: resolve its day (weekday remap when we know the arrival
+        # weekday, else the template Day Number), then drop it if it's outside the
+        # window OR lands on the arrival/departure day — those days are travel-only.
+        if weekday_str and arrival_dow is not None:
+            resolved_day = remap_day_number(weekday_str, arrival_dow, trip_length)
+        else:
+            resolved_day = template_day_number
+        if resolved_day is None:
             return None  # outside trip window — skip
-    elif trip_length is not None and template_day_number is not None:
-        # No weekday remap possible (e.g. nights known but no arrival date): keep the
-        # template Day Number, but still drop anything past the final itinerary day.
-        if template_day_number > trip_length:
+        if trip_length is not None and resolved_day > trip_length:
             return None  # outside trip window — skip
+        if resolved_day == 1:
+            return None  # arrival day — travel only, no activities
+        if trip_length is not None and resolved_day == trip_length:
+            return None  # departure day — travel only
+        day_number_override = resolved_day
 
     for name in COPY_FIELDS:
         if name == "Day Number" and day_number_override is not None:
