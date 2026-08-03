@@ -1,3 +1,18 @@
+# ⚠️ Archived — moved into `tommy-os`
+
+**This repo is archived and read-only.** Tommy Coconut's Claude Code skills now live
+in the main **`tommy-os`** monorepo, which is the single source of truth for skills too:
+
+- Skills: **`tommy-os/.claude/skills/`** · Project templates: **`tommy-os/.claude/templates/`**
+- Working inside `tommy-os`: skills are auto-discovered — nothing to install.
+- Global use (outside the repo): run **`scripts/install-claude-skills.sh`** from your `tommy-os` checkout.
+
+See **`tommy-os/.claude/skills/README.md`**. Migrated in **TOS-727**. The legacy
+`dushi-week-start.yml` clone workflow was retired (the itinerary clone now runs
+in-process in TypeScript inside the portal).
+
+---
+
 # Tommy Coconut — Claude Toolkit
 
 Shared Claude Code workflow for the TC team. Skills, templates, and SOPs for building Dushi Week itineraries and microsites — consistently, regardless of who's doing the build.
