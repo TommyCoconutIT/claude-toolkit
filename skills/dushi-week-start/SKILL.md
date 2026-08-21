@@ -8,7 +8,9 @@ description: Full Dushi Week pipeline. One entry point — fetches guest data fr
 Single entry point for the full Dushi Week build pipeline. You are orchestrating five steps:
 fetch → build itinerary → build microsite → ship → update Airtable + write WhatsApp.
 
-**Read `references/lessons-learned.md` inside `dushi-week-builder` before writing anything.**
+**Read `references/lessons-learned.md` inside `dushi-week-builder-v2` before writing anything.**
+
+> ⚠️ This orchestrator routes to **`dushi-week-builder-v2`** (the Airtable-first builder), NOT the older `dushi-week-builder` (v1). v1 is deprecated as of 2026-05-28 — v2 pulls day content from Airtable Itinerary Items V2 instead of letting the agent freelance it. Do not open v1 unless explicitly told to migrate something.
 
 ---
 
@@ -105,7 +107,7 @@ Do not proceed until the user confirms.
 
 ## STEP 5 — Build the itinerary
 
-Now invoke the `dushi-week-builder` skill logic directly. You have all the guest data — do not ask the user to re-enter it. Feed it in.
+Now invoke the `dushi-week-builder-v2` skill logic directly. You have all the guest data — do not ask the user to re-enter it. Feed it in.
 
 Key context to pass into the builder:
 - All fields from Step 2
@@ -113,7 +115,7 @@ Key context to pass into the builder:
 - Guest type (derive from the data: couple / family / friends — use adult count + "Who's coming?" answer)
 - Motivation quote (from Q&A) → use verbatim in the letter, it's gold
 
-Follow all instructions in `dushi-week-builder/SKILL.md` and its `references/` files fully.
+Follow all instructions in `dushi-week-builder-v2/SKILL.md` and its `references/` files fully.
 The output is a complete printable itinerary document.
 
 **⛔ GATE 1 — Hard stop. Say:**
@@ -232,7 +234,7 @@ Update the Pipeline record's status field:
 
 ## STEP 9 — Write the WhatsApp message
 
-Write the send message using the `tommy-coconut-voice` skill + `dushi-week-builder` guest type framing.
+Write the send message using the `tommy-coconut-voice` skill + `dushi-week-builder-v2` guest type framing.
 
 For couples use this structure (from the voice bible):
 - Open by naming the Must Life they're escaping

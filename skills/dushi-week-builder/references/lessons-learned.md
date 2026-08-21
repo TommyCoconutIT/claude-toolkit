@@ -2,7 +2,7 @@
 
 **MANDATORY READING.** This document must be read BEFORE any other reference file, BEFORE writing any content, BEFORE generating any output. It contains every mistake, correction, insight, and technical lesson learned from real builds. Ignoring this document leads to hallucinated content, dangerous liability language, factual errors, and wasted time.
 
-Last updated: 2026-05-27 (Lafrance Cartel build #67 — added Build #67 section at end: map pin audit rule, email/microsite expiry sync, no-names standard, pipeline record double duty, pull-main-before-hotfix rule. Prior: 2026-05-26 Moons Cartel build — added Captain Mike boat trip types to Section 14, CP counter grep to Section 3, pre-PR microsite audit to Section 19, and expanded Build #7 corrections in Section 17. Prior: Sagar Cartel build — first Family Young Adults prospect build. Added checklist items 16–18: breakfast audit, upsell audit, bookingUrl token rule. Added Build 6 reference. Added pre-PR breakfast+upsell pass to Section 19.) Prior: 2026-05-25 (Fairburn Cartel build — first HTML-template-skeleton couple build. Added Section 20: Template-First Rule.) Prior: 2026-05-23 (skill change: output is now **text-only Markdown** — photo/HTML/PDF/DOCX pipeline retired — and a new **Operator Research Protocol** for new/unknown activities). Prior: 2026-05-22 (Adams "Traveling Trio" — first two-coconut all-inclusive LEAD build). Prior: 2026-04-16 (King Cartel build)
+Last updated: 2026-05-28 (Momajaa Cartel build #70 — appended Build #70 section + new SKILL.md "STEP ZERO POINT SIX — Anti-Freelance Gate." The Momajaa build burned multiple rewrite cycles because the agent wrote freelance copy for nearly every block instead of pulling Template → Airtable → Comparable per Section 19. New hard gate now requires a source-attribution table at GATE 1 — every block must trace to template-verbatim, Airtable-verbatim, pre-approved comparable, or user-spoken-this-session. Also added: wellness add-on prices are NOT $200 (unsourced training-data invention — only acceptable copy is "drop a message in the group" until prices are captured in Section 14); Coffee Bike + Brisa breakfast copy must come from Activity Catalog; day subtitles + banner titles come from template, not invented; welcome dinner default is Villa Vis, agent never swaps without authorization; Zanzibar HH on Sat arrival is AFTER dinner, not before; non-standard week lengths trigger a structured confirmation with Boy, not creative compression.) Prior: 2026-05-27 (Lafrance Cartel build #67 — added Build #67 section at end: map pin audit rule, email/microsite expiry sync, no-names standard, pipeline record double duty, pull-main-before-hotfix rule. Prior: 2026-05-26 Moons Cartel build — added Captain Mike boat trip types to Section 14, CP counter grep to Section 3, pre-PR microsite audit to Section 19, and expanded Build #7 corrections in Section 17. Prior: Sagar Cartel build — first Family Young Adults prospect build. Added checklist items 16–18: breakfast audit, upsell audit, bookingUrl token rule. Added Build 6 reference. Added pre-PR breakfast+upsell pass to Section 19.) Prior: 2026-05-25 (Fairburn Cartel build — first HTML-template-skeleton couple build. Added Section 20: Template-First Rule.) Prior: 2026-05-23 (skill change: output is now **text-only Markdown** — photo/HTML/PDF/DOCX pipeline retired — and a new **Operator Research Protocol** for new/unknown activities). Prior: 2026-05-22 (Adams "Traveling Trio" — first two-coconut all-inclusive LEAD build). Prior: 2026-04-16 (King Cartel build)
 
 ---
 
@@ -383,6 +383,9 @@ Framing: "Boy & Britt are fishing at Caracas Bay this afternoon. If you feel lik
 - "all our energy goes into the week" NOT "every dollar goes into the week" (less transactional)
 - "Every Experience Is an Invitation" — not "Gift" (updated from earlier builds)
 
+### Anniversary / Milestone Surprises — In-Person Only (added 2026-05-28, Greene #69)
+For anniversary, honeymoon, birthday, or any milestone build: the TC surprises (in-room champagne, flowers, handwritten welcome notes, Don Piet VIP airport greet, etc.) are **in-person moments Britt and the crew pull when guests are on-island — they NEVER appear in the offer, itinerary, microsite, or email.** Boy's words on the Greene anniversary build: in-room champagne is "Marriott style"; the VIP airport greet is "a surprise we'd do when they are here without them knowing." The page promises the week; the surprises stay unannounced. The only milestone moments that go in writing are the ones the guest already chose (e.g. they booked the sunset cruise) or the ones the standard week already delivers (Sunset Club golden-hour portrait, Wednesday album, etc. — frame those out loud, don't add new ones).
+
 ### Sign-off Rules by Context
 - Public Airbnb reply: `Vacation is holy.\n— Tommy 🥥`
 - WhatsApp (first-time guests): `Vacation is holy.\nT 🥥\nTommy Coconut Private Resorts`
@@ -583,6 +586,21 @@ Do this EVERY TIME before writing a single word:
 - **Guest type**: Family with Adult Children (18-25)
 - **Key insight**: No bedtime constraint. Nightlife viable. Split activities. Intro dive real option. Easter Sunday was a factor. Pietermaai nightlife for adult kids.
 
+### Build #69: The Greene Cartel (20-Year Anniversary Couple, Two Coconut, Dushi Hideaway)
+- **Who**: aatgreene@gmail.com — no real names shared at build time
+- **Villa**: Dushi Hideaway | **Package**: Two Coconut All-In ($14,350) | **Dates**: Aug 29 – Sep 5, 2026
+- **Guest type**: Couple — 20-year wedding anniversary, first-time Curaçao
+- **Build #**: 69 | **Slug**: GreeneDushiWeek69 | **Pipeline**: `recCQ4I4TEbLFpDvk`
+- **Microsite**: https://www.tommycoconutprivateresorts.com/GreeneDushiWeek69
+- **Reference template used**: Lafrance Cartel #67 (same estate, same package, same no-names, same price)
+- **Key deviations from the standard Sat-to-Sat couple skeleton (Boy-directed during the build):**
+  1. **Day 1 Sunday**: Pasawá dinner → **Date Night at the House · Private Chef BBQ** (~7 PM). Boy explicitly approved Two Coconut + Date Night for this anniversary couple — see the Section 3 rule. The Chrissymag/Section 3 rule still applies: don't auto-include, always confirm.
+  2. **Day 3 Tuesday**: Pasawá dinner → **Zest · Live at the Beach 7:30 PM**. Tuesday is the all-day Jan Thiel beach day; Zest's Tuesday acoustic act is the right anchor.
+  3. **Day 5 Thursday**: Chobolobo dropped. Slow estate morning → Plasa Bieu lunch (~12:30) → Punda souvenir shopping → **Culture Walk with Tcam 4:15 PM** → De Gouverneur 6:30 → Punda Vibes. Note: the **shore snorkel mention belongs ONLY in the TC Today info box on Tuesday** (per Section 5 + 8), never as a main-timeline block on Thursday — I broke this rule mid-build and Boy caught it.
+  4. **Day 6 Friday**: Private Boat Day (10 AM–2 PM) → **Mambo morning + Private Sunset Cruise (3–7 PM with onboard BBQ)**. Guest selected "Sunset cruise with onboard BBQ" on the funnel. When the cruise is the Friday boat trip, the Zest Friday Spritz dinner block is **removed** — the BBQ on the boat IS dinner. Mambo upsells (Mood cabana lunch + Dolphin Swim) move to Friday too, since the Friday morning is now the Mambo anchor; they no longer go on Wednesday for this build (Lesson 7 from Chrissymag, Section 17 — upsells are geography-locked).
+- **Pattern: anniversary "named anchor moments" in the letter.** The Greene letter names four moments out loud as the anniversary anchors — Sunday intro dive, Sunday Date Night, Wednesday Sunset Club portrait (with album), Friday sunset cruise. Two of these are already package-default; two are guest-driven. Calling them out by day in the letter makes the milestone feel built, without requiring TC to invent extra inclusions.
+- **What Boy explicitly rejected for this build:** in-room champagne ("Marriott style"), Don Piet VIP airport greet ("a surprise we'd do when they are here without them knowing"). Frankie's Beach as an anniversary-picnic re-frame ("leave it as the generic upsell"). Horseback ride (operator unverified — skip until researched). See Section 9's new Anniversary/Milestone Surprises rule.
+
 ### Build 5: The Fairburn Cartel (First HTML-Template Skeleton Build)
 - **Who**: Lori & Scott Francisco-Fairburn (fairburnloriscott@gmail.com)
 - **Villa**: Dushi Hideaway | **Package**: Two Coconut (All-Inclusive, 2CCM) | **Dates**: Feb 6–13, 2027
@@ -738,6 +756,14 @@ Before writing any Airbnb review in a debrief, pull the Pipeline record. Airbnb 
 
 ---
 
+### Apply Boy's corrections as RULES, not as spot-fixes (added 2026-05-28, Greene build #69)
+When Boy flags one breach of a documented rule, the rule is the lesson — fix every instance, not just the one he caught. On the Greene build Boy flagged Bliss the Berry as a Day 4 breakfast. The actual rule ("Coffee Bike OR Brisa do Mar, every non-arrival day — absolute") was already in Section 3 and Section 16 #16. The right response wasn't "swap Day 4." It was "audit every non-arrival day's breakfast." Same logic for any other documented rule: when one violation surfaces, sweep the whole build before saying "fixed."
+
+### Run the Pre-Build Checklist BEFORE every GATE 1 (added 2026-05-28, Greene build #69)
+Section 16's checklist isn't a "before you write the first word" checklist — it's a "before you ever ask Boy to review" checklist. On the Greene build I shipped GATE 1 with three documented-rule breaches (Bliss the Berry on Day 4, shore snorkel as a main-timeline block on Thursday, Culture Walk dropped) that the existing checklist would have caught — items #16 (breakfast audit), #17a (optional activities in info-box only), and the obligation rule in Section 8. The rule from here: every GATE 1 ("itinerary is ready") must be preceded by a literal scan of Section 16 #16–#17a and Sections 5 + 8, **with results visible to Boy as part of the GATE 1 message** ("audit clean: ✅ breakfast, ✅ Mambo upsells, ✅ optional activities in info box only"). If you can't tell Boy what you checked, you didn't check it.
+
+---
+
 ### Tommy Portal — Booking URL Token Is the Pipeline Record ID
 The tommy-portal payment page (`/payments/pay?t=`) uses the **Airtable Pipeline record ID** as the token — NOT the short payment token stored in Pipeline field `fldZIAV3Qr8RaTixS`. Use `recXXXXXXXXXXXXXX` (the record ID, 17 chars starting with `rec`) as the `t=` parameter in `bookingUrl`. Confirmed: Sagar build 2026-05-26.
 
@@ -784,6 +810,7 @@ If in doubt: **leave it alone and ask.**
 | `[Guest first names]` | Both names (e.g., "Lori & Scott") |
 | `[Hometown]` | City they're from |
 | Dates on cover | Arrival and departure dates |
+| **Day-page `h2.day-date` headers** | When arrival/departure are confirmed, every day's `<h2 class="day-date">` must include the real date — `Weekday · Month D, YYYY` (e.g. `Saturday · August 29, 2026`), not just `Saturday`. Required on all 8 day-pages: Arrival, Day 1–6, Departure. Boy flagged this on the Greene build #69 — the Pipeline had exact dates, the printable HTML showed weekday only. Only ship weekday-only when dates are genuinely TBD (rare). |
 | Cover hero image URL | Look up from Basecamps table (`tblGc7g7uBedgS3Ui`, field `fldwENhluLhDMIhdG`) → build as `https://res.cloudinary.com/tommy-coconut/image/upload/w_1600,h_800,c_fill,g_auto,q_auto:best/<slug>`. Also set `fld15SzszbTcHufZT` on the Pipeline record first. See checklist item 19. |
 
 ### Copy Source Priority (When a Block Needs New or Changed Content)
@@ -1096,3 +1123,76 @@ Set `expiresAtISO` to 48 hours from the **latest deploy**, not from when the bui
 ### Lesson 4 — Skills must be in the shared repo or co-workers get inconsistent output
 
 At the start of this build, 5 of 7 skills existed only on Boy's local machine. Co-workers had a frozen, incomplete toolkit. All skills are now in `TommyCoconutIT/claude-toolkit`. After every skill update: commit + push. Co-workers run `git pull` to stay current.
+
+---
+
+## Build #70 — The Momajaa Cartel · May 2026
+
+**Guest:** momajaa@icloud.com · Family with adult kids (4 adults, no real names) · Dushi Hideaway · Two Coconut · $13,900 · 5 nights, dates TBD
+**Slug:** MomajaaDushiWeek70 · **Mode:** prospect · **Pipeline:** `rectNd7TaGkSyTimm`
+**Segment:** Family Young Adults · **Arrival:** Saturday (non-standard 5-night, Sat → Thu)
+
+### Lesson 1 — Freelancing copy is the most expensive failure mode
+
+This build burned multiple revision cycles because the agent wrote freelance copy for nearly every time-block, info-box, day subtitle, banner title, letter paragraph, and crew bio instead of pulling from the template or Activity Catalog. Section 19's "Template → Airtable → Comparable" priority order was bypassed at every step. Every freelance block had to be rewritten on Boy's correction.
+
+**Rule:** STEP ZERO POINT SIX in SKILL.md is now the hard gate. Every word in the deliverable must trace to (a) template-verbatim, (b) Airtable-verbatim, (c) pre-approved comparable, or (d) user-spoken-this-session. A mandatory source-attribution table is required at GATE 1. If any row says `FRESH (no source)` — do not call GATE 1.
+
+### Lesson 2 — Wellness add-on prices are NOT $200/person — they're not captured
+
+Multiple builds (including this one) have shipped "$200/person for additional massages" as a stated price. Section 14 of this document says explicitly: "No fixed prices captured yet — 'just ask in the group.'" The $200 number is unsourced training-data invention.
+
+**Rule:** Until Ray confirms a wellness add-on price and it's added to Section 14, the only acceptable copy for additional massages, mani/pedi, yoga, or IV drip is: *"the wellness clinic comes to the estate — drop a message in the group."* No prices.
+
+### Lesson 3 — Coffee Bike copy lives in the Activity Catalog, not the agent's head
+
+"Coffee Bike pulls up at Dushi Hideaway. Espresso, pastries, on the deck." appeared on multiple days. It's not in the template. It's not from the catalog. It's invented descriptive copy that the agent repeated because it sounded fine. Boy flagged it explicitly: "Coffee Bike pulls up at the estate? holy shit wauw."
+
+**Rule:** Before writing any breakfast block, search the Activity Catalog for "Coffee Bike" and "Brisa do Mar." Use catalog text once and reuse on subsequent days. Vary only what the catalog varies. Same logic for any other repeated venue.
+
+### Lesson 4 — Training-data poetry signatures to grep for
+
+These patterns showed up across Build #70 and all are invented. Add to the pre-GATE-1 grep:
+
+```
+"came back for the" "lose track of time" "the order matters" "the breath"
+"different feeling" "the kind of quiet" "memory card" "no clock to chase"
+"one last time" "Dessert is the" "the boulevard runs on" "lean into it"
+"the sun does what" "the night you'll talk about" "watch the stars"
+"the cocoa-butter" "the bay lights coming on" "the to-do list went quiet"
+"reads the group at" "the conversation starts the moment" "the helm with one hand"
+"behind every smooth-running" "the picture you didn't think"
+```
+
+Any hit = freelance copy = pull from template/catalog instead.
+
+### Lesson 5 — Day subtitles + banner titles are NOT a place to be creative
+
+The template has its own subtitles ("Bon Bini to Curaçao." for arrival, etc.). Build #70 invented "Under the water, on the sand, on the deck." (Sunday subtitle), "The long day. The best day to put it on." (Monday), "A slow morning. A sunset on the water." (Tuesday), "Water, Sun, Hands, Table" (Sunday banner title). All slop.
+
+**Rule:** Day subtitles + banner titles come from the template. If the segment doesn't have a template (Family Young Adults), leave them as factual one-liners that describe what the day contains ("Intro dive at Tugboat. Beach. Booker's massage. Dinner at Brisa.") — no rhythm-three poetry.
+
+### Lesson 6 — Non-standard week length (5 nights) is a build flag, not a creative invitation
+
+5-night Sat-to-Thu is non-standard. The 7-night couple template doesn't apply cleanly. The Family Young Adults segment in Itinerary Items V2 has 7-night content. The agent decided to compress + invent — wrong move. The right move:
+
+1. Surface the non-standard length at confirmation. Ask: "Which 5 of the 7 standard days are we keeping? Which canonical evening anchors (Mei Mei Mon salsa, Sunset Club Wed, Culture Walk Thu) get cut?"
+2. Once Boy picks, pull the kept days' content from the template/catalog *unchanged*. Don't compress.
+
+The "8th Night Buffer" naming also broke — that name only works for 7-night weeks. For a 5-night week it's literally the 6th night, so the name doesn't compute. Either rename to "Late Checkout" (descriptive) or ask Boy what to call it.
+
+### Lesson 7 — Sat arrival Zanzibar HH is AFTER dinner, not before
+
+Section 5 says "Zanzibar Saturday Happy Hour: SATURDAYS ONLY, 5 PM. Always present on the guest's first Saturday on-island." Section 6 says "the beach happy hour IS the evening." The template arrival day puts Zanzibar HH *after* dinner ("After dinner — Zanzibar Saturday Happy Hour" with live band from 6 PM).
+
+Build #70 initially placed Zanzibar 5 PM as a scheduled block *before* the 7 PM Brisa dinner. Boy corrected: "zanzibar is not before dinner and stop trying to do this bullshit."
+
+**Rule:** Zanzibar HH on arrival Saturday is the after-dinner walk-over — not a pre-dinner scheduled block. Use template L184-189 verbatim.
+
+### Lesson 8 — Welcome dinner default is Villa Vis, not Brisa do Mar
+
+Section 6: "Arrival night: Villa Vis — owner personally picks guests up. Check closed days (Tue+Wed) first. If guests don't want fish-only, use Brisa do Mar or Mei Mei."
+
+Build #70 swapped Villa Vis for Brisa do Mar on Saturday because the agent reasoned "family with adult kids might not all want fish-only." That reasoning was not authorized. Villa Vis is open Sat (Thu-Mon hours). Boy's response: "no one gave you the authority to decide that bullshit."
+
+**Rule:** Welcome dinner = Villa Vis unless (a) Villa Vis is closed that day (Tue/Wed), or (b) Ray/Boy explicitly says swap to Brisa or Mei Mei. The agent never decides this.

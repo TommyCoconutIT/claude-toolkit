@@ -1,9 +1,26 @@
 ---
 name: dushi-week-builder
-description: "Build personalized Dushi Week itineraries for Tommy Coconut Private Resorts guests. Use this skill whenever the user asks to create, edit, or update a guest itinerary, trip plan, Dushi Week schedule, or vacation week for any Tommy Coconut guest — whether from scratch or modifying an existing one. Also trigger when the user mentions 'itinerary', 'Dushi Week', 'guest week', 'trip plan', 'schedule their week', or any reference to planning a guest's stay in Curacao at a TC villa. This skill contains the full island knowledge database, guest type intelligence, scheduling logic, cruise ship awareness, and a verified-operator research protocol for new activities. TWO OUTPUT PATHS: (A) HTML template skeleton — when a standard HTML template exists for the variant, use it as the authoritative skeleton and only personalize tokens + specific requested blocks; (B) fresh Markdown — for new variants with no HTML template. See lessons-learned.md Section 10 and Section 20."
+description: "⚠️ DEPRECATED as of 2026-05-28. This is the v1 Dushi Week itinerary builder, retired after Build #70 Momajaa burned multiple rewrite cycles on freelanced copy. Use `dushi-week-builder-v2` instead — it pulls day content from Airtable Itinerary Items V2 (single source of truth) instead of letting the agent invent content from memory. This skill is retained only as a reference for historical builds. Do not invoke for new builds."
 ---
 
-# Dushi Week Builder
+# 🛑 DEPRECATED — Do NOT use this skill for new builds
+
+**This is `dushi-week-builder` (v1), retired 2026-05-28.**
+
+**Use [`dushi-week-builder-v2`](../dushi-week-builder-v2/SKILL.md) instead.** v2 is Airtable-first: day content (time blocks, activity descriptions, info boxes) is pulled live from Airtable Itinerary Items V2 (base `appFRLV1H76ohiIQS`) where Ray and Britt maintain the canonical copy. The HTML shell provides structure only. v2 prevents the failure mode that retired v1: the agent inventing day content from memory and burning the user's credits on rewrite cycles.
+
+**Why v1 was retired:** Build #70 (Momajaa Cartel, May 2026) burned multiple GATE 1 rewrite cycles because the agent — running v1 — freelanced day-block copy, day subtitles, banner titles, restaurant descriptions, and crew bios instead of pulling from template/Airtable. v1's design allowed this (it described template-first as a *priority*, not a *requirement*). v2 makes it impossible by sourcing day content from Airtable directly.
+
+**If a session lands here by mistake** (e.g. `dushi-week-start` was outdated, or a co-worker's `git pull` was stale, or someone typed `/dushi-week-builder` literally):
+1. Stop. Do not invoke this skill's logic.
+2. Read `dushi-week-builder-v2/SKILL.md` instead.
+3. Tell the user: "I was about to use the deprecated v1 builder — switching to v2."
+
+The content below is left in place only so historical builds (Builds 1–70) remain readable. Lessons learned from Build #70 and earlier are mirrored in `dushi-week-builder-v2/references/lessons-learned.md`.
+
+---
+
+# Dushi Week Builder (v1 — deprecated)
 
 ## ⚠️ STEP ZERO — Read Before Anything Else
 
@@ -12,6 +29,75 @@ description: "Build personalized Dushi Week itineraries for Tommy Coconut Privat
 After reading lessons-learned.md, also read the value stack at `tc-guest-confirmation/references/value-stack.md` (in the skills directory) — this contains the complete offer breakdown that you must understand before building any itinerary.
 
 Then follow the Pre-Build Checklist in Section 16 of lessons-learned.md before proceeding.
+
+---
+
+## ⚠️ STEP ZERO POINT FIVE — Run the Pre-Build Checklist BEFORE every GATE 1
+
+The Section 16 checklist is **not** "before you write the first word" — it's "before you ever ask Boy to review." Every time you're about to say "itinerary is ready" / "GATE 1," **literally scan**:
+
+- **Section 16 #16 — Breakfast audit.** Every non-arrival day opens with Coffee Bike OR Brisa do Mar. No other venue. No exceptions. Coffee Bike closed Monday → Brisa.
+- **Section 16 #17 — Upsell audit.** West-coast day = Frankie's + Touriffic. Mambo/Sea Aquarium day = Dolphin Swim + Mood cabana. Jan Thiel beach day = Papagayo daybed + Zest cabana. **Upsells are geography-locked — when a day's anchor changes, audit the upsells immediately.**
+- **Section 16 #17a + Section 5 + Section 8 — Optional activities in info-box only.** Reef snorkel with Raymonde (Tue), line fishing (Mon), padel (Sat), Give Back Locally (Fri) go **only** in the TC Today info box, **never** in a main schedule time-block. If you see any of these in a `time-block` — delete.
+- **Section 20 Token Map — Day-page h2 dates.** When arrival/departure are confirmed, every `<h2 class="day-date">` includes the real date (`Saturday · August 29, 2026`), not just the weekday.
+- **Section 2 — Liability language.** No "we've handled it," "kitchen knows," "chef has been briefed," "every restaurant has been flagged." Dietary action always lives with the guest.
+
+**Show Boy what you checked as part of the GATE 1 message** — e.g. "Audit clean: ✅ breakfast (Coffee Bike or Brisa, all 6 non-arrival days) · ✅ upsells geography-locked · ✅ optional activities info-box only · ✅ no liability language · ✅ real dates on all 8 day-page h2s." If you can't tell Boy what you checked, you didn't check it, and Boy ends up doing the audit for you. Don't.
+
+---
+
+## ⚠️ STEP ZERO POINT SIX — The Anti-Freelance Gate (HARD RULE, added 2026-05-28 after Build #70 Momajaa)
+
+**You are not the writer. The voice has already been written, approved, and stored in two places: the HTML template skeleton and the Airtable Activity Catalog. You are a transcriber + personaliser. Personalisation is limited to: guest names, crew/cartel name, dates, basecamp tokens, dietary lines, and the personal letter (where the rules still apply — only sourced facts).**
+
+### Every word in the deliverable must trace to one of four sources
+
+Every time-block, every restaurant-about card, every info-box body, every letter paragraph, every closing line, every day subtitle, every banner title must be one of:
+
+- **(a) Template-verbatim** — already exists in `references/itinerary-standard-sat-to-sat--couple.html` or another HTML skeleton for the segment. Copy `<h4>` and `<p>` text byte-for-byte. Swap basecamp / name / date tokens, nothing else.
+- **(b) Airtable-verbatim** — pulled from Activity Catalog (couple variant field `fldJx3o8AKlPzFQSv`, pro tip field `fldtIcAZltENxFR4U`) or Itinerary Items V2 (base `appFRLV1H76ohiIQS`). Use the catalog text without paraphrasing.
+- **(c) Pre-approved comparable** — only when (a) AND (b) return empty for that exact activity. Match word count, rhythm, and structure of the nearest similar template block. Flag as `[FRESH-COMP]` in the GATE 1 source table.
+- **(d) Explicitly user-approved** — Boy or Ray told you in this session: "use this exact wording." Quote it back to confirm before writing.
+
+**Nothing else is allowed in the deliverable. If a block doesn't have a source from (a), (b), (c), or (d) — leave it out.**
+
+### If a sentence is forming in your head that isn't from one of those four sources — STOP. That sentence does not go in the deliverable.
+
+This includes the small stuff. "Coffee Bike pulls up at the estate. Espresso, pastries, on the deck." is not in the template. "The wellness clinic comes to the estate" is — but the price you remember for additional massages probably isn't. Day subtitles like "Under the water, on the sand, on the deck" are not. Closing lines like "the kind of quiet that only POKO POKO gives you" are not. None of it goes in.
+
+### Common failure modes the gate catches (from Build #70 Momajaa)
+
+- **Inventing prices.** Wellness add-on prices are *not yet captured* per Section 14 of `lessons-learned.md`. "$200/person for additional massages" is unsourced. The only acceptable copy is "drop a message in the group, the wellness clinic comes to the estate." Same for any other price not in the value stack or catalog.
+- **Repeating a freelance one-liner.** "Coffee Bike pulls up at Dushi Hideaway. Espresso, pastries, on the deck." appeared on multiple days in Build #70. Coffee Bike copy lives in the Activity Catalog. Pull it once and use it; vary only what the catalog varies.
+- **Training-data poetry.** "The turtles came back for the fish guts. You came back for the turtles." "Cooler out. Sandwich. Repeat." "Snorkel out, look down, lose track of time." "You'll have an opinion by the bottom of the cup." "Dessert is the dance floor." All invented. Pull Piskado / Knip / Porto Mari / Pastetchi+Batido / Mei Mei copy from the template's Day 5 West Side Day and Day 3 Monday blocks.
+- **Day subtitles + banner titles invented.** The template has its own subtitles. Use them or leave them blank — do not write "Water, Sun, Hands, Table" or "The long day. The best day to put it on."
+- **Closing-page emotion.** "Four other people you already love, on an island that already knows your name." "One full memory card on Cameron's camera, one hardcover album in the mail." The template has a closing block. Pull it.
+
+### MANDATORY pre-GATE-1 source attribution table
+
+Before saying "itinerary is ready," generate this table and include it in the GATE 1 message. Every block in the file gets one row.
+
+```
+| Page | Block | Source |
+|---|---|---|
+| Cover | Crew name + dates | TOKEN (build inputs) |
+| Philosophy | Three-options framing | template L132-139 |
+| Letter | Salutation + body | LETTER-PERSONAL (drafted from sourced facts only — list every sentence not traceable to funnel/Airtable below the table) |
+| Sat Arrival | Wheels Down | template L150-155 |
+| Sat Arrival | Jeremiah at Hato | template L157-162 |
+| Sat Arrival | Welcome at Estate | template L164-169 |
+| Sat Arrival | Welcome Dinner Villa Vis | template L170-176 |
+| Sat Arrival | After-dinner Zanzibar | template L184-189 |
+| Sun Day 1 | Intro Dive | template L<X> (couple Day 2) |
+| Sun Day 1 | Welcome Massage | template L<Y> (couple Day 2) |
+| ... | ... | ... |
+```
+
+**If any row reads `FRESH (no source)` — do not call GATE 1. Re-pull from template or Airtable. If the activity genuinely has no template or catalog copy, stop and ask the user before writing fresh.**
+
+### The principle, stated plainly
+
+If you can't point to a line number in the template or a field in Activity Catalog for any given sentence in the deliverable — that sentence is invented, and inventions burn the user's credits on rewrite cycles. The skill exists to prevent that. Use it.
 
 ---
 
